@@ -2,85 +2,35 @@
 Locust performance testing file for chatbot with authentication
 Handles login flow before accessing chat functionality
 """
-import os
 import random
 import time
-from dotenv import load_dotenv
+from pathlib import Path
 from locust.contrib.fasthttp import FastHttpUser
 from locust import task, between, events
 
-# Load environment variables from .env file
-load_dotenv()
-
-# Get configuration from environment variables
-CHATBOT_URL = os.getenv("CHATBOT_URL", "https://cfoti.org")
-API_ENDPOINT_LOGIN = os.getenv("API_ENDPOINT_LOGIN", "/api/auth/login")  # Default: /api/auth/login
-API_ENDPOINT_SEND = os.getenv("API_ENDPOINT_SEND", "/api/chat")
-LOGIN_EMAIL = os.getenv("LOGIN_EMAIL", "")
-LOGIN_PASSWORD = os.getenv("LOGIN_PASSWORD", "")
-
-# Sample messages/queries to send to the chatbot
-# Singapore Business Federation - Centre for the Future of Trade and Investment
-# These simulate real user interactions - mix of simple and complex questions
-
-# Simple/Greeting messages (fast responses expected)
-SIMPLE_MESSAGES = [
-    "Hello",
-    "Hi",
-    "Good morning",
-    "What can you help me with?",
-    "Thank you",
-    "Thanks",
-    "I need help",
-    "Can you assist me?",
-]
-
-# Common questions (moderate complexity) - Typical trade and certificate queries
-COMMON_QUESTIONS = [
-    "Check requirements for Back-to-back Preferential Certificate of Origin (PCO)",
-    "Check product eligibility for Free Trade Agreements (FTA) and Preferential Tariffs",
-    "Check the eligibility criteria for Ordinary Certificate of Origin (OCO)",
-    "What documents do I need for a Certificate of Origin?",
-    "How do I apply for a Preferential Certificate of Origin?",
-    "What is the difference between PCO and OCO?",
-    "Which Free Trade Agreements does Singapore have?",
-    "How long does it take to process a Certificate of Origin?",
-    "What are the requirements for FTA eligibility?",
-    "Can I check if my product qualifies for preferential tariffs?",
-    "What is a Back-to-back Certificate of Origin?",
-    "How do I verify my product's origin?",
-    "What are the fees for certificate applications?",
-    "Where can I submit my certificate application?",
-    "What information is required for FTA verification?",
-]
-
-# Complex questions (may take longer to process) - Detailed multi-part queries
-COMPLEX_QUESTIONS = [
-    "I'm exporting electronics to multiple ASEAN countries. Can you explain the complete process for obtaining Preferential Certificates of Origin for each country, including the specific requirements, documentation needed, and how to verify product eligibility under different FTAs?",
-    "I need to understand the full eligibility criteria for Back-to-back Preferential Certificate of Origin. Can you provide detailed information about the requirements, application process, supporting documents needed, processing time, and any common issues that might cause rejection?",
-    "My company manufactures products using components from multiple countries. How do I determine the origin of my finished product for FTA purposes, what documentation is required to prove origin, and which Free Trade Agreements would provide the best tariff benefits for my specific product category?",
-    "I'm new to international trade and need comprehensive guidance. Can you explain the differences between Ordinary Certificate of Origin and Preferential Certificate of Origin, when to use each, the application procedures, required documents, processing timelines, and how to check product eligibility for preferential tariffs under various FTAs?",
-    "I have a shipment ready to export but I'm unsure about certificate requirements. Can you help me determine which type of certificate I need, verify my product's eligibility for preferential treatment, guide me through the complete application process including all required documents, and explain how to avoid common mistakes that could delay or reject my application?",
-]
-
-# Combine all messages (you can adjust weights by repeating messages)
-SAMPLE_MESSAGES = (
-    SIMPLE_MESSAGES * 2 +      # Simple messages appear 2x more often
-    COMMON_QUESTIONS * 3 +      # Common questions appear 3x more often (most realistic)
-    COMPLEX_QUESTIONS * 3           # Complex questions appear (less frequent)
+# Import configuration from centralized config file
+from test_config import (
+    CHATBOT_URL,
+    API_ENDPOINT_LOGIN,
+    API_ENDPOINT_SEND,
+    LOGIN_EMAIL,
+    LOGIN_PASSWORD,
+    WAIT_TIME_MIN,
+    WAIT_TIME_MAX,
+    TASK_WEIGHT_CHAT_PAGE,
+    TASK_WEIGHT_SEND_MESSAGE,
+    TTF_DATA_PATH,
+    LOGIN_ENDPOINT_FALLBACKS,
 )
 
-# Create a mapping to identify question category for TTF tracking
-def get_question_category(message):
-    """Determine the category of a question for TTF tracking"""
-    if message in SIMPLE_MESSAGES:
-        return "Simple"
-    elif message in COMMON_QUESTIONS:
-        return "Common"
-    elif message in COMPLEX_QUESTIONS:
-        return "Complex"
-    else:
-        return "Unknown"
+# Import sample questions and helper functions
+from sample_questions import (
+    get_sample_messages,
+    get_question_category,
+)
+
+# Get combined sample messages with weights applied
+SAMPLE_MESSAGES = get_sample_messages()
 
 # Global variable to store TTF file path
 TTF_FILE_PATH = None
@@ -90,12 +40,13 @@ TTF_FILE_PATH = None
 def on_test_start(environment, **kwargs):
     """Create CSV file for TTF tracking"""
     import csv
-    from pathlib import Path
     
     global TTF_FILE_PATH
     
-    Path("reports").mkdir(exist_ok=True)
-    TTF_FILE_PATH = Path("reports/ttf_data.csv")
+    # Create reports directory if it doesn't exist
+    ttf_path = Path(TTF_DATA_PATH)
+    ttf_path.parent.mkdir(parents=True, exist_ok=True)
+    TTF_FILE_PATH = ttf_path
     
     # Write header if file doesn't exist or is empty
     if not TTF_FILE_PATH.exists() or TTF_FILE_PATH.stat().st_size == 0:
@@ -119,7 +70,7 @@ class MyUser(FastHttpUser):
     """
     host = CHATBOT_URL
     is_authenticated = False
-    wait_time = between(2, 5)  # Wait 2-5 seconds between tasks (simulates user reading response)
+    wait_time = between(WAIT_TIME_MIN, WAIT_TIME_MAX)  # Configurable wait time between tasks
 
     def on_start(self):
         """
@@ -168,18 +119,7 @@ class MyUser(FastHttpUser):
         # Try login endpoint - common variations
         # Some sites use form-based login (POST to same page), so we try root path too
         # Start with the configured endpoint first, then try common variations
-        login_endpoints = [
-            API_ENDPOINT_LOGIN,  # User-configured or default /api/auth/login
-            "/api/auth/login",   # Explicit fallback
-            "/api/login",
-            "/api/auth/signin",
-            "/api/signin",
-            "/auth/login",
-            "/auth/signin",
-            "/login",
-            "/signin",
-            "/"  # Some sites use form POST to root
-        ]
+        login_endpoints = [API_ENDPOINT_LOGIN] + LOGIN_ENDPOINT_FALLBACKS
         # Remove duplicates while preserving order
         seen = set()
         login_endpoints = [x for x in login_endpoints if not (x in seen or seen.add(x))]
@@ -274,7 +214,7 @@ class MyUser(FastHttpUser):
                 print("NOTE: Session cookies detected, marking as authenticated")
                 self.is_authenticated = True
 
-    @task(3)
+    @task(TASK_WEIGHT_CHAT_PAGE)
     def test_chat_page(self):
         """
         Load the chat page (weight: 3)
@@ -293,7 +233,7 @@ class MyUser(FastHttpUser):
             else:
                 resp.failure(f"Failed to load chat page: {resp.status_code}")
 
-    @task(5)
+    @task(TASK_WEIGHT_SEND_MESSAGE)
     def send_chat_message(self):
         """
         Send a message to the chatbot API (weight: 5 - most frequent)

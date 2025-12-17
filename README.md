@@ -16,7 +16,9 @@ A comprehensive load testing suite for chatbots built with [Locust](https://locu
 ```
 .
 ├── locustfile.py              # Main Locust test file
-├── config_load_test.py        # Load test configuration
+├── test_config.py             # Centralized test configuration
+├── sample_questions.py        # Sample questions organized by category
+├── config_load_test.py        # Load test configuration (uses test_config.py)
 ├── run_tests.py               # Test runner script
 ├── requirements.txt           # Python dependencies
 ├── .env                       # Environment variables (create from .env.example)
@@ -106,12 +108,16 @@ The load test will:
 
 ### Test Configuration
 
-Default parameters (in `config_load_test.py`):
+**Easy Configuration**: All test settings are now centralized in `test_config.py` for easy management.
+
+Default parameters:
 - **Users**: 5 concurrent users
 - **Spawn Rate**: 1 user per second
 - **Duration**: 2 minutes
+- **Wait Time**: 2-5 seconds between tasks
+- **Task Weights**: Chat page (3), Send message (5)
 
-You can modify these in `config_load_test.py` or pass them as command-line arguments.
+You can modify these in `test_config.py` (or via environment variables) or pass them as command-line arguments.
 
 ## API Structure
 
@@ -228,45 +234,75 @@ print(percentiles)
 
 **Yes, you provide sample questions!** The test suite uses a pool of sample messages that simulate real user interactions:
 
-1. **Random Selection**: Each virtual user randomly picks a question from `SAMPLE_MESSAGES`
+1. **Random Selection**: Each virtual user randomly picks a question from the combined sample messages
 2. **Realistic Distribution**: Questions are weighted by frequency:
    - Simple messages (greetings): 2x weight
    - Common questions: 3x weight (most realistic)
-   - Complex questions: 1x weight (less frequent)
+   - Complex questions: 3x weight
 3. **Wait Times**: Users wait 2-5 seconds between messages (simulating reading responses)
 
-**Current Setup** (`locustfile.py`):
+**Current Setup** (`sample_questions.py`):
 - `SIMPLE_MESSAGES`: Quick greetings ("Hello", "Hi", "Thanks")
-- `COMMON_QUESTIONS`: Typical user queries (business hours, pricing, support)
+- `COMMON_QUESTIONS`: Typical user queries (trade certificates, FTA eligibility)
 - `COMPLEX_QUESTIONS`: Detailed multi-part questions
 
 ### Modifying Test Scenarios
 
-Edit `locustfile.py` to customize:
+**1. Change Sample Questions** (Edit `sample_questions.py`):
 
-**1. Add/Modify Sample Questions:**
+This is now super easy! Just edit `sample_questions.py`:
+
 ```python
-# Add domain-specific questions
+# Simple/Greeting Messages
+SIMPLE_MESSAGES = [
+    "Hello",
+    "Hi",
+    "Good morning",
+    # Add your custom simple messages here
+]
+
+# Common Questions
 COMMON_QUESTIONS = [
     "What are your business hours?",
     "Tell me about your services",
-    # Add your custom questions here
-    "What is your refund policy?",
-    "How do I contact support?",
+    # Add your custom common questions here
 ]
 
-# Adjust weights by changing multipliers
-SAMPLE_MESSAGES = (
-    SIMPLE_MESSAGES * 2 +      # Increase for more greetings
-    COMMON_QUESTIONS * 3 +      # Increase for more common questions
-    COMPLEX_QUESTIONS * 1       # Decrease for fewer complex questions
-)
+# Complex Questions
+COMPLEX_QUESTIONS = [
+    "Your complex multi-part question here",
+    # Add your custom complex questions here
+]
+
+# Adjust weights (how frequently each category appears)
+SIMPLE_WEIGHT = 2      # Simple messages appear 2x more often
+COMMON_WEIGHT = 3      # Common questions appear 3x more often
+COMPLEX_WEIGHT = 3     # Complex questions appear less frequently
 ```
 
-**2. Adjust User Behavior:**
-- `wait_time = between(2, 5)`: Time between messages (currently 2-5 seconds)
-- `@task(5)`: Weight of send_chat_message (higher = more frequent)
-- `@task(3)`: Weight of test_chat_page (lower = less frequent)
+**2. Configure Test Settings** (Edit `test_config.py`):
+
+All test configuration is centralized in `test_config.py`:
+
+```python
+# API Configuration
+CHATBOT_URL = "https://your-chatbot-url.com"
+API_ENDPOINT_LOGIN = "/api/auth/login"
+API_ENDPOINT_SEND = "/api/chat"
+
+# User Behavior Configuration
+WAIT_TIME_MIN = 2      # Minimum wait time between tasks (seconds)
+WAIT_TIME_MAX = 5      # Maximum wait time between tasks (seconds)
+
+# Task Weights Configuration
+TASK_WEIGHT_CHAT_PAGE = 3      # How often to load chat page
+TASK_WEIGHT_SEND_MESSAGE = 5   # How often to send messages (higher = more frequent)
+
+# Load Test Configuration
+DEFAULT_USERS = 5              # Number of concurrent users
+DEFAULT_SPAWN_RATE = 1         # Users spawned per second
+DEFAULT_RUN_TIME = "2m"         # Test duration
+```
 
 **3. API Endpoints:**
 - Update environment variables in `.env` file
@@ -380,7 +416,7 @@ The test suite includes sample questions for **Singapore Business Federation - C
 - Preferential tariffs
 - Product eligibility
 
-Edit `locustfile.py` to customize questions for your domain:
+**Edit `sample_questions.py` to customize questions for your domain** - it's now super easy!
 
 ```python
 # Simple messages
@@ -401,15 +437,21 @@ COMPLEX_QUESTIONS = [
     "Your complex multi-part question here",
     # Add detailed questions
 ]
+
+# Adjust weights to control frequency
+SIMPLE_WEIGHT = 2
+COMMON_WEIGHT = 3
+COMPLEX_WEIGHT = 3
 ```
 
 ### Test Parameters
 
-Modify `config_load_test.py` to change default test parameters:
+**Edit `test_config.py` to change test configuration** - all settings in one place:
+
 ```python
-LOAD_TEST_CONFIG = {
-    "users": 10,           # Number of concurrent users
-    "spawn_rate": 2,      # Users spawned per second
+# Load Test Configuration
+DEFAULT_USERS = 10           # Number of concurrent users
+DEFAULT_SPAWN_RATE = 2      # Users spawned per second
     "run_time": "5m",      # Test duration
 }
 ```
