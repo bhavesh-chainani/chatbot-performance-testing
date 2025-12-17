@@ -67,7 +67,7 @@ COMPLEX_QUESTIONS = [
 SAMPLE_MESSAGES = (
     SIMPLE_MESSAGES * 2 +      # Simple messages appear 2x more often
     COMMON_QUESTIONS * 3 +      # Common questions appear 3x more often (most realistic)
-    COMPLEX_QUESTIONS           # Complex questions appear once (less frequent)
+    COMPLEX_QUESTIONS * 3           # Complex questions appear (less frequent)
 )
 
 # Create a mapping to identify question category for TTF tracking
