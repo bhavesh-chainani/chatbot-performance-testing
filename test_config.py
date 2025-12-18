@@ -53,10 +53,10 @@ STRESS_TEST_RUN_TIME = os.getenv("STRESS_TEST_RUN_TIME", "5m")
 # Gradually increase load until system fails - finds exact breaking point
 # ============================================================================
 BREAKPOINT_TEST_START_USERS = int(os.getenv("BREAKPOINT_TEST_START_USERS", "1"))
-BREAKPOINT_TEST_MAX_USERS = int(os.getenv("BREAKPOINT_TEST_MAX_USERS", "15"))
+BREAKPOINT_TEST_MAX_USERS = int(os.getenv("BREAKPOINT_TEST_MAX_USERS", "150"))
 BREAKPOINT_TEST_SPAWN_RATE = float(os.getenv("BREAKPOINT_TEST_SPAWN_RATE", "1"))
 BREAKPOINT_TEST_STEP_DURATION = os.getenv("BREAKPOINT_TEST_STEP_DURATION", "1m")
-BREAKPOINT_TEST_USER_INCREMENT = int(os.getenv("BREAKPOINT_TEST_USER_INCREMENT", "2"))
+BREAKPOINT_TEST_USER_INCREMENT = int(os.getenv("BREAKPOINT_TEST_USER_INCREMENT", "20"))
 
 # ============================================================================
 # Legacy Defaults (for backward compatibility)

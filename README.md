@@ -200,6 +200,14 @@ python run_tests.py breakpoint
 
 **Note**: Breakpoint test uses its own configuration. Edit `config_breakpoint_test.py` to customize.
 
+**Consolidated Report**: The breakpoint test generates a single `breakpoint_test_summary.html` report that shows:
+- All steps in a single table
+- Key metrics for each step (requests, failures, response times, RPS)
+- Visual highlighting of the breaking point
+- Easy comparison across load levels
+
+Open `reports/breakpoint_test_summary.html` to see the complete analysis at a glance!
+
 ### Configuration Files
 
 All test configurations are easily accessible:
@@ -320,8 +328,9 @@ Test reports are saved in the `reports/` directory:
   - `reports/stress_test_report.html`
   - `reports/stress_test_report_*.csv`
 - **Breakpoint Test**: 
-  - `reports/breakpoint_test_step_{N}_{users}users.html` (one per step)
-  - `reports/breakpoint_test_step_{N}_{users}users_*.csv` (one per step)
+  - `reports/breakpoint_test_summary.html` - **Consolidated summary report** (shows all steps and breaking point)
+  - `reports/breakpoint_test_step_{N}_{users}users.html` (individual step reports)
+  - `reports/breakpoint_test_step_{N}_{users}users_*.csv` (individual step CSVs)
 
 **Shared Data:**
 - **TTF Data**: `reports/ttf_data.csv` - Time To First Token metrics per question (shared across all tests)

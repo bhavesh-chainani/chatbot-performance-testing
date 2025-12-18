@@ -21,6 +21,7 @@ import os
 import sys
 import subprocess
 import time
+import csv
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -244,6 +245,185 @@ def run_stress_test(users=None, spawn_rate=None, run_time=None):
         return False
 
 
+def _generate_breakpoint_summary_report(steps_data, breaking_point_users):
+    """Generate a consolidated HTML report for breakpoint test"""
+    from datetime import datetime
+    
+    html_content = """<!DOCTYPE html>
+<html>
+<head>
+    <title>Breakpoint Test Summary Report</title>
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }}
+        .container {{
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }}
+        h1 {{
+            color: #333;
+            border-bottom: 3px solid #4CAF50;
+            padding-bottom: 10px;
+        }}
+        .summary {{
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }}
+        .breaking-point {{
+            background-color: #ffebee;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 5px solid #f44336;
+        }}
+        table {{
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }}
+        th {{
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }}
+        td {{
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }}
+        tr:hover {{
+            background-color: #f5f5f5;
+        }}
+        .failed {{
+            background-color: #ffebee;
+            font-weight: bold;
+        }}
+        .warning {{
+            background-color: #fff3e0;
+        }}
+        .success {{
+            background-color: #e8f5e9;
+        }}
+        .metric {{
+            font-weight: bold;
+            color: #1976D2;
+        }}
+        .footer {{
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 0.9em;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Breakpoint Test Summary Report</h1>
+        <div class="summary">
+            <h2>Test Overview</h2>
+            <p><strong>Test Date:</strong> {test_date}</p>
+            <p><strong>Total Steps:</strong> {total_steps}</p>
+            <p><strong>Users Tested:</strong> {start_users} to {max_users}</p>
+            <p><strong>Breaking Point:</strong> <span style="color: #f44336; font-weight: bold;">{breaking_point}</span></p>
+        </div>
+"""
+    
+    if breaking_point_users:
+        html_content += f"""
+        <div class="breaking-point">
+            <h2>⚠️ Breaking Point Detected</h2>
+            <p>The system reached its breaking point at <strong>{breaking_point_users} concurrent users</strong>.</p>
+            <p>Last successful load: <strong>{breaking_point_users - steps_data[-1]['user_increment'] if steps_data else 'N/A'} users</strong></p>
+        </div>
+"""
+    
+    html_content += """
+        <h2>Step-by-Step Results</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Step</th>
+                    <th>Users</th>
+                    <th>Requests</th>
+                    <th>Failures</th>
+                    <th>Failure %</th>
+                    <th>Avg Response (ms)</th>
+                    <th>Median Response (ms)</th>
+                    <th>95th %ile (ms)</th>
+                    <th>RPS</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+"""
+    
+    for step in steps_data:
+        failure_rate = (step['failures'] / step['requests'] * 100) if step['requests'] > 0 else 0
+        row_class = "failed" if failure_rate > 10 else ("warning" if failure_rate > 0 else "success")
+        
+        html_content += f"""
+                <tr class="{row_class}">
+                    <td>{step['step']}</td>
+                    <td class="metric">{step['users']}</td>
+                    <td>{step['requests']}</td>
+                    <td>{step['failures']}</td>
+                    <td>{failure_rate:.2f}%</td>
+                    <td>{step['avg_response']:.0f}</td>
+                    <td>{step['median_response']:.0f}</td>
+                    <td>{step['p95_response']:.0f}</td>
+                    <td>{step['rps']:.2f}</td>
+                    <td>{'❌ Failed' if failure_rate > 10 else ('⚠️ Degraded' if failure_rate > 0 else '✅ OK')}</td>
+                </tr>
+"""
+    
+    # Format the HTML with actual data
+    test_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    start_users = steps_data[0]['users'] if steps_data else 'N/A'
+    max_users = steps_data[-1]['users'] if steps_data else 'N/A'
+    breaking_point = f"{breaking_point_users} users" if breaking_point_users else "Not reached"
+    
+    html_content += """
+            </tbody>
+        </table>
+        <div class="footer">
+            <p><strong>Legend:</strong></p>
+            <p><span class="success" style="padding: 5px 10px; border-radius: 3px;">✅ OK</span> - No failures detected</p>
+            <p><span class="warning" style="padding: 5px 10px; border-radius: 3px;">⚠️ Degraded</span> - Some failures (&lt;10%)</p>
+            <p><span class="failed" style="padding: 5px 10px; border-radius: 3px;">❌ Failed</span> - High failure rate (&gt;10%)</p>
+            <p style="margin-top: 20px;"><em>Generated on """ + test_date + """</em></p>
+        </div>
+    </div>
+</body>
+</html>
+"""
+    
+    # Format the HTML with actual data (only the placeholders, CSS is already escaped)
+    html_content = html_content.format(
+        test_date=test_date,
+        total_steps=len(steps_data),
+        start_users=start_users,
+        max_users=max_users,
+        breaking_point=breaking_point
+    )
+    
+    # Write the HTML file
+    report_path = Path("reports/breakpoint_test_summary.html")
+    with open(report_path, 'w') as f:
+        f.write(html_content)
+    
+    return report_path
+
+
 def run_breakpoint_test():
     """Run breakpoint test - gradually increase load until system fails"""
     try:
@@ -276,10 +456,13 @@ def run_breakpoint_test():
     print("  • Run {} at each load level".format(step_duration))
     print("  • Identify exact breaking point")
     print("  • Test graceful degradation under overload")
+    print("  • Generate consolidated summary report")
     print("\nStarting test...\n")
     
     current_users = start_users
     step_number = 1
+    steps_data = []
+    breaking_point_users = None
     
     while current_users <= max_users:
         print(f"\n{'='*60}")
@@ -303,38 +486,66 @@ def run_breakpoint_test():
             
             # Check if report was generated
             step_report_path = Path(f"reports/breakpoint_test_step_{step_number}_{current_users}users.html")
+            csv_path = Path(f"reports/breakpoint_test_step_{step_number}_{current_users}users_stats.csv")
             
-            if step_report_path.exists():
-                # Check for high failure rate (indicator of breakpoint)
-                if "FAILURES" in result.stdout or result.returncode != 0:
-                    print(f"\n⚠️  Failures detected at {current_users} users")
-                    print("This may indicate the system is approaching its breaking point.")
+            if step_report_path.exists() and csv_path.exists():
+                # Parse CSV to extract metrics
+                try:
+                    with open(csv_path, 'r') as f:
+                        reader = csv.DictReader(f)
+                        for row in reader:
+                            if row.get('Type') == '' and row.get('Name') == 'Aggregated':
+                                # Found aggregated row
+                                requests = int(row.get('Request Count', 0))
+                                failures = int(row.get('Failure Count', 0))
+                                avg_response = float(row.get('Average Response Time', 0))
+                                median_response = float(row.get('Median Response Time', 0))
+                                p95_response = float(row.get('95%', 0))
+                                rps = float(row.get('Requests/s', 0))
+                                
+                                steps_data.append({
+                                    'step': step_number,
+                                    'users': current_users,
+                                    'requests': requests,
+                                    'failures': failures,
+                                    'avg_response': avg_response,
+                                    'median_response': median_response,
+                                    'p95_response': p95_response,
+                                    'rps': rps,
+                                    'user_increment': user_increment
+                                })
+                                
+                                failure_rate = (failures / requests * 100) if requests > 0 else 0
+                                
+                                if failure_rate > 10:
+                                    print(f"\n⚠️  High failure rate ({failure_rate:.2f}%) detected at {current_users} users")
+                                    print("This indicates the system is at or past its breaking point.")
+                                    if breaking_point_users is None:
+                                        breaking_point_users = current_users
+                                elif failures > 0:
+                                    print(f"\n⚠️  Some failures ({failures}/{requests}) detected at {current_users} users")
+                                
+                                break
+                except Exception as e:
+                    print(f"Warning: Could not parse CSV metrics: {e}")
                 
                 print(f"✓ Step {step_number} completed with {current_users} users")
             else:
                 print(f"\n❌ Step {step_number} failed at {current_users} users - no report generated")
-                raise subprocess.CalledProcessError(result.returncode, cmd)
+                if breaking_point_users is None:
+                    breaking_point_users = current_users
+                break
             
-        except subprocess.CalledProcessError as e:
-            print(f"\n❌ Step {step_number} failed at {current_users} users")
-            print(f"Error: {e}")
-            print(f"\n⚠️  BREAKPOINT DETECTED!")
-            print(f"The system appears to have reached its breaking point at {current_users} users.")
+        except KeyboardInterrupt:
+            print(f"\n\nBreakpoint test interrupted by user at {current_users} users")
             if step_number > 1:
-                print(f"Previous successful load: {current_users - user_increment} users")
+                print(f"Last successful load: {steps_data[-1]['users'] if steps_data else current_users - user_increment} users")
             break
         except Exception as e:
             print(f"\n❌ Step {step_number} encountered an error at {current_users} users")
             print(f"Error: {e}")
-            print(f"\n⚠️  BREAKPOINT DETECTED!")
-            print(f"The system appears to have reached its breaking point at {current_users} users.")
-            if step_number > 1:
-                print(f"Previous successful load: {current_users - user_increment} users")
-            break
-        
-        except KeyboardInterrupt:
-            print(f"\n\nBreakpoint test interrupted by user at {current_users} users")
-            print(f"Last successful load: {current_users} users")
+            if breaking_point_users is None:
+                breaking_point_users = current_users
             break
         
         # Increment for next step
@@ -346,14 +557,33 @@ def run_breakpoint_test():
             print(f"\nWaiting 5 seconds before next step...")
             time.sleep(5)
     
-    print("\n" + "=" * 60)
-    print("BREAKPOINT TEST COMPLETED!")
-    print("=" * 60)
-    print(f"\nTested up to {current_users - user_increment} users")
-    print("\nReports generated:")
-    for i in range(1, step_number):
-        print(f"  • Step {i}: reports/breakpoint_test_step_{i}_*.html")
-    print("\nReview the reports to identify the exact breaking point.")
+    # Generate consolidated summary report
+    if steps_data:
+        print("\n" + "=" * 60)
+        print("Generating consolidated summary report...")
+        print("=" * 60)
+        
+        summary_report_path = _generate_breakpoint_summary_report(steps_data, breaking_point_users)
+        
+        print("\n" + "=" * 60)
+        print("BREAKPOINT TEST COMPLETED!")
+        print("=" * 60)
+        print(f"\nTested up to {steps_data[-1]['users']} users")
+        if breaking_point_users:
+            print(f"\n⚠️  BREAKPOINT DETECTED at {breaking_point_users} users")
+            print(f"Last successful load: {breaking_point_users - user_increment} users")
+        else:
+            print("\n✅ No breaking point detected within tested range")
+        print("\nReports generated:")
+        print(f"  • 📊 Consolidated Summary: {summary_report_path}")
+        print(f"  • 📁 Individual Step Reports: reports/breakpoint_test_step_*.html")
+        print("\nOpen the consolidated summary report to see the breaking point analysis.")
+    else:
+        print("\n" + "=" * 60)
+        print("BREAKPOINT TEST COMPLETED!")
+        print("=" * 60)
+        print("\n⚠️  No data collected. Check individual step reports for details.")
+    
     return True
 
 
