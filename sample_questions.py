@@ -67,9 +67,9 @@ COMPLEX_QUESTIONS = [
 # - 3 common questions  
 # - 1 complex question
 # ============================================================================
-SIMPLE_WEIGHT = 0      # Simple messages
-COMMON_WEIGHT = 1      # Common questions
-COMPLEX_WEIGHT = 1     # Complex questions
+SIMPLE_WEIGHT = 1      # Simple messages
+COMMON_WEIGHT = 4      # Common questions
+COMPLEX_WEIGHT = 5     # Complex questions
 
 # ============================================================================
 # Combined Sample Messages

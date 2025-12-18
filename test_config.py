@@ -30,7 +30,7 @@ LOGIN_PASSWORD = os.getenv("LOGIN_PASSWORD", "")
 # Default load test parameters
 DEFAULT_USERS = int(os.getenv("DEFAULT_USERS", "5"))
 DEFAULT_SPAWN_RATE = float(os.getenv("DEFAULT_SPAWN_RATE", "1"))
-DEFAULT_RUN_TIME = os.getenv("DEFAULT_RUN_TIME", "2m")
+DEFAULT_RUN_TIME = os.getenv("DEFAULT_RUN_TIME", "1m")
 
 # ============================================================================
 # User Behavior Configuration
