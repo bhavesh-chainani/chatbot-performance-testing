@@ -7,18 +7,25 @@ The weights at the bottom control how frequently each category appears.
 """
 
 # ============================================================================
-# Simple/Greeting Messages
-# Fast responses expected - basic interactions
+# Simple Questions
+# Fast responses expected - basic trade and certificate questions
 # ============================================================================
 SIMPLE_MESSAGES = [
-    "Hello",
-    "Hi",
-    "Good morning",
-    "What can you help me with?",
-    "Thank you",
-    "Thanks",
-    "I need help",
-    "Can you assist me?",
+    "What is a Certificate of Origin?",
+    "What does PCO stand for?",
+    "What is an HS code?",
+    "What is an FTA?",
+    "What countries have FTAs with Singapore?",
+    "How do I contact SBF for trade advice?",
+    "What is a tariff?",
+    "What is customs clearance?",
+    "What is ASEAN?",
+    "What documents are needed for exporting?",
+    "What is a commercial invoice?",
+    "What is a packing list?",
+    "What is a bill of lading?",
+    "What is the difference between FOB and CIF?",
+    "What is a letter of credit?",
 ]
 
 # ============================================================================
@@ -41,6 +48,21 @@ COMMON_QUESTIONS = [
     "What are the fees for certificate applications?",
     "Where can I submit my certificate application?",
     "What information is required for FTA verification?",
+    "How do I apply for a PCO in Singapore?",
+    "What are the requirements for a Back-to-Back PCO?",
+    "How do I determine the correct HS code for my product?",
+    "How do I calculate Regional Value Content (RVC)?",
+    "What documents are required for exporting to China?",
+    "How long does it take to process a PCO application?",
+    "What are the fees for PCO applications?",
+    "How do I verify if my product qualifies for preferential tariff treatment?",
+    "What are the rules of origin under the ASEAN FTA?",
+    "How do I handle transhipment of goods through Singapore?",
+    "What are the customs procedures for importing goods into Singapore?",
+    "How do I prepare a Manufacturing Cost Statement?",
+    "What are the common mistakes in PCO applications?",
+    "How do I amend an issued PCO?",
+    "What are the compliance requirements for exporting to the EU?",
 ]
 
 # ============================================================================
@@ -53,6 +75,21 @@ COMPLEX_QUESTIONS = [
     "My company manufactures products using components from multiple countries. How do I determine the origin of my finished product for FTA purposes, what documentation is required to prove origin, and which Free Trade Agreements would provide the best tariff benefits for my specific product category?",
     "I'm new to international trade and need comprehensive guidance. Can you explain the differences between Ordinary Certificate of Origin and Preferential Certificate of Origin, when to use each, the application procedures, required documents, processing timelines, and how to check product eligibility for preferential tariffs under various FTAs?",
     "I have a shipment ready to export but I'm unsure about certificate requirements. Can you help me determine which type of certificate I need, verify my product's eligibility for preferential treatment, guide me through the complete application process including all required documents, and explain how to avoid common mistakes that could delay or reject my application?",
+    "How do I determine substantial transformation for goods processed in Singapore for a Back-to-Back PCO?",
+    "What are the specific origin criteria differences between ASEAN-China FTA and RCEP for electronic components?",
+    "How do I handle cumulation of origin across multiple countries under RCEP?",
+    "What are the implications of third-country invoicing on PCO eligibility?",
+    "How do I navigate conflicting rules of origin between overlapping FTAs?",
+    "What strategies can I use to optimize tariff benefits across multiple FTAs?",
+    "How do I handle partial shipments with a single PCO?",
+    "What are the legal implications of incorrect origin declarations?",
+    "How do I manage product-specific rules vs. general rules for complex manufactured goods?",
+    "What documentation is required for proving origin when components come from multiple countries?",
+    "How do I handle retroactive issuance of PCOs for shipments already in transit?",
+    "What are the verification procedures if my PCO is challenged by foreign customs?",
+    "How do I calculate regional value content for products with components from multiple FTA partners?",
+    "What are the implications of minimal operations provisions on my manufacturing process?",
+    "How do I handle origin certification for goods that undergo processing in multiple countries?",
 ]
 
 # ============================================================================
