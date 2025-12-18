@@ -26,11 +26,44 @@ LOGIN_PASSWORD = os.getenv("LOGIN_PASSWORD", "")
 
 # ============================================================================
 # Load Test Configuration
+# Normal expected load conditions - baseline performance testing
 # ============================================================================
-# Default load test parameters
-DEFAULT_USERS = int(os.getenv("DEFAULT_USERS", "5"))
-DEFAULT_SPAWN_RATE = float(os.getenv("DEFAULT_SPAWN_RATE", "1"))
-DEFAULT_RUN_TIME = os.getenv("DEFAULT_RUN_TIME", "1m")
+LOAD_TEST_USERS = int(os.getenv("LOAD_TEST_USERS", "5"))
+LOAD_TEST_SPAWN_RATE = float(os.getenv("LOAD_TEST_SPAWN_RATE", "1"))
+LOAD_TEST_RUN_TIME = os.getenv("LOAD_TEST_RUN_TIME", "2m")
+
+# ============================================================================
+# Endurance Test Configuration
+# Long duration test with moderate load to check for memory leaks and degradation
+# ============================================================================
+ENDURANCE_TEST_USERS = int(os.getenv("ENDURANCE_TEST_USERS", "3"))
+ENDURANCE_TEST_SPAWN_RATE = float(os.getenv("ENDURANCE_TEST_SPAWN_RATE", "0.5"))
+ENDURANCE_TEST_RUN_TIME = os.getenv("ENDURANCE_TEST_RUN_TIME", "10m")
+
+# ============================================================================
+# Stress Test Configuration
+# High load beyond normal capacity to find breaking point
+# ============================================================================
+STRESS_TEST_USERS = int(os.getenv("STRESS_TEST_USERS", "10"))
+STRESS_TEST_SPAWN_RATE = float(os.getenv("STRESS_TEST_SPAWN_RATE", "2"))
+STRESS_TEST_RUN_TIME = os.getenv("STRESS_TEST_RUN_TIME", "5m")
+
+# ============================================================================
+# Breakpoint Test Configuration
+# Gradually increase load until system fails - finds exact breaking point
+# ============================================================================
+BREAKPOINT_TEST_START_USERS = int(os.getenv("BREAKPOINT_TEST_START_USERS", "1"))
+BREAKPOINT_TEST_MAX_USERS = int(os.getenv("BREAKPOINT_TEST_MAX_USERS", "15"))
+BREAKPOINT_TEST_SPAWN_RATE = float(os.getenv("BREAKPOINT_TEST_SPAWN_RATE", "1"))
+BREAKPOINT_TEST_STEP_DURATION = os.getenv("BREAKPOINT_TEST_STEP_DURATION", "1m")
+BREAKPOINT_TEST_USER_INCREMENT = int(os.getenv("BREAKPOINT_TEST_USER_INCREMENT", "2"))
+
+# ============================================================================
+# Legacy Defaults (for backward compatibility)
+# ============================================================================
+DEFAULT_USERS = LOAD_TEST_USERS
+DEFAULT_SPAWN_RATE = LOAD_TEST_SPAWN_RATE
+DEFAULT_RUN_TIME = LOAD_TEST_RUN_TIME
 
 # ============================================================================
 # User Behavior Configuration

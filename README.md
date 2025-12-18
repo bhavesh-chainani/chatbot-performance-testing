@@ -4,12 +4,17 @@ A comprehensive load testing suite for chatbots built with [Locust](https://locu
 
 ## Features
 
-- ✅ **Load Testing**: Simulate multiple concurrent users interacting with your chatbot
+- ✅ **4 Test Types**: Load, Endurance, Stress, and Breakpoint testing
+- ✅ **Load Testing**: Simulate normal expected load conditions
+- ✅ **Endurance Testing**: Long duration tests to identify memory leaks and degradation
+- ✅ **Stress Testing**: High load beyond normal capacity to find breaking points
+- ✅ **Breakpoint Testing**: Gradually increase load until system fails
 - ✅ **Authentication Support**: Automatic login flow handling
 - ✅ **TTF Tracking**: Time To First Token metrics per question category (Simple, Common, Complex)
 - ✅ **Question Categories**: Separate performance metrics for different question types
 - ✅ **Detailed Reports**: HTML and CSV reports with comprehensive metrics
 - ✅ **Customizable**: Easy to configure test parameters and sample questions
+- ✅ **Locust Free Tier Compatible**: Configurations start small and are easily adjustable
 
 ## Project Structure
 
@@ -19,7 +24,10 @@ A comprehensive load testing suite for chatbots built with [Locust](https://locu
 ├── test_config.py             # Centralized test configuration
 ├── sample_questions.py        # Sample questions organized by category
 ├── config_load_test.py        # Load test configuration (uses test_config.py)
-├── run_tests.py               # Test runner script
+├── config_endurance_test.py   # Endurance test configuration
+├── config_stress_test.py      # Stress test configuration
+├── config_breakpoint_test.py  # Breakpoint test configuration
+├── run_tests.py               # Test runner script (supports all 4 test types)
 ├── requirements.txt           # Python dependencies
 ├── .env                       # Environment variables (create from .env.example)
 ├── .env.example              # Example environment configuration
@@ -75,24 +83,144 @@ cp .env.example .env
 
 ## Quick Start
 
-### Run Load Test
+### Running Tests
 
-**Using Python script (Recommended):**
+The test suite supports **4 different test types**. All configurations are easily accessible and start small for Locust free tier.
+
+**Basic Usage:**
 ```bash
-# Use defaults from config_load_test.py
+# Run load test with defaults
+python run_tests.py load
+
+# Run endurance test with defaults
+python run_tests.py endurance
+
+# Run stress test with defaults
+python run_tests.py stress
+
+# Run breakpoint test with defaults
+python run_tests.py breakpoint
+```
+
+**With Custom Parameters:**
+```bash
+# Override defaults (users spawn_rate duration)
+python run_tests.py load 10 2 5m
+python run_tests.py endurance 5 1 15m
+python run_tests.py stress 15 3 5m
+
+# Breakpoint test uses its own configuration (see config_breakpoint_test.py)
+python run_tests.py breakpoint
+```
+
+**Show Help:**
+```bash
 python run_tests.py
-
-# Or specify custom parameters
-python run_tests.py 10 2 5m  # users spawn_rate duration
 ```
 
-**Using Locust directly:**
+### Test Types Explained
+
+#### 1. Load Test (`load`)
+**Purpose**: Test normal expected load conditions - baseline performance testing.
+
+**Default Configuration** (`config_load_test.py`):
+- Users: 5 concurrent users
+- Spawn Rate: 1 user/second
+- Duration: 2 minutes
+
+**Use Case**: Regular performance testing, baseline metrics, production-like load.
+
+**Run:**
 ```bash
+python run_tests.py load
+# or with custom parameters
+python run_tests.py load 10 2 5m
+```
+
+#### 2. Endurance Test (`endurance`)
+**Purpose**: Long duration test with moderate load to identify:
+- Memory leaks
+- Performance degradation over time
+- Resource exhaustion issues
+- Stability problems
+
+**Default Configuration** (`config_endurance_test.py`):
+- Users: 3 concurrent users
+- Spawn Rate: 0.5 users/second (slow ramp-up)
+- Duration: 10 minutes
+
+**Use Case**: Testing system stability, finding memory leaks, checking for degradation.
+
+**Run:**
+```bash
+python run_tests.py endurance
+# or with custom parameters
+python run_tests.py endurance 5 1 30m
+```
+
+#### 3. Stress Test (`stress`)
+**Purpose**: High load beyond normal capacity to identify:
+- Maximum capacity limits
+- Performance bottlenecks under stress
+- Error handling under high load
+- System recovery capabilities
+
+**Default Configuration** (`config_stress_test.py`):
+- Users: 10 concurrent users
+- Spawn Rate: 2 users/second (faster ramp-up)
+- Duration: 5 minutes
+
+**Use Case**: Finding breaking points, testing error handling, capacity planning.
+
+**Run:**
+```bash
+python run_tests.py stress
+# or with custom parameters
+python run_tests.py stress 20 3 5m
+```
+
+#### 4. Breakpoint Test (`breakpoint`)
+**Purpose**: Gradually increase load until system fails - finds exact breaking point.
+
+**How it works**: Starts with low load and gradually increases users at each step until failure is detected.
+
+**Default Configuration** (`config_breakpoint_test.py`):
+- Start Users: 1
+- Max Users: 15
+- Spawn Rate: 1 user/second
+- Step Duration: 1 minute per load level
+- User Increment: +2 users per step
+
+**Use Case**: Finding exact capacity limits, testing graceful degradation.
+
+**Run:**
+```bash
+python run_tests.py breakpoint
+```
+
+**Note**: Breakpoint test uses its own configuration. Edit `config_breakpoint_test.py` to customize.
+
+### Configuration Files
+
+All test configurations are easily accessible:
+
+- **`test_config.py`**: Centralized configuration (all test types)
+- **`config_load_test.py`**: Load test specific config
+- **`config_endurance_test.py`**: Endurance test specific config
+- **`config_stress_test.py`**: Stress test specific config
+- **`config_breakpoint_test.py`**: Breakpoint test specific config
+
+**Easy Configuration**: Edit any config file or set environment variables. All configs start small for Locust free tier and can be easily adjusted.
+
+### Using Locust Directly
+
+You can also run tests directly with Locust:
+
+```bash
+# Load test
 locust -f locustfile.py --users 5 --spawn-rate 1 --run-time 2m --host https://cfoti.org --headless --html reports/load_test_report.html --csv reports/load_test_report
-```
 
-**Interactive Web UI:**
-```bash
+# Interactive Web UI
 locust -f locustfile.py --host https://cfoti.org
 ```
 Then open `http://localhost:8089` in your browser to configure and run tests interactively.
@@ -108,16 +236,42 @@ The load test will:
 
 ### Test Configuration
 
-**Easy Configuration**: All test settings are now centralized in `test_config.py` for easy management.
+**Easy Configuration**: All test settings are centralized in `test_config.py` and individual config files for easy management.
 
-Default parameters:
-- **Users**: 5 concurrent users
-- **Spawn Rate**: 1 user per second
-- **Duration**: 2 minutes
+**Default Parameters by Test Type:**
+
+| Test Type | Users | Spawn Rate | Duration | Purpose |
+|-----------|-------|------------|----------|---------|
+| **Load** | 5 | 1/sec | 2m | Normal expected load |
+| **Endurance** | 3 | 0.5/sec | 10m | Long duration, moderate load |
+| **Stress** | 10 | 2/sec | 5m | High load beyond capacity |
+| **Breakpoint** | 1→15 | 1/sec | 1m/step | Gradual increase until failure |
+
+**Common Settings** (all test types):
 - **Wait Time**: 2-5 seconds between tasks
 - **Task Weights**: Chat page (3), Send message (5)
 
-You can modify these in `test_config.py` (or via environment variables) or pass them as command-line arguments.
+**Configuration Options:**
+1. Edit config files: `config_*_test.py` for test-specific settings
+2. Edit `test_config.py` for global settings
+3. Set environment variables (takes precedence)
+4. Pass command-line arguments (overrides config)
+
+**Example - Customizing Load Test:**
+```python
+# Edit config_load_test.py or test_config.py
+LOAD_TEST_USERS = 10
+LOAD_TEST_SPAWN_RATE = 2
+LOAD_TEST_RUN_TIME = "5m"
+```
+
+**Example - Using Environment Variables:**
+```bash
+export LOAD_TEST_USERS=10
+export LOAD_TEST_SPAWN_RATE=2
+export LOAD_TEST_RUN_TIME=5m
+python run_tests.py load
+```
 
 ## API Structure
 
@@ -154,9 +308,23 @@ The chatbot requires authentication:
 ## Reports
 
 Test reports are saved in the `reports/` directory:
-- HTML reports: `reports/{test_type}_test_report.html`
-- CSV data: `reports/{test_type}_test_*.csv`
-- **TTF Data**: `reports/ttf_data.csv` - Time To First Token metrics per question
+
+**Report Files by Test Type:**
+- **Load Test**: 
+  - `reports/load_test_report.html`
+  - `reports/load_test_report_*.csv`
+- **Endurance Test**: 
+  - `reports/endurance_test_report.html`
+  - `reports/endurance_test_report_*.csv`
+- **Stress Test**: 
+  - `reports/stress_test_report.html`
+  - `reports/stress_test_report_*.csv`
+- **Breakpoint Test**: 
+  - `reports/breakpoint_test_step_{N}_{users}users.html` (one per step)
+  - `reports/breakpoint_test_step_{N}_{users}users_*.csv` (one per step)
+
+**Shared Data:**
+- **TTF Data**: `reports/ttf_data.csv` - Time To First Token metrics per question (shared across all tests)
 
 ### Time To First Token (TTF) Tracking
 
