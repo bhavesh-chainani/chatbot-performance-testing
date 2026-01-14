@@ -11,7 +11,7 @@ This test runs for an extended period with moderate load to identify:
 This file uses the centralized test_config.py for configuration.
 You can override defaults here or via environment variables.
 """
-from test_config import (
+from config.test_config import (
     CHATBOT_URL,
     ENDURANCE_TEST_USERS,
     ENDURANCE_TEST_SPAWN_RATE,
@@ -30,4 +30,3 @@ ENDURANCE_TEST_CONFIG = {
     "web_ui": True,  # Enable web UI
     "html_report": "reports/endurance_test_report.html"
 }
-

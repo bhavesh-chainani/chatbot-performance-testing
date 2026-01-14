@@ -11,7 +11,7 @@ This test gradually increases load to identify:
 This file uses the centralized test_config.py for configuration.
 You can override defaults here or via environment variables.
 """
-from test_config import (
+from config.test_config import (
     CHATBOT_URL,
     BREAKPOINT_TEST_START_USERS,
     BREAKPOINT_TEST_MAX_USERS,
@@ -34,4 +34,3 @@ BREAKPOINT_TEST_CONFIG = {
     "web_ui": True,  # Enable web UI
     "html_report": "reports/breakpoint_test_report.html"
 }
-

@@ -1,6 +1,7 @@
 """
 Locust performance testing file for chatbot with authentication
 Handles login flow before accessing chat functionality
+Supports AWS-hosted chatbots
 """
 import random
 import time
@@ -9,7 +10,14 @@ from locust.contrib.fasthttp import FastHttpUser
 from locust import task, between, events
 
 # Import configuration from centralized config file
-from test_config import (
+import sys
+from pathlib import Path
+
+# Add project root to path
+project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
+
+from config.test_config import (
     CHATBOT_URL,
     API_ENDPOINT_LOGIN,
     API_ENDPOINT_SEND,
@@ -24,7 +32,7 @@ from test_config import (
 )
 
 # Import sample questions and helper functions
-from sample_questions import (
+from src.sample_questions import (
     get_sample_messages,
     get_question_category,
 )
@@ -58,7 +66,7 @@ def on_test_start(environment, **kwargs):
             ])
 
 
-class MyUser(FastHttpUser):
+class ChatbotUser(FastHttpUser):
     """
     User class that simulates authenticated chatbot interactions
     

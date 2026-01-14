@@ -5,7 +5,7 @@ Tests normal expected load conditions
 This file uses the centralized test_config.py for configuration.
 You can override defaults here or via environment variables.
 """
-from test_config import (
+from config.test_config import (
     CHATBOT_URL,
     LOAD_TEST_USERS,
     LOAD_TEST_SPAWN_RATE,

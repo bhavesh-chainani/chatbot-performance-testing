@@ -12,9 +12,28 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # ============================================================================
+# AWS Configuration
+# ============================================================================
+# Set AWS_REGION if your chatbot is hosted on AWS
+AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
+AWS_PROFILE = os.getenv("AWS_PROFILE", "default")
+
+# AWS API Gateway endpoint (if using API Gateway)
+AWS_API_GATEWAY_URL = os.getenv("AWS_API_GATEWAY_URL", "")
+
+# AWS CloudFront distribution (if using CloudFront)
+AWS_CLOUDFRONT_DISTRIBUTION = os.getenv("AWS_CLOUDFRONT_DISTRIBUTION", "")
+
+# AWS Cognito configuration (if using Cognito for authentication)
+AWS_COGNITO_USER_POOL_ID = os.getenv("AWS_COGNITO_USER_POOL_ID", "")
+AWS_COGNITO_CLIENT_ID = os.getenv("AWS_COGNITO_CLIENT_ID", "")
+AWS_COGNITO_REGION = os.getenv("AWS_COGNITO_REGION", AWS_REGION)
+
+# ============================================================================
 # API Configuration
 # ============================================================================
-CHATBOT_URL = os.getenv("CHATBOT_URL", "https://cfoti.org")
+# Use AWS API Gateway URL if provided, otherwise use CHATBOT_URL
+CHATBOT_URL = os.getenv("CHATBOT_URL", AWS_API_GATEWAY_URL or "https://your-chatbot-url.com")
 API_ENDPOINT_LOGIN = os.getenv("API_ENDPOINT_LOGIN", "/api/auth/login")
 API_ENDPOINT_SEND = os.getenv("API_ENDPOINT_SEND", "/api/chat")
 
@@ -23,6 +42,9 @@ API_ENDPOINT_SEND = os.getenv("API_ENDPOINT_SEND", "/api/chat")
 # ============================================================================
 LOGIN_EMAIL = os.getenv("LOGIN_EMAIL", "")
 LOGIN_PASSWORD = os.getenv("LOGIN_PASSWORD", "")
+
+# AWS Cognito authentication (alternative to email/password)
+USE_AWS_COGNITO = os.getenv("USE_AWS_COGNITO", "false").lower() == "true"
 
 # ============================================================================
 # Load Test Configuration
@@ -112,4 +134,3 @@ CUSTOM_HEADERS = {
     # Add any custom headers here
     # Example: "X-Custom-Header": "value"
 }
-

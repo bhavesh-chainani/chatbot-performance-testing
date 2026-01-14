@@ -4,18 +4,18 @@ Performance Testing Script for Chatbot
 Supports 4 test types: load, endurance, stress, breakpoint
 
 Usage:
-    python run_tests.py load                    # Run load test with defaults
-    python run_tests.py endurance              # Run endurance test with defaults
-    python run_tests.py stress                 # Run stress test with defaults
-    python run_tests.py breakpoint             # Run breakpoint test with defaults
+    python scripts/run_tests.py load                    # Run load test with defaults
+    python scripts/run_tests.py endurance              # Run endurance test with defaults
+    python scripts/run_tests.py stress                 # Run stress test with defaults
+    python scripts/run_tests.py breakpoint             # Run breakpoint test with defaults
     
     # Override defaults with custom parameters:
-    python run_tests.py load [users] [spawn_rate] [duration]
-    python run_tests.py endurance [users] [spawn_rate] [duration]
-    python run_tests.py stress [users] [spawn_rate] [duration]
+    python scripts/run_tests.py load [users] [spawn_rate] [duration]
+    python scripts/run_tests.py endurance [users] [spawn_rate] [duration]
+    python scripts/run_tests.py stress [users] [spawn_rate] [duration]
     
     # Example:
-    python run_tests.py load 10 2 5m
+    python scripts/run_tests.py load 10 2 5m
 """
 import os
 import sys
@@ -25,13 +25,16 @@ import csv
 from pathlib import Path
 from dotenv import load_dotenv
 
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 # Load environment variables
 load_dotenv()
 
 # Create reports directory
 Path("reports").mkdir(exist_ok=True)
 
-CHATBOT_URL = os.getenv("CHATBOT_URL", "https://cfoti.org")
+from config.test_config import CHATBOT_URL
 
 
 def run_load_test(users=None, spawn_rate=None, run_time=None):
@@ -39,7 +42,7 @@ def run_load_test(users=None, spawn_rate=None, run_time=None):
     # Load defaults from config if not provided
     if users is None or spawn_rate is None or run_time is None:
         try:
-            from config_load_test import LOAD_TEST_CONFIG
+            from config.config_load_test import LOAD_TEST_CONFIG
             users = users or LOAD_TEST_CONFIG["users"]
             spawn_rate = spawn_rate or LOAD_TEST_CONFIG["spawn_rate"]
             run_time = run_time or LOAD_TEST_CONFIG["run_time"]
@@ -67,7 +70,7 @@ def run_load_test(users=None, spawn_rate=None, run_time=None):
     
     cmd = [
         "locust",
-        "-f", "locustfile.py",
+        "-f", "src/locustfile.py",
         "--users", str(users),
         "--spawn-rate", str(spawn_rate),
         "--run-time", run_time,
@@ -110,7 +113,7 @@ def run_endurance_test(users=None, spawn_rate=None, run_time=None):
     # Load defaults from config if not provided
     if users is None or spawn_rate is None or run_time is None:
         try:
-            from config_endurance_test import ENDURANCE_TEST_CONFIG
+            from config.config_endurance_test import ENDURANCE_TEST_CONFIG
             users = users or ENDURANCE_TEST_CONFIG["users"]
             spawn_rate = spawn_rate or ENDURANCE_TEST_CONFIG["spawn_rate"]
             run_time = run_time or ENDURANCE_TEST_CONFIG["run_time"]
@@ -137,7 +140,7 @@ def run_endurance_test(users=None, spawn_rate=None, run_time=None):
     
     cmd = [
         "locust",
-        "-f", "locustfile.py",
+        "-f", "src/locustfile.py",
         "--users", str(users),
         "--spawn-rate", str(spawn_rate),
         "--run-time", run_time,
@@ -180,7 +183,7 @@ def run_stress_test(users=None, spawn_rate=None, run_time=None):
     # Load defaults from config if not provided
     if users is None or spawn_rate is None or run_time is None:
         try:
-            from config_stress_test import STRESS_TEST_CONFIG
+            from config.config_stress_test import STRESS_TEST_CONFIG
             users = users or STRESS_TEST_CONFIG["users"]
             spawn_rate = spawn_rate or STRESS_TEST_CONFIG["spawn_rate"]
             run_time = run_time or STRESS_TEST_CONFIG["run_time"]
@@ -207,7 +210,7 @@ def run_stress_test(users=None, spawn_rate=None, run_time=None):
     
     cmd = [
         "locust",
-        "-f", "locustfile.py",
+        "-f", "src/locustfile.py",
         "--users", str(users),
         "--spawn-rate", str(spawn_rate),
         "--run-time", run_time,
@@ -427,7 +430,7 @@ def _generate_breakpoint_summary_report(steps_data, breaking_point_users):
 def run_breakpoint_test():
     """Run breakpoint test - gradually increase load until system fails"""
     try:
-        from config_breakpoint_test import BREAKPOINT_TEST_CONFIG
+        from config.config_breakpoint_test import BREAKPOINT_TEST_CONFIG
         start_users = BREAKPOINT_TEST_CONFIG["start_users"]
         max_users = BREAKPOINT_TEST_CONFIG["max_users"]
         spawn_rate = BREAKPOINT_TEST_CONFIG["spawn_rate"]
@@ -471,7 +474,7 @@ def run_breakpoint_test():
         
         cmd = [
             "locust",
-            "-f", "locustfile.py",
+            "-f", "src/locustfile.py",
             "--users", str(current_users),
             "--spawn-rate", str(spawn_rate),
             "--run-time", step_duration,
@@ -598,16 +601,16 @@ def print_usage():
     print("  3. stress     - High load beyond normal capacity")
     print("  4. breakpoint - Gradually increase load until failure")
     print("\nUsage:")
-    print("  python run_tests.py [test_type] [users] [spawn_rate] [duration]")
+    print("  python scripts/run_tests.py [test_type] [users] [spawn_rate] [duration]")
     print("\nExamples:")
-    print("  python run_tests.py load                    # Use defaults")
-    print("  python run_tests.py load 10 2 5m           # Custom parameters")
-    print("  python run_tests.py endurance              # Use defaults")
-    print("  python run_tests.py stress                 # Use defaults")
-    print("  python run_tests.py breakpoint             # Use defaults")
+    print("  python scripts/run_tests.py load                    # Use defaults")
+    print("  python scripts/run_tests.py load 10 2 5m           # Custom parameters")
+    print("  python scripts/run_tests.py endurance              # Use defaults")
+    print("  python scripts/run_tests.py stress                 # Use defaults")
+    print("  python scripts/run_tests.py breakpoint             # Use defaults")
     print("\nConfiguration:")
-    print("  Edit test_config.py or set environment variables to customize")
-    print("  All test configurations are in config_*_test.py files")
+    print("  Edit config/test_config.py or set environment variables to customize")
+    print("  All test configurations are in config/config_*_test.py files")
     print("=" * 60)
 
 
@@ -644,7 +647,7 @@ def main():
     elif test_type == "breakpoint":
         if users is not None or spawn_rate is not None or run_time is not None:
             print("Warning: Breakpoint test uses its own configuration.")
-            print("Parameters are ignored. Edit config_breakpoint_test.py to customize.")
+            print("Parameters are ignored. Edit config/config_breakpoint_test.py to customize.")
         run_breakpoint_test()
     else:
         print(f"Error: Unknown test type '{test_type}'")

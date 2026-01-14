@@ -143,4 +143,3 @@ def get_question_category(message):
         return "Complex"
     else:
         return "Unknown"
-

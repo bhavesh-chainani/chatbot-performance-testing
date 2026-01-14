@@ -11,7 +11,7 @@ This test pushes the system beyond normal capacity to identify:
 This file uses the centralized test_config.py for configuration.
 You can override defaults here or via environment variables.
 """
-from test_config import (
+from config.test_config import (
     CHATBOT_URL,
     STRESS_TEST_USERS,
     STRESS_TEST_SPAWN_RATE,
@@ -30,4 +30,3 @@ STRESS_TEST_CONFIG = {
     "web_ui": True,  # Enable web UI
     "html_report": "reports/stress_test_report.html"
 }
-
