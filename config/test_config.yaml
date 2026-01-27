@@ -1,0 +1,76 @@
+# Chatbot API Configuration
+# Simple configuration for API-based chatbot testing
+# 
+# Note: Values in .env file override these defaults
+# Required in .env: CHATBOT_URL, LOGIN_EMAIL, LOGIN_PASSWORD, API_ENDPOINT_LOGIN, API_ENDPOINT_SEND
+
+# ============================================================================
+# Chatbot API Configuration
+# ============================================================================
+chatbot:
+  url: "https://your-chatbot-url.com"  # Base URL (override with CHATBOT_URL in .env)
+  api_endpoints:
+    login: "/api/auth/login"            # Login endpoint (override with API_ENDPOINT_LOGIN in .env)
+    send: "/api/chat"                   # Chat endpoint (override with API_ENDPOINT_SEND in .env)
+
+# ============================================================================
+# Authentication
+# ============================================================================
+# Set LOGIN_EMAIL and LOGIN_PASSWORD in .env file
+
+# ============================================================================
+# Load Test Configuration
+# Normal expected load conditions - baseline performance testing
+# ============================================================================
+load_test:
+  users: 500                            # Concurrent users (client requirement: 500)
+  spawn_rate: 25.0                      # Users per second (500 users / 20 seconds)
+  run_time: "20m"                      # Duration (client requirement: ~20 minutes)
+
+# ============================================================================
+# Endurance Test Configuration
+# Long duration test with moderate load to check for memory leaks
+# ============================================================================
+endurance_test:
+  users: 500                            # Concurrent users (client requirement: 500)
+  spawn_rate: 10.0                      # Users per second (slow ramp-up for 8 hour test)
+  run_time: "8h"                       # Duration (client requirement: 8 hours)
+
+# ============================================================================
+# Stress Test Configuration
+# High load beyond normal capacity to find breaking point
+# ============================================================================
+stress_test:
+  users: 750                            # Concurrent users (client requirement: 750)
+  spawn_rate: 37.5                      # Users per second (750 users / 20 seconds)
+  run_time: "20m"                      # Duration (client requirement: ~20 minutes)
+
+# ============================================================================
+# Breakpoint Test Configuration
+# Gradually increase load until system fails - finds exact breaking point
+# ============================================================================
+breakpoint_test:
+  start_users: 0                        # Starting number of users
+  max_users: 1000                       # Maximum users to test (client requirement: up to 1000)
+  spawn_rate: 16.67                     # Users per second (1000 users / 60 minutes)
+  step_duration: "5m"                   # Duration at each load level
+  user_increment: 50                    # Users added per step (ramp from 0 to 1000 over 60 min)
+
+# ============================================================================
+# User Behavior
+# ============================================================================
+user_behavior:
+  wait_time:
+    min: 2.0                            # Min seconds between actions
+    max: 5.0                            # Max seconds between actions
+  task_weights:
+    chat_page: 3                        # How often to load chat page
+    send_message: 5                     # How often to send messages
+
+# ============================================================================
+# Reporting
+# ============================================================================
+reporting:
+  reports_dir: "reports"
+  html_report_path: "reports/load_test_report.html"
+  ttf_data_path: "reports/ttf_data.csv"

@@ -1,20 +1,9 @@
-# Environment variables
-.env
-
-# Reports
-reports/
-*.html
-*.csv
-
 # Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-env/
-venv/
-ENV/
 build/
 develop-eggs/
 dist/
@@ -31,6 +20,21 @@ wheels/
 .installed.cfg
 *.egg
 
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# Environment variables
+.env
+.env.local
+
+# Reports
+reports/
+*.html
+*.csv
+
 # IDE
 .vscode/
 .idea/
@@ -42,3 +46,9 @@ wheels/
 .DS_Store
 Thumbs.db
 
+# AWS
+.aws/
+*.pem
+
+# Logs
+*.log

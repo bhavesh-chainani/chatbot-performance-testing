@@ -3,7 +3,7 @@ Load Test Configuration
 Tests normal expected load conditions
 
 This file uses the centralized test_config.py for configuration.
-You can override defaults here or via environment variables.
+Configuration is loaded from test_config.yaml (with env var overrides).
 """
 from config.test_config import (
     CHATBOT_URL,
@@ -14,7 +14,7 @@ from config.test_config import (
 )
 
 # Load test parameters - suitable for Locust Cloud free tier
-# These can be overridden via environment variables in test_config.py
+# These can be overridden via environment variables or test_config.yaml
 LOAD_TEST_CONFIG = {
     "users": LOAD_TEST_USERS,  # Number of concurrent users
     "spawn_rate": LOAD_TEST_SPAWN_RATE,  # Users spawned per second

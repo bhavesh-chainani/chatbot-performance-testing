@@ -9,7 +9,7 @@ This test runs for an extended period with moderate load to identify:
 - Stability problems
 
 This file uses the centralized test_config.py for configuration.
-You can override defaults here or via environment variables.
+Configuration is loaded from test_config.yaml (with env var overrides).
 """
 from config.test_config import (
     CHATBOT_URL,
@@ -21,7 +21,7 @@ from config.test_config import (
 
 # Endurance test parameters - moderate load, long duration
 # Suitable for Locust Cloud free tier
-# These can be overridden via environment variables in test_config.py
+# These can be overridden via environment variables or test_config.yaml
 ENDURANCE_TEST_CONFIG = {
     "users": ENDURANCE_TEST_USERS,  # Moderate number of concurrent users
     "spawn_rate": ENDURANCE_TEST_SPAWN_RATE,  # Slow spawn rate

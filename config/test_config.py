@@ -1,136 +1,106 @@
 """
 Test Configuration
-Centralized configuration for chatbot performance testing
-
-To configure your tests, modify the values below or set them via environment variables.
-Environment variables take precedence over the defaults here.
+Loads from test_config.yaml with environment variable overrides
 """
 import os
+import yaml
+from pathlib import Path
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
+# Load environment variables
 load_dotenv()
 
-# ============================================================================
-# AWS Configuration
-# ============================================================================
-# Set AWS_REGION if your chatbot is hosted on AWS
-AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
-AWS_PROFILE = os.getenv("AWS_PROFILE", "default")
+# Load YAML configuration
+_config_path = Path(__file__).parent / "test_config.yaml"
+_config = {}
 
-# AWS API Gateway endpoint (if using API Gateway)
-AWS_API_GATEWAY_URL = os.getenv("AWS_API_GATEWAY_URL", "")
+if _config_path.exists():
+    with open(_config_path, 'r') as f:
+        _config = yaml.safe_load(f) or {}
+else:
+    print(f"Warning: {_config_path} not found. Using defaults.")
 
-# AWS CloudFront distribution (if using CloudFront)
-AWS_CLOUDFRONT_DISTRIBUTION = os.getenv("AWS_CLOUDFRONT_DISTRIBUTION", "")
+def _get_config(key_path, default=None, env_key=None):
+    """Get config value from YAML, with environment variable override"""
+    if env_key:
+        env_value = os.getenv(env_key)
+        if env_value is not None:
+            if isinstance(default, bool):
+                return env_value.lower() in ('true', '1', 'yes', 'on')
+            elif isinstance(default, int):
+                try:
+                    return int(env_value)
+                except ValueError:
+                    return default
+            elif isinstance(default, float):
+                try:
+                    return float(env_value)
+                except ValueError:
+                    return default
+            return env_value
+    
+    keys = key_path.split('.')
+    value = _config
+    for key in keys:
+        if isinstance(value, dict) and key in value:
+            value = value[key]
+        else:
+            return default
+    return value if value is not None else default
 
-# AWS Cognito configuration (if using Cognito for authentication)
-AWS_COGNITO_USER_POOL_ID = os.getenv("AWS_COGNITO_USER_POOL_ID", "")
-AWS_COGNITO_CLIENT_ID = os.getenv("AWS_COGNITO_CLIENT_ID", "")
-AWS_COGNITO_REGION = os.getenv("AWS_COGNITO_REGION", AWS_REGION)
+# Chatbot API Configuration
+CHATBOT_URL = _get_config('chatbot.url', 'https://your-chatbot-url.com', 'CHATBOT_URL')
+API_ENDPOINT_LOGIN = _get_config('chatbot.api_endpoints.login', '/api/auth/login', 'API_ENDPOINT_LOGIN')
+API_ENDPOINT_SEND = _get_config('chatbot.api_endpoints.send', '/api/chat', 'API_ENDPOINT_SEND')
 
-# ============================================================================
-# API Configuration
-# ============================================================================
-# Use AWS API Gateway URL if provided, otherwise use CHATBOT_URL
-CHATBOT_URL = os.getenv("CHATBOT_URL", AWS_API_GATEWAY_URL or "https://your-chatbot-url.com")
-API_ENDPOINT_LOGIN = os.getenv("API_ENDPOINT_LOGIN", "/api/auth/login")
-API_ENDPOINT_SEND = os.getenv("API_ENDPOINT_SEND", "/api/chat")
+# Authentication (from .env)
+LOGIN_EMAIL = _get_config('authentication.email', '', 'LOGIN_EMAIL')
+LOGIN_PASSWORD = _get_config('authentication.password', '', 'LOGIN_PASSWORD')
 
-# ============================================================================
-# Authentication Configuration
-# ============================================================================
-LOGIN_EMAIL = os.getenv("LOGIN_EMAIL", "")
-LOGIN_PASSWORD = os.getenv("LOGIN_PASSWORD", "")
+# Load Test
+LOAD_TEST_USERS = _get_config('load_test.users', 5, 'LOAD_TEST_USERS')
+LOAD_TEST_SPAWN_RATE = _get_config('load_test.spawn_rate', 1.0, 'LOAD_TEST_SPAWN_RATE')
+LOAD_TEST_RUN_TIME = _get_config('load_test.run_time', '2m', 'LOAD_TEST_RUN_TIME')
 
-# AWS Cognito authentication (alternative to email/password)
-USE_AWS_COGNITO = os.getenv("USE_AWS_COGNITO", "false").lower() == "true"
+# Endurance Test
+ENDURANCE_TEST_USERS = _get_config('endurance_test.users', 3, 'ENDURANCE_TEST_USERS')
+ENDURANCE_TEST_SPAWN_RATE = _get_config('endurance_test.spawn_rate', 0.5, 'ENDURANCE_TEST_SPAWN_RATE')
+ENDURANCE_TEST_RUN_TIME = _get_config('endurance_test.run_time', '10m', 'ENDURANCE_TEST_RUN_TIME')
 
-# ============================================================================
-# Load Test Configuration
-# Normal expected load conditions - baseline performance testing
-# ============================================================================
-LOAD_TEST_USERS = int(os.getenv("LOAD_TEST_USERS", "5"))
-LOAD_TEST_SPAWN_RATE = float(os.getenv("LOAD_TEST_SPAWN_RATE", "1"))
-LOAD_TEST_RUN_TIME = os.getenv("LOAD_TEST_RUN_TIME", "2m")
+# Stress Test
+STRESS_TEST_USERS = _get_config('stress_test.users', 10, 'STRESS_TEST_USERS')
+STRESS_TEST_SPAWN_RATE = _get_config('stress_test.spawn_rate', 2.0, 'STRESS_TEST_SPAWN_RATE')
+STRESS_TEST_RUN_TIME = _get_config('stress_test.run_time', '5m', 'STRESS_TEST_RUN_TIME')
 
-# ============================================================================
-# Endurance Test Configuration
-# Long duration test with moderate load to check for memory leaks and degradation
-# ============================================================================
-ENDURANCE_TEST_USERS = int(os.getenv("ENDURANCE_TEST_USERS", "3"))
-ENDURANCE_TEST_SPAWN_RATE = float(os.getenv("ENDURANCE_TEST_SPAWN_RATE", "0.5"))
-ENDURANCE_TEST_RUN_TIME = os.getenv("ENDURANCE_TEST_RUN_TIME", "10m")
+# Breakpoint Test
+BREAKPOINT_TEST_START_USERS = _get_config('breakpoint_test.start_users', 1, 'BREAKPOINT_TEST_START_USERS')
+BREAKPOINT_TEST_MAX_USERS = _get_config('breakpoint_test.max_users', 150, 'BREAKPOINT_TEST_MAX_USERS')
+BREAKPOINT_TEST_SPAWN_RATE = _get_config('breakpoint_test.spawn_rate', 1.0, 'BREAKPOINT_TEST_SPAWN_RATE')
+BREAKPOINT_TEST_STEP_DURATION = _get_config('breakpoint_test.step_duration', '1m', 'BREAKPOINT_TEST_STEP_DURATION')
+BREAKPOINT_TEST_USER_INCREMENT = _get_config('breakpoint_test.user_increment', 20, 'BREAKPOINT_TEST_USER_INCREMENT')
 
-# ============================================================================
-# Stress Test Configuration
-# High load beyond normal capacity to find breaking point
-# ============================================================================
-STRESS_TEST_USERS = int(os.getenv("STRESS_TEST_USERS", "10"))
-STRESS_TEST_SPAWN_RATE = float(os.getenv("STRESS_TEST_SPAWN_RATE", "2"))
-STRESS_TEST_RUN_TIME = os.getenv("STRESS_TEST_RUN_TIME", "5m")
-
-# ============================================================================
-# Breakpoint Test Configuration
-# Gradually increase load until system fails - finds exact breaking point
-# ============================================================================
-BREAKPOINT_TEST_START_USERS = int(os.getenv("BREAKPOINT_TEST_START_USERS", "1"))
-BREAKPOINT_TEST_MAX_USERS = int(os.getenv("BREAKPOINT_TEST_MAX_USERS", "150"))
-BREAKPOINT_TEST_SPAWN_RATE = float(os.getenv("BREAKPOINT_TEST_SPAWN_RATE", "1"))
-BREAKPOINT_TEST_STEP_DURATION = os.getenv("BREAKPOINT_TEST_STEP_DURATION", "1m")
-BREAKPOINT_TEST_USER_INCREMENT = int(os.getenv("BREAKPOINT_TEST_USER_INCREMENT", "20"))
-
-# ============================================================================
-# Legacy Defaults (for backward compatibility)
-# ============================================================================
+# Legacy defaults
 DEFAULT_USERS = LOAD_TEST_USERS
 DEFAULT_SPAWN_RATE = LOAD_TEST_SPAWN_RATE
 DEFAULT_RUN_TIME = LOAD_TEST_RUN_TIME
 
-# ============================================================================
-# User Behavior Configuration
-# ============================================================================
-# Wait time between tasks (simulates user reading response)
-# Format: between(min_seconds, max_seconds)
-WAIT_TIME_MIN = float(os.getenv("WAIT_TIME_MIN", "2"))
-WAIT_TIME_MAX = float(os.getenv("WAIT_TIME_MAX", "5"))
+# User Behavior
+WAIT_TIME_MIN = _get_config('user_behavior.wait_time.min', 2.0, 'WAIT_TIME_MIN')
+WAIT_TIME_MAX = _get_config('user_behavior.wait_time.max', 5.0, 'WAIT_TIME_MAX')
+TASK_WEIGHT_CHAT_PAGE = _get_config('user_behavior.task_weights.chat_page', 3, 'TASK_WEIGHT_CHAT_PAGE')
+TASK_WEIGHT_SEND_MESSAGE = _get_config('user_behavior.task_weights.send_message', 5, 'TASK_WEIGHT_SEND_MESSAGE')
 
-# ============================================================================
-# Task Weights Configuration
-# ============================================================================
-# These control how often each task is executed relative to others
-# Higher weight = more frequent execution
-TASK_WEIGHT_CHAT_PAGE = int(os.getenv("TASK_WEIGHT_CHAT_PAGE", "3"))
-TASK_WEIGHT_SEND_MESSAGE = int(os.getenv("TASK_WEIGHT_SEND_MESSAGE", "5"))
+# Reporting
+REPORTS_DIR = _get_config('reporting.reports_dir', 'reports', 'REPORTS_DIR')
+HTML_REPORT_PATH = _get_config('reporting.html_report_path', f'{REPORTS_DIR}/load_test_report.html', 'HTML_REPORT_PATH')
+TTF_DATA_PATH = _get_config('reporting.ttf_data_path', f'{REPORTS_DIR}/ttf_data.csv', 'TTF_DATA_PATH')
 
-# ============================================================================
-# Reporting Configuration
-# ============================================================================
-REPORTS_DIR = os.getenv("REPORTS_DIR", "reports")
-HTML_REPORT_PATH = os.getenv("HTML_REPORT_PATH", f"{REPORTS_DIR}/load_test_report.html")
-TTF_DATA_PATH = os.getenv("TTF_DATA_PATH", f"{REPORTS_DIR}/ttf_data.csv")
-
-# ============================================================================
-# Login Endpoint Fallback Configuration
-# ============================================================================
-# Additional login endpoints to try if the primary one fails
+# Login fallbacks
 LOGIN_ENDPOINT_FALLBACKS = [
     "/api/auth/login",
     "/api/login",
-    "/api/auth/signin",
-    "/api/signin",
-    "/auth/login",
-    "/auth/signin",
     "/login",
-    "/signin",
     "/"
 ]
 
-# ============================================================================
-# Request Headers Configuration
-# ============================================================================
-# Custom headers can be added here if needed
-CUSTOM_HEADERS = {
-    # Add any custom headers here
-    # Example: "X-Custom-Header": "value"
-}
+CUSTOM_HEADERS = {}

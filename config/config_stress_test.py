@@ -9,7 +9,7 @@ This test pushes the system beyond normal capacity to identify:
 - System recovery capabilities
 
 This file uses the centralized test_config.py for configuration.
-You can override defaults here or via environment variables.
+Configuration is loaded from test_config.yaml (with env var overrides).
 """
 from config.test_config import (
     CHATBOT_URL,
@@ -21,7 +21,7 @@ from config.test_config import (
 
 # Stress test parameters - high load, shorter duration
 # Suitable for Locust Cloud free tier
-# These can be overridden via environment variables in test_config.py
+# These can be overridden via environment variables or test_config.yaml
 STRESS_TEST_CONFIG = {
     "users": STRESS_TEST_USERS,  # High number of concurrent users
     "spawn_rate": STRESS_TEST_SPAWN_RATE,  # Faster spawn rate

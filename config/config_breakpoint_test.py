@@ -9,7 +9,7 @@ This test gradually increases load to identify:
 - Recovery behavior
 
 This file uses the centralized test_config.py for configuration.
-You can override defaults here or via environment variables.
+Configuration is loaded from test_config.yaml (with env var overrides).
 """
 from config.test_config import (
     CHATBOT_URL,
@@ -23,7 +23,7 @@ from config.test_config import (
 
 # Breakpoint test parameters - gradual load increase
 # Suitable for Locust Cloud free tier
-# These can be overridden via environment variables in test_config.py
+# These can be overridden via environment variables or test_config.yaml
 BREAKPOINT_TEST_CONFIG = {
     "start_users": BREAKPOINT_TEST_START_USERS,  # Starting number of users
     "max_users": BREAKPOINT_TEST_MAX_USERS,  # Maximum users to test
