@@ -300,3 +300,4 @@ Set up AWS Cost Explorer and billing alerts:
 
 **If only using EC2 for Locust infrastructure:**
 - **Total Cost: ~$4.04** for complete test plan
+
