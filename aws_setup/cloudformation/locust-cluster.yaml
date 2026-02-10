@@ -25,7 +25,7 @@ Parameters:
   
   WorkerCount:
     Type: Number
-    Default: 2
+    Default: 1
     MinValue: 1
     MaxValue: 5
     Description: Number of worker instances

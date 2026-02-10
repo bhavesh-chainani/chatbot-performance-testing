@@ -1,6 +1,6 @@
 #!/bin/bash
 # Deploy Locust cluster using CloudFormation
-# This script creates EC2 instances for distributed load testing
+# Simple setup for 10 concurrent users
 
 set -e
 
@@ -33,17 +33,14 @@ if [ -z "$KEY_PAIR" ]; then
     exit 1
 fi
 
-read -p "Master instance type (default: t3.medium): " MASTER_TYPE
-MASTER_TYPE=${MASTER_TYPE:-t3.medium}
+# Use small instances for 10 users
+MASTER_TYPE="t3.small"
+WORKER_TYPE="t3.small"
+WORKER_COUNT=1
 
-read -p "Worker instance type (default: t3.small): " WORKER_TYPE
-WORKER_TYPE=${WORKER_TYPE:-t3.small}
+echo "Using: Master=$MASTER_TYPE, Workers=$WORKER_COUNT x $WORKER_TYPE"
 
-read -p "Number of workers (default: 2): " WORKER_COUNT
-WORKER_COUNT=${WORKER_COUNT:-2}
-
-# Get AMI ID for the region (Amazon Linux 2)
-# Try to get latest AMI, fallback to hardcoded values if permission denied
+# Get AMI ID for the region
 AMI_ID=$(aws ec2 describe-images \
     --owners amazon \
     --filters "Name=name,Values=amzn2-ami-hvm-*-x86_64-gp2" "Name=state,Values=available" \
@@ -54,25 +51,21 @@ AMI_ID=$(aws ec2 describe-images \
 # If AMI lookup failed, use region-specific defaults
 if [ -z "$AMI_ID" ] || [ "$AMI_ID" == "None" ]; then
     echo "Warning: Could not query AMI. Using default AMI IDs for region."
-    echo "If deployment fails, you may need to add ec2:DescribeImages permission or specify AMI manually."
-    
-    # Common Amazon Linux 2 AMI IDs by region (update these if needed)
     case $AWS_REGION in
         us-east-1)
-            AMI_ID="ami-0c55b159cbfafe1f0"  # N. Virginia
+            AMI_ID="ami-0c55b159cbfafe1f0"
             ;;
         us-west-2)
-            AMI_ID="ami-0c2ab3c8efb1f0a91"  # Oregon
+            AMI_ID="ami-0c2ab3c8efb1f0a91"
             ;;
         eu-west-1)
-            AMI_ID="ami-0c94864ba8d3946e7"  # Ireland
+            AMI_ID="ami-0c94864ba8d3946e7"
             ;;
         ap-southeast-1)
-            AMI_ID="ami-0c7388116d47466e0"  # Singapore
+            AMI_ID="ami-0c7388116d47466e0"
             ;;
         *)
             echo "Error: Unknown region. Please specify AMI ID manually or add ec2:DescribeImages permission."
-            echo "You can find AMI IDs at: https://aws.amazon.com/amazon-linux-2/release-notes/"
             exit 1
             ;;
     esac
@@ -126,22 +119,19 @@ echo "Master Private IP: $MASTER_PRIVATE_IP"
 echo "Locust Web UI: http://$MASTER_IP:8089"
 echo ""
 echo "Next Steps:"
-echo "1. Copy test files to master:"
-echo "   scp -r src/ config/ .env ec2-user@$MASTER_IP:/home/ec2-user/chatbot-performance-testing/"
+echo "1. Copy test files:"
+echo "   scp -i ~/.ssh/$KEY_PAIR.pem -r src/ config/ .env ec2-user@$MASTER_IP:/home/ec2-user/chatbot-performance-testing/"
 echo ""
-echo "2. SSH into master and start Locust:"
-echo "   ssh ec2-user@$MASTER_IP"
+echo "2. SSH into master:"
+echo "   ssh -i ~/.ssh/$KEY_PAIR.pem ec2-user@$MASTER_IP"
 echo "   cd /home/ec2-user/chatbot-performance-testing"
 echo "   locust -f src/locustfile.py --master --host=https://your-chatbot-url.com"
 echo ""
-echo "3. Get worker instance IPs:"
-echo "   aws ec2 describe-instances --filters \"Name=tag:Name,Values=locust-worker-*\" --query 'Reservations[*].Instances[*].[PublicIpAddress,PrivateIpAddress]' --output table --region $AWS_REGION"
-echo ""
-echo "4. SSH into each worker and start:"
-echo "   ssh ec2-user@<worker-ip>"
+echo "3. SSH into worker and start:"
+echo "   ssh -i ~/.ssh/$KEY_PAIR.pem ec2-user@<worker-ip>"
 echo "   cd /home/ec2-user/chatbot-performance-testing"
 echo "   locust -f src/locustfile.py --worker --master-host=$MASTER_PRIVATE_IP"
 echo ""
-echo "5. Access Locust web UI:"
+echo "4. Access Locust web UI:"
 echo "   http://$MASTER_IP:8089"
 echo "=========================================="
