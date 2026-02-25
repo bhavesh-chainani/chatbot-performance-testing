@@ -63,7 +63,9 @@ def _esc(text: str) -> str:
     )
 
 
-def generate_html(rows: list[dict], test_type: str) -> str:
+def generate_html(rows: list[dict], test_type: str, exclude_empty_answers: bool = False) -> str:
+    if exclude_empty_answers:
+        rows = [r for r in rows if r.get("answer", "").strip()]
     success_rows = [r for r in rows if r.get("status") == "Success"]
     error_rows = [r for r in rows if r.get("status") != "Success"]
     all_times = [r["response_time_ms"] for r in success_rows]
@@ -216,8 +218,11 @@ def generate_html(rows: list[dict], test_type: str) -> str:
 def main():
     reports_dir = Path(REPORTS_DIR)
 
-    if len(sys.argv) > 1:
-        csv_files = [Path(a) for a in sys.argv[1:]]
+    exclude_empty = "--exclude-empty" in sys.argv
+    args = [a for a in sys.argv[1:] if a != "--exclude-empty"]
+
+    if args:
+        csv_files = [Path(a) for a in args]
     else:
         csv_files = sorted(reports_dir.glob("response_times_*.csv"))
 
@@ -237,7 +242,7 @@ def main():
             continue
 
         test_type = rows[0].get("test_type", csv_path.stem.replace("response_times_", ""))
-        html = generate_html(rows, test_type)
+        html = generate_html(rows, test_type, exclude_empty_answers=exclude_empty)
 
         out_path = csv_path.with_name(f"report_{test_type}.html")
         out_path.write_text(html)
