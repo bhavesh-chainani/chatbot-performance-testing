@@ -12,7 +12,7 @@ Config defaults are set for full-scale AWS (500–1000 users).
 |------|-------------------|----------|---------|
 | **Load** | 500 | 20 min | Baseline under expected traffic |
 | **Stress** | 750 | 20 min | Beyond normal capacity |
-| **Endurance** | 500 | 8 hours | Sustained load, detect degradation |
+| **Endurance** | 500 | 2 hours | Sustained load (2h keeps within 70M token budget) |
 | **Breakpoint** | ramp to 1000 | 30 min | Find the breaking point |
 
 ## Quick Start

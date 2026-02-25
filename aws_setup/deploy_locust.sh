@@ -10,7 +10,7 @@ echo ""
 echo "  Test profiles:"
 echo "    load      – 500 users,  20 min"
 echo "    stress    – 750 users,  20 min"
-echo "    endurance – 500 users,  8 hours"
+echo "    endurance – 500 users,  2 hours (70M token budget)"
 echo "    breakpoint – ramp to 1000, 30 min"
 echo ""
 

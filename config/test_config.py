@@ -74,7 +74,7 @@ STRESS_TEST_RUN_TIME = _get_config('stress_test.run_time', '20m')
 
 ENDURANCE_TEST_USERS = _get_config('endurance_test.users', 500)
 ENDURANCE_TEST_SPAWN_RATE = _get_config('endurance_test.spawn_rate', 25)
-ENDURANCE_TEST_RUN_TIME = _get_config('endurance_test.run_time', '8h')
+ENDURANCE_TEST_RUN_TIME = _get_config('endurance_test.run_time', '2h')
 
 BREAKPOINT_MAX_USERS = _get_config('breakpoint_test.max_users', 1000)
 BREAKPOINT_RAMP_USERS_PER_STEP = _get_config('breakpoint_test.ramp_users_per_step', 50)

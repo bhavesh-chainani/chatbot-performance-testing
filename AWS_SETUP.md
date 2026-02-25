@@ -6,7 +6,7 @@ Deploy 1 master + 5 workers for load / stress / endurance / breakpoint tests at 
 |------|------:|----------|
 | **Load** | 500 | 20 min |
 | **Stress** | 750 | 20 min |
-| **Endurance** | 500 | 8 hours |
+| **Endurance** | 500 | 2 hours (fits 70M token budget) |
 | **Breakpoint** | ramp to 1000 | 30 min |
 
 **Infrastructure:** 1× `c5.large` (master) + 5× `c5.xlarge` (workers). ~200–250 users per worker.
