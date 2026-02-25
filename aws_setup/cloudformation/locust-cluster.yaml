@@ -1,43 +1,47 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'Locust Load Testing Cluster on AWS EC2'
+Description: >
+  Locust load-testing cluster sized for chatbot performance tests
+  (500-1000 concurrent users across load / stress / endurance / breakpoint tests)
 
 Parameters:
   InstanceTypeMaster:
     Type: String
-    Default: t3.medium
-    Description: EC2 instance type for Locust master
+    Default: c5.large
+    Description: Master node – hosts web UI and coordinates workers
     AllowedValues:
-      - t3.micro
-      - t3.small
       - t3.medium
       - t3.large
-      - t3.xlarge
-  
+      - c5.large
+      - c5.xlarge
+
   InstanceTypeWorker:
     Type: String
-    Default: t3.small
-    Description: EC2 instance type for Locust workers
+    Default: c5.xlarge
+    Description: Worker nodes – generate virtual user load
     AllowedValues:
-      - t3.micro
-      - t3.small
-      - t3.medium
       - t3.large
-  
+      - t3.xlarge
+      - c5.large
+      - c5.xlarge
+      - c5.2xlarge
+
   WorkerCount:
     Type: Number
-    Default: 1
+    Default: 3
     MinValue: 1
     MaxValue: 5
-    Description: Number of worker instances
-  
+    Description: >
+      Number of worker instances.
+      Guidance: 2 workers for 500 users, 3 for 750, 4-5 for 1000.
+
   KeyPairName:
     Type: AWS::EC2::KeyPair::KeyName
-    Description: EC2 Key Pair name for SSH access
-  
+    Description: EC2 Key Pair for SSH access
+
   AllowedCIDR:
     Type: String
     Default: 0.0.0.0/0
-    Description: CIDR block allowed to access Locust web UI
+    Description: CIDR allowed to access Locust web UI and SSH
 
 Conditions:
   HasWorker1: !Or [!Equals [!Ref WorkerCount, 1], !Equals [!Ref WorkerCount, 2], !Equals [!Ref WorkerCount, 3], !Equals [!Ref WorkerCount, 4], !Equals [!Ref WorkerCount, 5]]
@@ -50,7 +54,7 @@ Resources:
   LocustSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Security group for Locust load testing cluster
+      GroupDescription: Locust cluster security group
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 8089
@@ -59,8 +63,8 @@ Resources:
           Description: Locust web UI
         - IpProtocol: tcp
           FromPort: 5557
-          ToPort: 5557
-          CidrIp: 10.0.0.0/8
+          ToPort: 5558
+          CidrIp: 0.0.0.0/0
           Description: Locust master-worker communication
         - IpProtocol: tcp
           FromPort: 22
@@ -68,10 +72,13 @@ Resources:
           CidrIp: !Ref AllowedCIDR
           Description: SSH access
 
+  # ---------- User-data shared bootstrap ----------
+  # Each instance installs Python deps and creates the project directory.
+
   LocustMasterInstance:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-0c55b159cbfafe1f0  # Amazon Linux 2 - us-east-1. Update for your region!
+      ImageId: ami-0c55b159cbfafe1f0   # Amazon Linux 2 – replaced at deploy time
       InstanceType: !Ref InstanceTypeMaster
       KeyName: !Ref KeyPairName
       SecurityGroupIds:
@@ -82,8 +89,8 @@ Resources:
           yum update -y
           yum install -y python3 python3-pip git
           pip3 install locust pyyaml python-dotenv requests boto3
-          mkdir -p /home/ec2-user/chatbot-performance-testing
-          cd /home/ec2-user/chatbot-performance-testing
+          mkdir -p /home/ec2-user/chatbot-performance-testing/reports
+          chown -R ec2-user:ec2-user /home/ec2-user/chatbot-performance-testing
       Tags:
         - Key: Name
           Value: locust-master
@@ -106,12 +113,10 @@ Resources:
           yum install -y python3 python3-pip git
           pip3 install locust pyyaml python-dotenv requests boto3
           mkdir -p /home/ec2-user/chatbot-performance-testing
-          cd /home/ec2-user/chatbot-performance-testing
+          chown -R ec2-user:ec2-user /home/ec2-user/chatbot-performance-testing
       Tags:
         - Key: Name
           Value: locust-worker-1
-        - Key: Purpose
-          Value: load-testing
 
   LocustWorker2:
     Type: AWS::EC2::Instance
@@ -129,12 +134,10 @@ Resources:
           yum install -y python3 python3-pip git
           pip3 install locust pyyaml python-dotenv requests boto3
           mkdir -p /home/ec2-user/chatbot-performance-testing
-          cd /home/ec2-user/chatbot-performance-testing
+          chown -R ec2-user:ec2-user /home/ec2-user/chatbot-performance-testing
       Tags:
         - Key: Name
           Value: locust-worker-2
-        - Key: Purpose
-          Value: load-testing
 
   LocustWorker3:
     Type: AWS::EC2::Instance
@@ -152,12 +155,10 @@ Resources:
           yum install -y python3 python3-pip git
           pip3 install locust pyyaml python-dotenv requests boto3
           mkdir -p /home/ec2-user/chatbot-performance-testing
-          cd /home/ec2-user/chatbot-performance-testing
+          chown -R ec2-user:ec2-user /home/ec2-user/chatbot-performance-testing
       Tags:
         - Key: Name
           Value: locust-worker-3
-        - Key: Purpose
-          Value: load-testing
 
   LocustWorker4:
     Type: AWS::EC2::Instance
@@ -175,12 +176,10 @@ Resources:
           yum install -y python3 python3-pip git
           pip3 install locust pyyaml python-dotenv requests boto3
           mkdir -p /home/ec2-user/chatbot-performance-testing
-          cd /home/ec2-user/chatbot-performance-testing
+          chown -R ec2-user:ec2-user /home/ec2-user/chatbot-performance-testing
       Tags:
         - Key: Name
           Value: locust-worker-4
-        - Key: Purpose
-          Value: load-testing
 
   LocustWorker5:
     Type: AWS::EC2::Instance
@@ -198,30 +197,28 @@ Resources:
           yum install -y python3 python3-pip git
           pip3 install locust pyyaml python-dotenv requests boto3
           mkdir -p /home/ec2-user/chatbot-performance-testing
-          cd /home/ec2-user/chatbot-performance-testing
+          chown -R ec2-user:ec2-user /home/ec2-user/chatbot-performance-testing
       Tags:
         - Key: Name
           Value: locust-worker-5
-        - Key: Purpose
-          Value: load-testing
 
 Outputs:
   MasterPublicIP:
-    Description: Public IP address of Locust master
+    Description: Public IP of Locust master (SSH + web UI)
     Value: !GetAtt LocustMasterInstance.PublicIp
     Export:
       Name: !Sub '${AWS::StackName}-MasterIP'
-  
+
   MasterPrivateIP:
-    Description: Private IP address of Locust master
+    Description: Private IP of Locust master (worker --master-host)
     Value: !GetAtt LocustMasterInstance.PrivateIp
     Export:
       Name: !Sub '${AWS::StackName}-MasterPrivateIP'
-  
+
   LocustWebUI:
-    Description: URL to access Locust web UI
+    Description: URL for Locust web UI
     Value: !Sub 'http://${LocustMasterInstance.PublicIp}:8089'
-  
+
   SecurityGroupId:
     Description: Security Group ID
     Value: !Ref LocustSecurityGroup

@@ -1,12 +1,37 @@
 # Chatbot API Configuration
 chatbot:
-  url: "https://your-chatbot-url.com"
+  url: "https://cfoti.org"
   api_endpoints:
     login: "/api/auth/login"
     send: "/api/chat"
 
-# Load Test Configuration (10 concurrent users)
+# =============================================================================
+# Test Profiles
+# Select which test to run via TEST_TYPE env var (load, stress, endurance, breakpoint)
+# Primary metric: End-to-End Response Time
+# =============================================================================
+
+# Load Test - baseline performance under expected load
 load_test:
-  users: 10
-  spawn_rate: 2.0
-  run_time: "5m"
+  users: 500
+  spawn_rate: 25          # reach 500 users in ~20s
+  run_time: "20m"
+
+# Stress Test - performance beyond normal capacity
+stress_test:
+  users: 750
+  spawn_rate: 38          # reach 750 users in ~20s
+  run_time: "20m"
+
+# Endurance Test - sustained load over extended period
+endurance_test:
+  users: 500
+  spawn_rate: 25
+  run_time: "8h"
+
+# Breakpoint Test - ramp up until failure
+breakpoint_test:
+  max_users: 1000
+  ramp_users_per_step: 50   # add 50 users each step
+  step_duration_seconds: 90  # hold each step for 90s
+  run_time: "30m"

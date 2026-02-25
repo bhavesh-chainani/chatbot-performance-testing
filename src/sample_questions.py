@@ -10,7 +10,7 @@ The weights at the bottom control how frequently each category appears.
 # Simple Questions
 # Fast responses expected - basic trade and certificate questions
 # ============================================================================
-SIMPLE_MESSAGES = [
+SIMPLE_QUESTIONS = [
     "What is a Certificate of Origin?",
     "What does PCO stand for?",
     "What is an HS code?",
@@ -26,43 +26,6 @@ SIMPLE_MESSAGES = [
     "What is a bill of lading?",
     "What is the difference between FOB and CIF?",
     "What is a letter of credit?",
-]
-
-# ============================================================================
-# Common Questions
-# Moderate complexity - Typical trade and certificate queries
-# ============================================================================
-COMMON_QUESTIONS = [
-    "Check requirements for Back-to-back Preferential Certificate of Origin (PCO)",
-    "Check product eligibility for Free Trade Agreements (FTA) and Preferential Tariffs",
-    "Check the eligibility criteria for Ordinary Certificate of Origin (OCO)",
-    "What documents do I need for a Certificate of Origin?",
-    "How do I apply for a Preferential Certificate of Origin?",
-    "What is the difference between PCO and OCO?",
-    "Which Free Trade Agreements does Singapore have?",
-    "How long does it take to process a Certificate of Origin?",
-    "What are the requirements for FTA eligibility?",
-    "Can I check if my product qualifies for preferential tariffs?",
-    "What is a Back-to-back Certificate of Origin?",
-    "How do I verify my product's origin?",
-    "What are the fees for certificate applications?",
-    "Where can I submit my certificate application?",
-    "What information is required for FTA verification?",
-    "How do I apply for a PCO in Singapore?",
-    "What are the requirements for a Back-to-Back PCO?",
-    "How do I determine the correct HS code for my product?",
-    "How do I calculate Regional Value Content (RVC)?",
-    "What documents are required for exporting to China?",
-    "How long does it take to process a PCO application?",
-    "What are the fees for PCO applications?",
-    "How do I verify if my product qualifies for preferential tariff treatment?",
-    "What are the rules of origin under the ASEAN FTA?",
-    "How do I handle transhipment of goods through Singapore?",
-    "What are the customs procedures for importing goods into Singapore?",
-    "How do I prepare a Manufacturing Cost Statement?",
-    "What are the common mistakes in PCO applications?",
-    "How do I amend an issued PCO?",
-    "What are the compliance requirements for exporting to the EU?",
 ]
 
 # ============================================================================
@@ -97,15 +60,13 @@ COMPLEX_QUESTIONS = [
 # ============================================================================
 # These weights control how frequently each category appears in the test
 # Higher weight = more frequent appearance
-# 
-# Example: If SIMPLE_WEIGHT=2, COMMON_WEIGHT=3, COMPLEX_WEIGHT=1
-# Then for every 6 questions, you'll get:
-# - 2 simple messages
-# - 3 common questions  
-# - 1 complex question
+#
+# Example: If SIMPLE_WEIGHT=1, COMPLEX_WEIGHT=3
+# Then for every 4 questions, you'll get:
+# - 1 simple question
+# - 3 complex questions
 # ============================================================================
-SIMPLE_WEIGHT = 1      # Simple messages
-COMMON_WEIGHT = 4      # Common questions
+SIMPLE_WEIGHT = 1      # Simple questions
 COMPLEX_WEIGHT = 5     # Complex questions
 
 # ============================================================================
@@ -117,8 +78,7 @@ COMPLEX_WEIGHT = 5     # Complex questions
 def get_sample_messages():
     """Get combined sample messages with weights applied"""
     return (
-        SIMPLE_MESSAGES * SIMPLE_WEIGHT +
-        COMMON_QUESTIONS * COMMON_WEIGHT +
+        SIMPLE_QUESTIONS * SIMPLE_WEIGHT +
         COMPLEX_QUESTIONS * COMPLEX_WEIGHT
     )
 
@@ -128,17 +88,15 @@ def get_sample_messages():
 def get_question_category(message):
     """
     Determine the category of a question for TTF tracking
-    
+
     Args:
         message: The question text
-        
+
     Returns:
-        str: Category name ("Simple", "Common", "Complex", or "Unknown")
+        str: Category name ("Simple", "Complex", or "Unknown")
     """
-    if message in SIMPLE_MESSAGES:
+    if message in SIMPLE_QUESTIONS:
         return "Simple"
-    elif message in COMMON_QUESTIONS:
-        return "Common"
     elif message in COMPLEX_QUESTIONS:
         return "Complex"
     else:

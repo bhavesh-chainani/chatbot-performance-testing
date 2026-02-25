@@ -54,7 +54,6 @@ if [ -z "$OUTPUTS" ] || [ "$OUTPUTS" == "null" ] || [ "$OUTPUTS" == "[]" ]; then
         --region $AWS_REGION
     echo ""
     echo "If stack is CREATE_IN_PROGRESS, wait a few minutes and try again."
-    echo "Or run: ./aws_setup/troubleshoot_instances.sh"
     exit 1
 fi
 
@@ -78,14 +77,19 @@ MASTER_PRIVATE_IP=$(aws cloudformation describe-stacks \
     --region $AWS_REGION)
 
 if [ -n "$MASTER_IP" ] && [ "$MASTER_IP" != "None" ]; then
-    echo "Master SSH:"
-    echo "  ssh -i ~/.ssh/locust-load-testing.pem ec2-user@$MASTER_IP"
+    echo "Master Public IP (for SSH and Web UI):"
+    echo "  $MASTER_IP"
     echo ""
-    echo "Master Private IP (for workers):"
+    echo "Master Private IP (for worker --master-host):"
     echo "  $MASTER_PRIVATE_IP"
+    echo ""
+    echo "SSH Command:"
+    echo "  ssh -i ~/.ssh/locust-testing.pem ec2-user@$MASTER_IP"
     echo ""
     echo "Locust Web UI:"
     echo "  http://$MASTER_IP:8089"
 else
     echo "Could not find master IP. Check stack name and region."
 fi
+
+echo "=========================================="
