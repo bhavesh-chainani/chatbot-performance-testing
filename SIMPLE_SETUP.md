@@ -21,6 +21,27 @@ Deploy a single EC2 instance to run all 4 test types against your chatbot.
 
 ---
 
+## Step 0: Get Your Session Cookie
+
+The chatbot uses SSO login through `member-uat.sbf.org.sg`. Locust authenticates using a session cookie you grab from the browser.
+
+1. Open **https://cfoti.org** in Chrome and log in normally
+2. Open DevTools (F12) → **Application** tab → **Cookies** → `https://cfoti.org`
+3. Find the cookie named **`session`** — copy its **Value**
+4. Paste it into `.env`:
+
+```env
+CHATBOT_URL=https://cfoti.org
+LOGIN_EMAIL=your-email@example.com
+LOGIN_PASSWORD=your-password
+SSO_LOGIN_URL=https://member-uat.sbf.org.sg/sbfportal/services/Account.Login.Service.ss?n=2&c=6422571_SB2
+SESSION_COOKIE=paste-your-session-cookie-value-here
+```
+
+> The session cookie lasts 24 hours. If tests start failing with 401, grab a fresh one.
+
+---
+
 ## Step 1: Create EC2 Key Pair (if you don't have one)
 
 ```bash

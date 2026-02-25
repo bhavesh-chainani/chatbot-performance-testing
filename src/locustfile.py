@@ -1,7 +1,8 @@
 """
 Locust performance testing for chatbot
-Supports 4 test types: load, stress, endurance, breakpoint
-Primary metric: End-to-End Response Time
+Auth: Pre-authenticated session cookie (SSO handled externally)
+Chat: POST /api/chat/stream?ticket_id=X  (Server-Sent Events)
+Metric: End-to-End Response Time
 
 Usage:
   TEST_TYPE=load       locust -f src/locustfile.py
@@ -17,8 +18,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-from locust import task, between, events, LoadTestShape
-from locust.contrib.fasthttp import FastHttpUser
+from locust import task, between, events, LoadTestShape, HttpUser
 
 import sys
 project_root = Path(__file__).parent.parent
@@ -26,13 +26,14 @@ sys.path.insert(0, str(project_root))
 
 from config.test_config import (
     CHATBOT_URL,
-    API_ENDPOINT_LOGIN,
-    API_ENDPOINT_SEND,
+    API_ENDPOINT_CHAT,
+    API_ENDPOINT_TICKETS,
+    API_ENDPOINT_USERME,
     LOGIN_EMAIL,
     LOGIN_PASSWORD,
+    SESSION_COOKIE,
     WAIT_TIME_MIN,
     WAIT_TIME_MAX,
-    LOGIN_ENDPOINT_FALLBACKS,
     TEST_TYPE,
     ACTIVE_USERS,
     ACTIVE_SPAWN_RATE,
@@ -48,7 +49,7 @@ from src.sample_questions import get_sample_messages, get_question_category
 SAMPLE_MESSAGES = get_sample_messages()
 
 # ---------------------------------------------------------------------------
-# CSV logging – captures question, answer, and e2e response time
+# CSV logging
 # ---------------------------------------------------------------------------
 RESPONSE_TIME_CSV = None
 
@@ -63,15 +64,17 @@ def on_test_start(environment, **kwargs):
     if not RESPONSE_TIME_CSV.exists() or RESPONSE_TIME_CSV.stat().st_size == 0:
         with open(RESPONSE_TIME_CSV, "w", newline="") as f:
             csv.writer(f).writerow([
-                "timestamp",
-                "test_type",
-                "question_category",
-                "question",
-                "answer",
-                "response_time_ms",
-                "status_code",
-                "status",
+                "timestamp", "test_type", "question_category",
+                "question", "answer", "response_time_ms",
+                "status_code", "status",
             ])
+
+    if not SESSION_COOKIE:
+        print("WARNING: SESSION_COOKIE is empty in .env")
+        print("  1. Log into cfoti.org in your browser")
+        print("  2. DevTools > Application > Cookies > cfoti.org")
+        print("  3. Copy the 'session' cookie value into .env")
+
     print(
         f"=== Running {TEST_TYPE.upper()} test | "
         f"users={ACTIVE_USERS} | run_time={ACTIVE_RUN_TIME} ==="
@@ -79,31 +82,27 @@ def on_test_start(environment, **kwargs):
 
 
 # ---------------------------------------------------------------------------
-# Breakpoint test shape – step-ramp until cap
+# Breakpoint shape – only when TEST_TYPE=breakpoint
 # ---------------------------------------------------------------------------
-class BreakpointShape(LoadTestShape):
-    """Ramps users in steps until max_users or run_time is reached.
-    Only activates when TEST_TYPE=breakpoint."""
+if TEST_TYPE == "breakpoint":
+    class BreakpointShape(LoadTestShape):
+        """Ramps users in steps until max_users or run_time is reached."""
 
-    def tick(self):
-        if TEST_TYPE != "breakpoint":
-            return None
+        def tick(self):
+            run_time = self.get_run_time()
+            total_seconds = _parse_run_time(ACTIVE_RUN_TIME)
+            if run_time > total_seconds:
+                return None
 
-        run_time = self.get_run_time()
-        total_seconds = _parse_run_time(ACTIVE_RUN_TIME)
-        if run_time > total_seconds:
-            return None
-
-        current_step = math.floor(run_time / BREAKPOINT_STEP_DURATION)
-        target_users = min(
-            (current_step + 1) * BREAKPOINT_RAMP_USERS_PER_STEP,
-            BREAKPOINT_MAX_USERS,
-        )
-        return (target_users, max(BREAKPOINT_RAMP_USERS_PER_STEP, 1))
+            current_step = math.floor(run_time / BREAKPOINT_STEP_DURATION)
+            target_users = min(
+                (current_step + 1) * BREAKPOINT_RAMP_USERS_PER_STEP,
+                BREAKPOINT_MAX_USERS,
+            )
+            return (target_users, max(BREAKPOINT_RAMP_USERS_PER_STEP, 1))
 
 
 def _parse_run_time(rt: str) -> int:
-    """Convert '20m' / '8h' / '30s' to seconds."""
     rt = rt.strip().lower()
     if rt.endswith("h"):
         return int(rt[:-1]) * 3600
@@ -117,110 +116,126 @@ def _parse_run_time(rt: str) -> int:
 # ---------------------------------------------------------------------------
 # Virtual user
 # ---------------------------------------------------------------------------
-class ChatbotUser(FastHttpUser):
-    """Authenticates, then sends chat messages.
-    Captures the full answer and end-to-end response time."""
+class ChatbotUser(HttpUser):
+    """
+    Uses HttpUser (not FastHttpUser) for SSE streaming compatibility.
+    Auth via pre-set session cookie from .env.
+    Each user gets their own chat ticket.
+    """
 
     host = CHATBOT_URL
     wait_time = between(WAIT_TIME_MIN, WAIT_TIME_MAX)
 
     def on_start(self):
+        self.ticket_id = None
         self.is_authenticated = False
-        with self.client.get("/", name="Load Login Page", catch_response=True) as resp:
-            if resp.status_code not in [200, 302]:
-                resp.failure(f"Failed to load login page: {resp.status_code}")
-                return
-        self.login()
-        if self.is_authenticated:
-            with self.client.get("/chat", name="Load Chat Page", catch_response=True) as resp:
-                if resp.status_code in [200, 302]:
-                    resp.success()
-                else:
-                    resp.failure(f"Failed to load chat page: {resp.status_code}")
 
-    # -- authentication -------------------------------------------------------
-    def login(self):
-        if not LOGIN_EMAIL or not LOGIN_PASSWORD:
-            print("WARNING: LOGIN_EMAIL or LOGIN_PASSWORD not set")
+        if not SESSION_COOKIE:
+            print("ERROR: No SESSION_COOKIE set. Cannot authenticate.")
             return
 
-        headers = {
-            "Content-Type": "application/json",
-            "Accept": "application/json, text/plain, */*",
-            "Origin": CHATBOT_URL,
-            "Referer": f"{CHATBOT_URL}/",
-        }
-        payload = {"email": LOGIN_EMAIL, "password": LOGIN_PASSWORD}
-        endpoints = list(dict.fromkeys([API_ENDPOINT_LOGIN] + LOGIN_ENDPOINT_FALLBACKS))
+        self.client.cookies["session"] = SESSION_COOKIE
+        self.client.cookies["isLoggedIn"] = "true"
 
-        for endpoint in endpoints:
-            with self.client.post(
-                endpoint, json=payload, headers=headers,
-                catch_response=True, name="Login",
-            ) as resp:
-                if resp.status_code in [200, 201, 302]:
-                    self.is_authenticated = True
+        with self.client.get(
+            API_ENDPOINT_USERME, name="Verify Auth", catch_response=True
+        ) as resp:
+            if resp.status_code == 200:
+                self.is_authenticated = True
+                try:
+                    user_data = resp.json()
+                    user_json = json.dumps({
+                        "id": user_data.get("id", ""),
+                        "email": user_data.get("email", ""),
+                        "full_name": user_data.get("full_name", ""),
+                        "is_admin": user_data.get("is_admin", False),
+                        "uen": user_data.get("uen", ""),
+                        "memtype": user_data.get("memtype", ""),
+                        "created_at": user_data.get("created_at", ""),
+                    })
+                    self.client.cookies["user"] = user_json
+                except Exception:
+                    pass
+                resp.success()
+            else:
+                resp.failure(f"Auth failed: {resp.status_code} – session cookie may be expired")
+                return
+
+        self._create_ticket()
+
+    # -- ticket management ----------------------------------------------------
+    def _create_ticket(self):
+        """Create a new chat ticket, or fall back to an existing one."""
+        with self.client.post(
+            API_ENDPOINT_TICKETS,
+            json={},
+            name="Create Ticket",
+            catch_response=True,
+        ) as resp:
+            if resp.status_code in [200, 201]:
+                try:
+                    data = resp.json()
+                    self.ticket_id = data.get("ticket_id") or data.get("id")
+                except Exception:
+                    pass
+                if self.ticket_id:
                     resp.success()
                     return
-                if resp.status_code == 401:
-                    resp.failure("401 Unauthorized – check credentials")
-                    return
-                if resp.status_code == 404 and endpoint != endpoints[-1]:
-                    resp.success()
-                    continue
-                resp.failure(f"Login failed: {resp.status_code}")
+            resp.success()
 
-            if resp.status_code in [404, 415]:
-                form_headers = {**headers, "Content-Type": "application/x-www-form-urlencoded"}
-                with self.client.post(
-                    endpoint, data=payload, headers=form_headers,
-                    catch_response=True, name="Login (form-data)",
-                ) as form_resp:
-                    if form_resp.status_code in [200, 201, 302]:
-                        self.is_authenticated = True
-                        form_resp.success()
-                        return
-                    if form_resp.status_code == 401:
-                        form_resp.failure("401 Unauthorized")
-                        return
+        with self.client.get(
+            f"{API_ENDPOINT_TICKETS}?offset=0&limit=1&order_by=updated_at:desc",
+            name="Get Tickets",
+            catch_response=True,
+        ) as resp:
+            if resp.status_code == 200:
+                try:
+                    data = resp.json()
+                    tickets = data if isinstance(data, list) else data.get("tickets", data.get("items", []))
+                    if tickets:
+                        self.ticket_id = tickets[0].get("ticket_id") or tickets[0].get("id")
+                except Exception:
+                    pass
+                resp.success()
+            else:
+                resp.failure(f"Failed to get tickets: {resp.status_code}")
 
-        if hasattr(self.client, "cookies") and len(self.client.cookies) > 0:
-            self.is_authenticated = True
+        if not self.ticket_id:
+            print("WARNING: Could not create or find a chat ticket")
 
     # -- primary task ---------------------------------------------------------
     @task
     def send_chat_message(self):
         if not self.is_authenticated:
-            self.login()
-            if not self.is_authenticated:
+            return
+        if not self.ticket_id:
+            self._create_ticket()
+            if not self.ticket_id:
                 return
 
         message = random.choice(SAMPLE_MESSAGES)
         category = get_question_category(message)
 
-        headers = {
-            "Content-Type": "application/json",
-            "Accept": "application/json, text/plain, */*",
-            "Origin": CHATBOT_URL,
-            "Referer": f"{CHATBOT_URL}/chat",
-        }
         payload = {"message_content": message}
 
         start = time.time()
         with self.client.post(
-            API_ENDPOINT_SEND, json=payload, headers=headers,
-            catch_response=True, name=f"Chat [{category}]",
+            f"{API_ENDPOINT_CHAT}?ticket_id={self.ticket_id}",
+            json=payload,
+            name=f"Chat [{category}]",
+            catch_response=True,
+            timeout=120,
         ) as resp:
             response_time_ms = (time.time() - start) * 1000
             answer_text = ""
 
             if resp.status_code in [200, 201]:
                 resp.success()
-                answer_text = _extract_answer(resp)
+                answer_text = _parse_sse_response(resp.text)
                 self._log(category, message, answer_text, response_time_ms,
                           resp.status_code, "Success")
             elif resp.status_code == 401:
-                resp.failure("401 Unauthorized")
+                resp.failure("401 Unauthorized – session cookie expired")
                 self.is_authenticated = False
                 self._log(category, message, "", response_time_ms,
                           resp.status_code, "401 Unauthorized")
@@ -249,26 +264,28 @@ class ChatbotUser(FastHttpUser):
             pass
 
 
-def _extract_answer(resp) -> str:
-    """Best-effort extraction of the chatbot answer from the API response."""
-    try:
-        data = resp.json()
-        if isinstance(data, dict):
-            for key in ("response", "message", "answer", "text", "content", "reply"):
-                if key in data and isinstance(data[key], str):
-                    return data[key]
-            if "conversations" in data and isinstance(data["conversations"], list):
-                convos = data["conversations"]
-                if convos:
-                    last = convos[-1]
-                    if isinstance(last, dict):
-                        for key in ("response", "message", "answer", "text", "content"):
-                            if key in last:
-                                return str(last[key])
-            return json.dumps(data)[:500]
-    except Exception:
-        pass
-    try:
-        return resp.text[:500]
-    except Exception:
-        return ""
+def _parse_sse_response(text: str) -> str:
+    """Parse Server-Sent Events stream to extract the full chatbot answer."""
+    parts = []
+    for line in text.split("\n"):
+        line = line.strip()
+        if not line.startswith("data:"):
+            continue
+        data = line[5:].strip()
+        if data == "[DONE]":
+            break
+        try:
+            parsed = json.loads(data)
+            for key in ("content", "token", "text", "chunk", "delta", "message", "answer"):
+                if key in parsed:
+                    val = parsed[key]
+                    if isinstance(val, str):
+                        parts.append(val)
+                        break
+                    if isinstance(val, dict) and "content" in val:
+                        parts.append(val["content"])
+                        break
+        except (json.JSONDecodeError, TypeError):
+            if data:
+                parts.append(data)
+    return "".join(parts)

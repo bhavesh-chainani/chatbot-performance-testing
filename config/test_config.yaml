@@ -2,8 +2,11 @@
 chatbot:
   url: "https://cfoti.org"
   api_endpoints:
-    login: "/api/auth/login"
-    send: "/api/chat"
+    chat: "/api/chat/stream"
+    tickets: "/api/tickets"
+    userme: "/api/user/me"
+  sso:
+    login_url: "https://member-uat.sbf.org.sg/sbfportal/services/Account.Login.Service.ss?n=2&c=6422571_SB2"
 
 # =============================================================================
 # Test Profiles
@@ -32,6 +35,6 @@ endurance_test:
 # Breakpoint Test - ramp up until failure
 breakpoint_test:
   max_users: 20
-  ramp_users_per_step: 5    # add 5 users each step
-  step_duration_seconds: 60  # hold each step for 60s
+  ramp_users_per_step: 5
+  step_duration_seconds: 60
   run_time: "5m"

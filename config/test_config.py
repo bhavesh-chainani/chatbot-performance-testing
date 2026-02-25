@@ -48,14 +48,17 @@ def _get_config(key_path, default=None, env_key=None):
             return default
     return value if value is not None else default
 
-# ---- Chatbot API Configuration ----
-CHATBOT_URL = _get_config('chatbot.url', 'https://your-chatbot-url.com', 'CHATBOT_URL')
-API_ENDPOINT_LOGIN = _get_config('chatbot.api_endpoints.login', '/api/auth/login', 'API_ENDPOINT_LOGIN')
-API_ENDPOINT_SEND = _get_config('chatbot.api_endpoints.send', '/api/chat', 'API_ENDPOINT_SEND')
+# ---- Chatbot API ----
+CHATBOT_URL = _get_config('chatbot.url', 'https://cfoti.org', 'CHATBOT_URL')
+API_ENDPOINT_CHAT = _get_config('chatbot.api_endpoints.chat', '/api/chat/stream')
+API_ENDPOINT_TICKETS = _get_config('chatbot.api_endpoints.tickets', '/api/tickets')
+API_ENDPOINT_USERME = _get_config('chatbot.api_endpoints.userme', '/api/user/me')
 
-# ---- Authentication ----
-LOGIN_EMAIL = _get_config('authentication.email', '', 'LOGIN_EMAIL')
-LOGIN_PASSWORD = _get_config('authentication.password', '', 'LOGIN_PASSWORD')
+# ---- SSO Authentication ----
+LOGIN_EMAIL = os.getenv('LOGIN_EMAIL', '')
+LOGIN_PASSWORD = os.getenv('LOGIN_PASSWORD', '')
+SSO_LOGIN_URL = _get_config('chatbot.sso.login_url', '', 'SSO_LOGIN_URL')
+SESSION_COOKIE = os.getenv('SESSION_COOKIE', '')
 
 # ---- Active Test Type ----
 TEST_TYPE = os.getenv('TEST_TYPE', 'load').lower()
@@ -78,7 +81,6 @@ BREAKPOINT_RAMP_USERS_PER_STEP = _get_config('breakpoint_test.ramp_users_per_ste
 BREAKPOINT_STEP_DURATION = _get_config('breakpoint_test.step_duration_seconds', 60)
 BREAKPOINT_RUN_TIME = _get_config('breakpoint_test.run_time', '5m')
 
-# Map TEST_TYPE to the right profile values
 _PROFILES = {
     'load': {
         'users': LOAD_TEST_USERS,
@@ -113,10 +115,3 @@ WAIT_TIME_MAX = _get_config('user_behavior.wait_time.max', 5.0, 'WAIT_TIME_MAX')
 
 # ---- Reporting ----
 REPORTS_DIR = _get_config('reporting.reports_dir', 'reports', 'REPORTS_DIR')
-
-LOGIN_ENDPOINT_FALLBACKS = [
-    "/api/auth/login",
-    "/api/login",
-    "/login",
-    "/"
-]
