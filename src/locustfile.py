@@ -265,27 +265,31 @@ class ChatbotUser(HttpUser):
 
 
 def _parse_sse_response(text: str) -> str:
-    """Parse Server-Sent Events stream to extract the full chatbot answer."""
-    parts = []
+    """Parse cfoti SSE stream to extract the chatbot's final answer.
+
+    Event format:
+      data: {"type": "streaming_event", "data": {"payload": {
+        "step_type": "reasoning", "status": "success", "output": "...answer..."
+      }}}
+    """
     for line in text.split("\n"):
         line = line.strip()
         if not line.startswith("data:"):
             continue
-        data = line[5:].strip()
-        if data == "[DONE]":
-            break
         try:
-            parsed = json.loads(data)
-            for key in ("content", "token", "text", "chunk", "delta", "message", "answer"):
-                if key in parsed:
-                    val = parsed[key]
-                    if isinstance(val, str):
-                        parts.append(val)
-                        break
-                    if isinstance(val, dict) and "content" in val:
-                        parts.append(val["content"])
-                        break
+            evt = json.loads(line[5:].strip())
+            if evt.get("type") == "streaming_event":
+                payload = evt.get("data", {}).get("payload", {})
+                if payload.get("status") == "success" and isinstance(payload.get("output"), str):
+                    return payload["output"]
+            if evt.get("type") == "message":
+                msg = evt.get("data", {})
+                if isinstance(msg, dict):
+                    for key in ("content", "message", "text", "response"):
+                        if key in msg and isinstance(msg[key], str):
+                            return msg[key]
+                elif isinstance(msg, str):
+                    return msg
         except (json.JSONDecodeError, TypeError):
-            if data:
-                parts.append(data)
-    return "".join(parts)
+            continue
+    return ""
