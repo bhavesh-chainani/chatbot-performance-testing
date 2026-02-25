@@ -11,6 +11,8 @@ Deploy 1 master + 5 workers for load / stress / endurance / breakpoint tests at 
 
 **Infrastructure:** 1× `c5.large` (master) + 5× `c5.xlarge` (workers). ~200–250 users per worker.
 
+**Cost:** Running all 4 tests in one session is roughly **$11–$14** (on-demand, us-east-1). See **[docs/AWS_COSTS.md](docs/AWS_COSTS.md)** for a full breakdown.
+
 ---
 
 ## Prerequisites
