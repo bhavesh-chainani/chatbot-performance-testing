@@ -1,0 +1,230 @@
+timestamp,test_type,question_category,question,answer,response_time_ms,status_code,status
+2026-02-25T18:09:19.042310,load,Complex,How do I handle cumulation of origin across multiple countries under RCEP?,,17.49,200,Success
+2026-02-25T18:09:19.123278,load,Simple,What is a letter of credit?,,120.04,200,Success
+2026-02-25T18:09:21.029230,load,Complex,How do I handle partial shipments with a single PCO?,,117.3,200,Success
+2026-02-25T18:09:22.082897,load,Simple,What is a Certificate of Origin?,,116.05,200,Success
+2026-02-25T18:09:40.130989,load,Simple,What is an FTA?,"## What is an FTA?
+
+**FTA** stands for **Free Trade Agreement**.
+
+A Free Trade Agreement (FTA) is a treaty between two or more countries that aims to reduce or eliminate barriers to trade and investment. The primary objectives of FTAs include:
+
+- **Reducing or eliminating tariffs** (customs duties) on goods traded between member countries
+- **Facilitating easier market access** for services and investments
+- **Establishing common rules** for trade, including customs procedures, intellectual prop",20149.48,200,Success
+2026-02-25T18:09:43.084001,load,Simple,What is an HS code?,"## What is an HS Code?
+
+An **HS Code** (Harmonized System Code) is an internationally standardized system of names and numbers used to classify traded products. It is a critical component of international trade and customs procedures.
+
+### Key Features of HS Codes:
+
+- **Standardized Classification**: HS codes provide a uniform method for identifying and categorizing goods across different countries
+- **Numerical Structure**: Typically structured with at least 6 digits at the international level,",21566.78,200,Success
+2026-02-25T18:09:44.123311,load,Simple,What is a Certificate of Origin?,"## What is a Certificate of Origin?
+
+I encountered technical difficulties accessing both the glossary and knowledge base systems to retrieve the authoritative definition and detailed information about Certificates of Origin from our FTA legal databases.
+
+Based on general trade documentation principles, a **Certificate of Origin (CO)** is an official document that certifies the country in which goods were manufactured or produced. It is a critical document in international trade that:
+
+- **Declar",20390.66,200,Success
+2026-02-25T18:09:44.562121,load,Complex,How do I determine substantial transformation for goods processed in Singapore for a Back-to-Back PCO?,"## Determining Substantial Transformation for Back-to-Back PCO
+
+I apologize, but I encountered technical difficulties accessing both the glossary and knowledge base systems, which contain the authoritative information about Back-to-Back PCO (Preferential Certificate of Origin) procedures and substantial transformation criteria for goods processed in Singapore.
+
+### Current Status
+
+**What I attempted to retrieve:**
+- ✗ Glossary definitions for Back-to-Back PCO and substantial transformation crite",21778.23,200,Success
+2026-02-25T18:09:45.000190,load,Simple,What is ASEAN?,"I apologize, but I encountered technical difficulties while attempting to retrieve information about HS codes and ASEAN from our knowledge base and glossary systems. All connection attempts to these resources failed during the search process.
+
+However, I can provide you with general guidance on these topics:
+
+## What is an HS Code?
+
+An **HS Code (Harmonized System Code)** is an internationally standardized system of names and numbers used to classify traded products. It is maintained by the Worl",20721.17,200,Success
+2026-02-25T18:09:45.218830,load,Complex,How do I handle cumulation of origin across multiple countries under RCEP?,"## Cumulation of Origin Under RCEP
+
+I apologize, but I encountered technical difficulties accessing both the knowledge base and glossary systems that contain the detailed legal information about RCEP cumulation of origin procedures. These systems are currently unavailable due to connection errors.
+
+### What I Was Attempting to Retrieve:
+
+I was in the process of gathering information about:
+- **RCEP cumulation rules**: How materials and processing from multiple RCEP member countries can be combin",21333.8,200,Success
+2026-02-25T18:10:12.787985,load,Complex,How do I handle origin certification for goods that undergo processing in multiple countries?,"Handling Origin Certification for Goods Processed in Multiple Countries
+
+I apologize, but I am currently unable to retrieve the authoritative information from our legal databases and knowledge base systems due to technical connectivity issues. Both the glossary tool and knowledge base tool are experiencing connection failures, which prevents me from accessing the specific FTA legal texts, regulations, and procedures related to origin certification for goods processed across multiple countries.
+
+",23955.08,200,Success
+2026-02-25T18:10:13.448440,load,Simple,What is an HS code?,"What is an HS Code?
+
+## Definition and Purpose
+
+An **HS Code** (Harmonized System Code) is an internationally standardized system of names and numbers used to classify traded products. It is a critical component of international trade and customs procedures.
+
+### Key Characteristics:
+
+**Structure:**
+- HS codes are typically structured with **6 digits** at the international level (maintained by the World Customs Organization)
+- Countries may extend these codes with additional digits for more spec",26214.11,200,Success
+2026-02-25T18:10:14.111979,load,Complex,How do I navigate conflicting rules of origin between overlapping FTAs?,"Navigating Conflicting Rules of Origin Between Overlapping FTAs
+
+I encountered technical connectivity issues with the knowledge base and glossary tools while attempting to retrieve specific guidance on this topic. However, I can provide you with general guidance based on standard trade practices:
+
+## General Approach to Overlapping FTAs
+
+When multiple FTAs exist between the same trading partners (e.g., Singapore has both ASEAN-China FTA and RCEP with China), businesses face the challenge of choo",29164.58,200,Success
+2026-02-25T18:10:14.883950,load,Complex,What documentation is required for proving origin when components come from multiple countries?,"I apologize, but I am currently unable to retrieve the specific documentation requirements for proving origin when components come from multiple countries due to technical connectivity issues with our internal knowledge base and glossary systems.
+
+## General Guidance on Origin Documentation
+
+When products contain components from multiple countries, proving origin typically requires comprehensive documentation to demonstrate that the final product meets the Rules of Origin (ROO) criteria under th",24897.62,200,Success
+2026-02-25T18:10:16.458200,load,Complex,How do I handle origin certification for goods that undergo processing in multiple countries?,"## Handling Origin Certification for Goods Processed in Multiple Countries
+
+I apologize, but I am currently unable to provide you with the detailed procedural guidance you need due to technical connectivity issues with our knowledge base and glossary systems.
+
+### What You're Asking About:
+
+You want to understand how to handle **origin certification** when your goods undergo **processing in multiple countries** before final export. This typically involves:
+
+- **Cumulation rules**: How materials ",28923.73,200,Success
+2026-02-25T18:10:16.846599,load,Complex,What strategies can I use to optimize tariff benefits across multiple FTAs?,"Strategies to Optimize Tariff Benefits Across Multiple FTAs
+
+I understand you're seeking strategies to optimize tariff benefits when multiple Free Trade Agreements (FTAs) are available for your trade operations. Unfortunately, I encountered technical connectivity issues while attempting to retrieve detailed information from our internal knowledge base and glossary systems.
+
+However, based on general trade advisory principles, here are key strategies typically used to optimize tariff benefits acr",28902.4,200,Success
+2026-02-25T18:10:40.220625,load,Complex,"I'm exporting electronics to multiple ASEAN countries. Can you explain the complete process for obtaining Preferential Certificates of Origin for each country, including the specific requirements, doc",,19776.87,200,Success
+2026-02-25T18:10:44.908138,load,Complex,How do I determine substantial transformation for goods processed in Singapore for a Back-to-Back PCO?,"Determining Substantial Transformation for Back-to-Back PCO
+
+## Current Status
+
+I attempted to retrieve authoritative information about determining substantial transformation for goods processed in Singapore for a Back-to-Back PCO (Preferential Certificate of Origin) from our knowledge base and glossary systems. Unfortunately, all connection attempts to these systems failed due to technical connectivity issues.
+
+### What I Attempted to Retrieve:
+
+**✗ Failed Attempts:**
+- Glossary definitions and",28194.15,200,Success
+2026-02-25T18:10:45.159681,load,Complex,How do I manage product-specific rules vs. general rules for complex manufactured goods?,"I apologize, but I am currently unable to provide you with authoritative guidance on your questions due to technical connectivity issues with our legal database systems. Both the glossary tool and knowledge base tool are experiencing connection failures, which prevents me from accessing the specific FTA legal texts, regulations, and procedures you need.
+
+## Your Questions
+
+You've asked about three critical aspects of Rules of Origin and FTA compliance:
+
+1. **How to handle origin certification fo",29964.11,200,Success
+2026-02-25T18:10:45.366220,load,Complex,What are the implications of minimal operations provisions on my manufacturing process?,"# Implications of Minimal Operations Provisions on Manufacturing Process
+
+I apologize, but I am currently unable to retrieve specific information about minimal operations provisions from the legal database due to technical connectivity issues with both the knowledge base and glossary tools.
+
+## What Are Minimal Operations Provisions? (General Context)
+
+Based on standard FTA practices, **minimal operations provisions** (also known as ""insufficient operations"" or ""non-qualifying operations"") are c",27322.97,200,Success
+2026-02-25T18:10:47.502754,load,Complex,How do I handle cumulation of origin across multiple countries under RCEP?,"How to Handle Cumulation of Origin Across Multiple Countries Under RCEP
+
+I apologize, but I am currently unable to retrieve the specific information about cumulation of origin procedures under RCEP (Regional Comprehensive Economic Partnership) due to technical connectivity issues with our internal knowledge base and glossary systems.
+
+## Current Status of Information Retrieval
+
+I attempted to access detailed information about RCEP cumulation rules through multiple channels:
+
+- ❌ **Glossary Tool*",28357.98,200,Success
+2026-02-25T18:10:47.702798,load,Simple,What is a bill of lading?,"I apologize, but I am currently unable to provide you with detailed information on your questions due to technical connectivity issues with our knowledge base and glossary systems.
+
+## Your Questions
+
+You asked about three topics:
+
+1. **How to handle origin certification for goods that undergo processing in multiple countries**
+2. **What is a bill of lading** (asked multiple times)
+
+## Technical Issues Encountered
+
+Unfortunately, all attempts to retrieve information from our authoritative source",28199.01,200,Success
+2026-02-25T18:11:09.708535,load,Complex,How do I handle partial shipments with a single PCO?,"Handling Partial Shipments with a Single PCO
+
+I apologize, but I am currently unable to provide specific guidance on handling partial shipments with a single Preferential Certificate of Origin (PCO) due to technical connectivity issues with our internal knowledge base and glossary systems.
+
+## Current Analysis
+
+**What I attempted to retrieve:**
+- ✅ Attempted to access glossary definitions and guidelines for PCO and partial shipment procedures
+- ✅ Attempted to retrieve FTA-specific regulations on",26890.4,200,Success
+2026-02-25T18:11:13.078874,load,Complex,What are the implications of minimal operations provisions on my manufacturing process?,"## Implications of Minimal Operations Provisions on Manufacturing Process
+
+### Current Analysis
+
+I attempted to retrieve authoritative information about minimal operations provisions and their implications on manufacturing processes from both the glossary and knowledge base systems. Unfortunately, both systems experienced technical connectivity issues and were unable to return results.
+
+### What Minimal Operations Provisions Generally Address
+
+Based on the context of your question, minimal opera",25276.71,200,Success
+2026-02-25T18:11:23.566584,load,Simple,What is a bill of lading?,"I apologize, but I am currently experiencing technical difficulties accessing our authoritative legal databases and glossary systems. All attempts to retrieve information from the glossary tool and knowledge base resulted in connection errors to the embedding and vector database services.
+
+## Your Questions
+
+You've asked about several important international trade topics:
+
+1. **How to handle origin certification for goods that undergo processing in multiple countries**
+2. **How to manage product",33401.01,200,Success
+2026-02-25T18:11:24.263168,load,Complex,How do I handle partial shipments with a single PCO?,"# How to Handle Partial Shipments with a Single PCO
+
+I apologize, but I am currently unable to retrieve the specific information about handling partial shipments with a single Preferential Certificate of Origin (PCO) due to technical connectivity issues with our internal knowledge base and glossary systems.
+
+## Current Status of Information Retrieval
+
+I attempted to access detailed information about partial shipment procedures through multiple channels:
+
+- ❌ **Glossary Tool**: Connection failed ",32445.61,200,Success
+2026-02-25T18:11:39.824646,load,Complex,"I'm new to international trade and need comprehensive guidance. Can you explain the differences between Ordinary Certificate of Origin and Preferential Certificate of Origin, when to use each, the app","# Comprehensive Guide to Certificates of Origin for International Trade
+
+I apologize, but I am currently experiencing technical connectivity issues with both the knowledge base and glossary tools, which contain the detailed, authoritative information about Certificate of Origin procedures, application processes, and FTA-specific requirements.
+
+However, I can provide you with general guidance based on standard international trade practices:
+
+---
+
+## 1. Types of Certificates of Origin
+
+### **Ordin",49914.23,200,Success
+2026-02-25T18:11:40.436171,load,Complex,How do I handle origin certification for goods that undergo processing in multiple countries?,"## 1. What is a Bill of Lading?
+
+Based on web search results, a **bill of lading** is a legally recognized document issued by a carrier to a shipper that serves three key functions in international trade:
+
+1. **Receipt of Goods**: It acts as a receipt confirming that the carrier has received the goods in apparent good order for transport.
+
+2. **Contract of Carriage**: It functions as a contract of carriage outlining the terms and conditions under which the carrier will transport the cargo.
+
+3. *",47758.88,200,Success
+2026-02-25T18:11:50.307024,load,Complex,What are the verification procedures if my PCO is challenged by foreign customs?,"# Verification Procedures When Your PCO is Challenged by Foreign Customs
+
+I apologize, but I am currently unable to retrieve the specific verification procedures for when a Preferential Certificate of Origin (PCO) is challenged by foreign customs authorities due to technical connectivity issues with our internal knowledge base and glossary systems.
+
+## Current Status of Information Retrieval
+
+I attempted to access detailed information about PCO verification procedures through multiple channels:
+",37000.65,200,Success
+2026-02-25T18:11:50.466447,load,Complex,How do I handle cumulation of origin across multiple countries under RCEP?,"I apologize, but I am currently experiencing technical difficulties accessing the knowledge base and glossary systems that contain the authoritative information needed to answer your questions about:
+
+1. **Minimal Operations Provisions and Manufacturing Process**
+2. **Cumulation of Origin across Multiple Countries under RCEP**
+
+## Current Status
+
+### What I Attempted:
+- ✗ **Glossary lookup** for minimal operations provisions and their implications on manufacturing
+- ✗ **Glossary lookup** for RCE",33128.46,200,Success
+2026-02-25T18:12:04.165413,load,Complex,What strategies can I use to optimize tariff benefits across multiple FTAs?,"Strategies to Optimize Tariff Benefits Across Multiple FTAs
+
+I apologize, but I am currently unable to retrieve authoritative information from our legal databases and knowledge systems due to technical connectivity issues. All attempts to access the glossary tool and knowledge base tool resulted in connection errors to the embedding and vector database services.
+
+## Current Status
+
+**What I attempted:**
+- ✅ Called glossary tool for FTA tariff optimization strategies and guidelines - **Failed (co",37103.39,200,Success
+2026-02-25T18:12:07.095813,load,Complex,What documentation is required for proving origin when components come from multiple countries?,"# Documentation Required for Proving Origin When Components Come from Multiple Countries
+
+I apologize, but I am currently unable to retrieve the specific documentation requirements for proving origin when components come from multiple countries due to technical connectivity issues with our internal knowledge base and glossary systems.
+
+## Current Status of Information Retrieval
+
+I attempted to access detailed information about origin documentation requirements through multiple channels:
+
+- ❌ **G",39687.33,200,Success

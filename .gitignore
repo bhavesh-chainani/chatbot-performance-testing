@@ -31,9 +31,9 @@ ENV/
 .env.local
 
 # Reports
-reports/
-*.html
-*.csv
+# reports/
+# *.html
+# *.csv
 
 # IDE
 .vscode/

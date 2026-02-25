@@ -1,0 +1,369 @@
+timestamp,test_type,question_category,question,answer,response_time_ms,status_code,status
+2026-02-25T18:21:05.927411,stress,Complex,How do I handle retroactive issuance of PCOs for shipments already in transit?,,63.28,200,Success
+2026-02-25T18:21:06.998347,stress,Complex,How do I handle origin certification for goods that undergo processing in multiple countries?,,85.62,200,Success
+2026-02-25T18:21:07.101089,stress,Complex,"I need to understand the full eligibility criteria for Back-to-back Preferential Certificate of Origin. Can you provide detailed information about the requirements, application process, supporting doc",,205.69,200,Success
+2026-02-25T18:21:11.820175,stress,Complex,What are the specific origin criteria differences between ASEAN-China FTA and RCEP for electronic components?,,851.26,200,Success
+2026-02-25T18:21:18.168974,stress,Complex,"I have a shipment ready to export but I'm unsure about certificate requirements. Can you help me determine which type of certificate I need, verify my product's eligibility for preferential treatment,",,12331.53,200,Success
+2026-02-25T18:21:29.352586,stress,Complex,What strategies can I use to optimize tariff benefits across multiple FTAs?,"I apologize, but I encountered technical difficulties accessing both the glossary and knowledge base systems to retrieve comprehensive information about strategies to optimize tariff benefits across multiple FTAs.
+
+Based on general trade advisory principles, optimizing tariff benefits across multiple FTAs typically involves several strategic considerations:
+
+## General Strategic Approaches
+
+When dealing with multiple FTAs, businesses typically need to consider:
+
+1. **FTA Selection & Comparison**",21489.42,200,Success
+2026-02-25T18:21:31.592218,stress,Complex,What are the specific origin criteria differences between ASEAN-China FTA and RCEP for electronic components?,"I apologize, but I encountered technical difficulties while attempting to retrieve information from our knowledge base and glossary systems to answer your questions about:
+
+1. **PCO verification procedures when challenged by foreign customs**
+2. **Specific origin criteria differences between ASEAN-China FTA and RCEP for electronic components**
+
+## Current Status
+
+### What I attempted to do:
+- ✅ Initiated search for PCO (Proof of Certification of Origin) terminology and verification procedures
+- ",22722.83,200,Success
+2026-02-25T18:21:34.079328,stress,Complex,How do I handle partial shipments with a single PCO?,"## Handling Partial Shipments with a Single PCO
+
+I apologize, but I encountered technical difficulties accessing both the glossary and knowledge base systems to retrieve the specific procedures for handling partial shipments with a single PCO (Preferential Certificate of Origin).
+
+**PCO** typically refers to **Preferential Certificate of Origin**, which is a document used to claim preferential tariff treatment under Free Trade Agreements (FTAs).
+
+### Current Analysis
+
+Based on your query about h",22619.05,200,Success
+2026-02-25T18:21:36.020084,stress,Complex,What are the verification procedures if my PCO is challenged by foreign customs?,"## Verification Procedures for PCO Challenged by Foreign Customs
+
+I apologize, but I encountered technical difficulties accessing both the glossary and knowledge base systems to retrieve the specific verification procedures for when your Preferential Certificate of Origin (PCO) is challenged by foreign customs authorities.
+
+### What I Attempted
+
+**✓ Completed:**
+- Identified your question about PCO verification procedures when challenged by foreign customs
+- Attempted to retrieve information fro",27175.39,200,Success
+2026-02-25T18:21:36.998924,stress,Complex,How do I handle cumulation of origin across multiple countries under RCEP?,"I understand you need comprehensive guidance on export certificate requirements and specifically on handling cumulation of origin across multiple countries under RCEP. However, I'm currently unable to retrieve the necessary information from our knowledge base and regulatory databases due to technical connectivity issues.
+
+## Current Situation
+
+Based on your inquiry, you're seeking assistance with:
+
+1. **Certificate Type Determination** - Which specific certificate of origin you need for your exp",26663.72,200,Success
+2026-02-25T18:21:43.275949,stress,Complex,"My company manufactures products using components from multiple countries. How do I determine the origin of my finished product for FTA purposes, what documentation is required to prove origin, and wh","I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems needed to provide you with comprehensive information about Rules of Origin determination, documentation requirements, and FTA tariff benefits.
+
+However, I can provide you with a general framework based on standard FTA practices:
+
+## Understanding Origin Determination for FTA Purposes
+
+To determine the origin of your finished product manufactured using components from multiple countries, you ty",29289.29,200,Success
+2026-02-25T18:21:45.774981,stress,Complex,How do I calculate regional value content for products with components from multiple FTA partners?,,118.14,200,Success
+2026-02-25T18:21:46.287188,stress,Complex,What are the specific origin criteria differences between ASEAN-China FTA and RCEP for electronic components?,"I apologize, but I'm currently unable to retrieve the specific information you requested about the origin criteria differences between ASEAN-China FTA and RCEP for electronic components. 
+
+## Current Status
+
+I attempted to access our knowledge base and glossary systems to retrieve detailed information about:
+- **ASEAN-China FTA** origin criteria for electronic components
+- **RCEP** origin criteria for electronic components
+- Comparative analysis between the two FTAs
+
+Unfortunately, I encountered",24382.74,200,Success
+2026-02-25T18:21:54.642060,stress,Complex,"I need to understand the full eligibility criteria for Back-to-back Preferential Certificate of Origin. Can you provide detailed information about the requirements, application process, supporting doc","I apologize, but I am currently unable to retrieve the comprehensive information you requested about Back-to-back Preferential Certificate of Origin due to technical connectivity issues with both the glossary and knowledge base systems.
+
+## What Has Been Done and What's Next
+
+**✅ Completed:**
+- Received your detailed inquiry about Back-to-back Preferential Certificate of Origin
+- Identified the specific information areas you need:
+  - Full eligibility criteria
+  - Application process requirement",20578.08,200,Success
+2026-02-25T18:22:06.379665,stress,Complex,How do I handle retroactive issuance of PCOs for shipments already in transit?,"I apologize, but I'm currently unable to retrieve the necessary information about retroactive issuance of Preferential Certificates of Origin (PCOs) for shipments already in transit due to technical connectivity issues with our knowledge base and regulatory databases.
+
+## What I Attempted to Retrieve
+
+I tried to access information on:
+- **Retroactive PCO issuance procedures** - The process for obtaining certificates after goods have already been shipped
+- **RCEP-specific retroactive issuance rul",25385.77,200,Success
+2026-02-25T18:22:06.672044,stress,Simple,What is customs clearance?,"What is Customs Clearance?
+
+## Definition and Process
+
+Based on information retrieved from web sources, **customs clearance** is the official procedure by which exported or imported goods are examined, documented, and authorized by the customs authority of the relevant country before they are allowed to move across the border.
+
+## The Customs Clearance Process
+
+Customs clearance typically involves the following stages:
+
+### 1. **Document Preparation**
+The exporter or importer prepares and submit",30261.53,200,Success
+2026-02-25T18:22:07.726978,stress,Complex,How do I manage product-specific rules vs. general rules for complex manufactured goods?,"# Managing Product-Specific Rules vs. General Rules for Complex Manufactured Goods
+
+I apologize, but I encountered technical difficulties while attempting to retrieve the comprehensive information you requested about managing product-specific rules versus general rules for complex manufactured goods.
+
+## Current Status
+
+### What I Attempted to Complete:
+
+**✓ Initiated:**
+- Search for terminology and guidelines on Product-Specific Rules (PSR) vs. General Rules through the glossary system
+- Query ",28343.51,200,Success
+2026-02-25T18:22:15.606912,stress,Complex,How do I handle origin certification for goods that undergo processing in multiple countries?,"I apologize, but I am currently unable to retrieve the specific information you requested about handling origin certification for goods that undergo processing in multiple countries due to technical connectivity issues with both the knowledge base and glossary systems.
+
+## Current Situation
+
+I attempted to access:
+- **Glossary Tool**: To retrieve trade terminology and guidelines for multi-country processing scenarios - **Connection Failed**
+- **Knowledge Base Tool**: To retrieve FTA-specific rul",27119.23,200,Success
+2026-02-25T18:22:16.050358,stress,Complex,"I'm exporting electronics to multiple ASEAN countries. Can you explain the complete process for obtaining Preferential Certificates of Origin for each country, including the specific requirements, doc","Thank you for your enquiry about obtaining Preferential Certificates of Origin (PCO) for exporting electronics to ASEAN countries.
+
+### Understanding Your Request
+
+I understand you're looking for comprehensive guidance on:
+- The complete PCO application process
+- Country-specific requirements across multiple ASEAN destinations
+- Required documentation
+- Product eligibility verification under different FTAs
+
+### Why We Need to Focus on One Destination at a Time
+
+The PCO process, requirements, doc",37188.94,200,Success
+2026-02-25T18:22:26.791586,stress,Complex,How do I handle retroactive issuance of PCOs for shipments already in transit?,"Retroactive Issuance of Preferential Certificates of Origin (PCOs)
+
+I apologize, but I'm currently unable to retrieve the specific procedural information you need regarding retroactive issuance of PCOs for shipments already in transit due to technical connectivity issues with our knowledge base systems.
+
+## What I Attempted to Retrieve
+
+I attempted to access authoritative information on:
+
+- **Retroactive/Retrospective issuance procedures** for Preferential Certificates of Origin
+- **Time limits ",36175.56,200,Success
+2026-02-25T18:22:33.646236,stress,Complex,What are the implications of third-country invoicing on PCO eligibility?,"I apologize, but I am currently unable to provide you with the detailed information you requested about **Back-to-back Preferential Certificate of Origin (PCO)** and **third-country invoicing implications** due to technical connectivity issues with our knowledge base and glossary systems.
+
+## What Has Been Done and What's Next
+
+**✅ Completed:**
+- Received your comprehensive inquiry covering:
+  - Full eligibility criteria for Back-to-back Preferential Certificate of Origin
+  - Application process",35282.17,200,Success
+2026-02-25T18:22:37.116973,stress,Complex,How do I handle partial shipments with a single PCO?,"# Handling Partial Shipments with a Single PCO
+
+I apologize, but I encountered technical difficulties while attempting to retrieve comprehensive information about handling partial shipments with a single Preferential Certificate of Origin (PCO).
+
+## Technical Issues Encountered
+
+All attempts to access our knowledge base and glossary systems resulted in connection errors, preventing me from retrieving the authoritative FTA texts and procedural guidelines needed to provide you with accurate inform",27434.01,200,Success
+2026-02-25T18:22:38.733125,stress,Complex,What documentation is required for proving origin when components come from multiple countries?,"# Documentation Required for Proving Origin When Components Come from Multiple Countries
+
+I apologize, but I encountered technical difficulties while attempting to retrieve the comprehensive information you requested about documentation requirements for proving origin when components come from multiple countries.
+
+## Technical Issue Encountered
+
+All attempts to access our knowledge base and glossary systems resulted in connection errors. Specifically:
+
+**✗ Failed Tool Calls:**
+- ❌ Glossary tool ",27824.94,200,Success
+2026-02-25T18:22:41.653979,stress,Complex,How do I navigate conflicting rules of origin between overlapping FTAs?,"I apologize, but I am currently unable to retrieve the necessary information to answer your question about navigating conflicting rules of origin between overlapping FTAs due to technical connectivity issues with our knowledge base and glossary systems.
+
+## What I Attempted to Retrieve
+
+I tried to access comprehensive guidance on:
+
+1. **How to choose between multiple FTAs** when the same countries are parties to more than one trade agreement
+2. **Strategies for handling conflicting rules of orig",31417.29,200,Success
+2026-02-25T18:22:44.617401,stress,Complex,What are the specific origin criteria differences between ASEAN-China FTA and RCEP for electronic components?,"# Origin Criteria Differences: ASEAN-China FTA vs RCEP for Electronic Components
+
+## Current Analysis
+
+I attempted to retrieve the specific origin criteria differences between ASEAN-China FTA and RCEP for electronic components from our knowledge base systems. Unfortunately, I encountered technical connectivity issues that prevented me from accessing the required information.
+
+### What I Attempted to Retrieve
+
+I tried to access:
+- **ASEAN-China FTA Rules of Origin** specific to electronic compone",26526.96,200,Success
+2026-02-25T18:22:53.005756,stress,Complex,How do I calculate regional value content for products with components from multiple FTA partners?,"Calculating Regional Value Content (RVC) for Products with Components from Multiple FTA Partners
+
+I apologize, but I am currently unable to retrieve the specific information you requested about calculating Regional Value Content (RVC) for products with components from multiple FTA partner countries due to technical connectivity issues with our knowledge base and glossary systems.
+
+## Current Technical Status
+
+**Attempted Actions:**
+- ✓ Called glossary tool to retrieve RVC terminology and calcula",32608.41,200,Success
+2026-02-25T18:23:06.378055,stress,Complex,What are the specific origin criteria differences between ASEAN-China FTA and RCEP for electronic components?,"I apologize, but I am currently unable to provide you with the detailed comparison of origin criteria differences between **ASEAN-China FTA (ACFTA)** and **RCEP** for electronic components due to technical connectivity issues with our knowledge base and glossary systems.
+
+## What Has Been Done and What's Next
+
+**✅ Completed:**
+- Received your inquiry about comparing origin criteria between ASEAN-China FTA and RCEP for electronic components
+- Attempted to retrieve information from multiple source",30232.21,200,Success
+2026-02-25T18:23:07.577141,stress,Complex,What strategies can I use to optimize tariff benefits across multiple FTAs?,"Strategies to Optimize Tariff Benefits Across Multiple FTAs
+
+I apologize, but I am currently unable to retrieve the comprehensive information you need regarding strategies to optimize tariff benefits across multiple Free Trade Agreements due to technical connectivity issues with our knowledge base and glossary systems.
+
+## What I Attempted to Retrieve
+
+I attempted to access authoritative guidance on:
+
+1. **FTA Selection Strategies** - How to choose the most beneficial FTA when multiple agreement",36846.66,200,Success
+2026-02-25T18:23:15.721175,stress,Complex,"I'm exporting electronics to multiple ASEAN countries. Can you explain the complete process for obtaining Preferential Certificates of Origin for each country, including the specific requirements, doc",,31046.07,200,Success
+2026-02-25T18:23:23.596984,stress,Complex,How do I handle retroactive issuance of PCOs for shipments already in transit?,"# Handling Retroactive Issuance of PCOs for Shipments Already in Transit
+
+Based on the web search results retrieved, I can provide you with information about retroactive issuance of Preferential Certificates of Origin (PCOs) for shipments already in transit.
+
+## Retroactive PCO Issuance Procedure
+
+According to information from the **Ministry of Investment, Trade and Industry (MITI)**, exporters can obtain a retroactive Preferential Certificate of Origin for FTA-qualified goods that are already i",41512.36,200,Success
+2026-02-25T18:23:30.289476,stress,Complex,What are the legal implications of incorrect origin declarations?,"# Legal Implications of Incorrect Origin Declarations
+
+## Technical Challenges Encountered
+
+I attempted to retrieve comprehensive information from our authoritative knowledge base and glossary systems regarding the legal implications of incorrect origin declarations. Unfortunately, all knowledge base and glossary tool calls resulted in connection errors, preventing access to FTA-specific legal texts and procedural guidelines.
+
+However, I was able to retrieve relevant information from web sources",48424.3,200,Success
+2026-02-25T18:23:31.529797,stress,Complex,What are the implications of minimal operations provisions on my manufacturing process?,"# Implications of Minimal Operations Provisions on Manufacturing Process
+
+## Current Analysis
+
+I attempted to retrieve comprehensive information about minimal operations provisions and their implications on your manufacturing process. Unfortunately, I encountered **technical connectivity issues** with all knowledge base systems, preventing me from accessing the required regulatory information.
+
+### What Are Minimal Operations Provisions?
+
+**Minimal operations** (also known as **insufficient oper",43240.39,200,Success
+2026-02-25T18:23:34.424227,stress,Complex,How do I determine substantial transformation for goods processed in Singapore for a Back-to-Back PCO?,"Determining Substantial Transformation for Back-to-Back PCO in Singapore
+
+I apologize, but I am currently unable to provide you with the specific legal requirements and procedures for determining substantial transformation for goods processed in Singapore under a Back-to-Back PCO (Preferential Certificate of Origin) due to technical connectivity issues with our knowledge base and glossary systems.
+
+## Current Technical Status
+
+All attempts to retrieve authoritative information have failed due to",37535.5,200,Success
+2026-02-25T18:23:39.177757,stress,Complex,"I have a shipment ready to export but I'm unsure about certificate requirements. Can you help me determine which type of certificate I need, verify my product's eligibility for preferential treatment,",,19502.46,200,Success
+2026-02-25T18:23:42.815139,stress,Complex,How do I handle origin certification for goods that undergo processing in multiple countries?,"I apologize, but I am currently unable to provide you with comprehensive information about **handling origin certification for goods that undergo processing in multiple countries** due to technical connectivity issues with our knowledge base and glossary systems.
+
+## Technical Issues Encountered
+
+All attempts to retrieve information from our primary sources have failed:
+
+- ❌ **Glossary tool** - Connection error (unable to access trade terminology and procedural guidelines)
+- ❌ **Knowledge base t",32344.21,200,Success
+2026-02-25T18:23:45.773094,stress,Complex,How do I determine substantial transformation for goods processed in Singapore for a Back-to-Back PCO?,,34490.0,200,Success
+2026-02-25T18:24:05.881318,stress,Complex,"I have a shipment ready to export but I'm unsure about certificate requirements. Can you help me determine which type of certificate I need, verify my product's eligibility for preferential treatment,",,27381.11,200,Success
+2026-02-25T18:24:09.712873,stress,Complex,How do I handle cumulation of origin across multiple countries under RCEP?,"# Handling Cumulation of Origin Across Multiple Countries Under RCEP
+
+I apologize, but I encountered significant technical difficulties while attempting to retrieve comprehensive information about handling cumulation of origin across multiple countries under RCEP (Regional Comprehensive Economic Partnership).
+
+## Technical Issues Encountered
+
+All attempts to access our knowledge base and glossary systems resulted in connection errors, preventing me from retrieving the authoritative RCEP legal te",41414.63,200,Success
+2026-02-25T18:24:13.037492,stress,Complex,What are the specific origin criteria differences between ASEAN-China FTA and RCEP for electronic components?,"# Origin Criteria Differences: ASEAN-China FTA vs RCEP for Electronic Components
+
+## Current Analysis
+
+I attempted to retrieve comprehensive information comparing the origin criteria between ASEAN-China FTA and RCEP for electronic components. Unfortunately, I encountered **technical connectivity failures** across all knowledge base systems, preventing me from accessing the required regulatory information.
+
+### What I Attempted
+
+**✅ Completed:**
+- Understood your question about comparing origin c",38196.21,200,Success
+2026-02-25T18:24:19.212786,stress,Complex,"I'm exporting electronics to multiple ASEAN countries. Can you explain the complete process for obtaining Preferential Certificates of Origin for each country, including the specific requirements, doc",,36519.75,200,Success
+2026-02-25T18:24:20.765733,stress,Complex,How do I determine substantial transformation for goods processed in Singapore for a Back-to-Back PCO?,"# Determining Substantial Transformation for Goods Processed in Singapore for a Back-to-Back PCO
+
+I apologize, but I encountered technical difficulties while attempting to retrieve comprehensive information about determining substantial transformation for goods processed in Singapore in the context of Back-to-Back Preferential Certificate of Origin (B2B PCO).
+
+## Technical Issues Encountered
+
+All attempts to access our knowledge base and glossary systems resulted in connection errors, preventing",46487.19,200,Success
+2026-02-25T18:24:24.619204,stress,Complex,How do I handle cumulation of origin across multiple countries under RCEP?,"How to Handle Cumulation of Origin Across Multiple Countries Under RCEP
+
+I apologize, but I am currently unable to provide you with comprehensive information about **cumulation of origin across multiple countries under RCEP** due to technical connectivity issues with our knowledge base and glossary systems.
+
+## Technical Issues Encountered
+
+All attempts to retrieve information from our primary authoritative sources have failed:
+
+- ❌ **Glossary tool** - Connection error (unable to access trade te",39696.43,200,Success
+2026-02-25T18:24:37.661057,stress,Complex,How do I navigate conflicting rules of origin between overlapping FTAs?,"Navigating Conflicting Rules of Origin Between Overlapping FTAs
+
+I apologize for the technical difficulties encountered with our internal knowledge base and glossary systems. However, I was able to retrieve relevant information from web sources to help address your question about navigating conflicting rules of origin between overlapping FTAs.
+
+---
+
+## Key Strategies for Handling Overlapping FTAs
+
+Based on the information retrieved, when you face multiple Free Trade Agreements (FTAs) that overla",47027.97,200,Success
+2026-02-25T18:24:47.697888,stress,Simple,What is an HS code?,"# What is an HS Code?
+
+## Definition
+
+Based on information retrieved from web sources, an **HS (Harmonized System) code**, also called the Harmonized System classification, is an internationally standardized numeric system of product names and codes developed by the **World Customs Organization** to classify virtually all goods traded across borders.
+
+## Structure of HS Codes
+
+The HS code uses a **six-digit structure** that forms the basis for customs tariffs, trade statistics, rules of origin, ",35956.03,200,Success
+2026-02-25T18:24:49.687114,stress,Complex,How do I handle retroactive issuance of PCOs for shipments already in transit?,"Handling Retroactive Issuance of PCOs for Shipments Already in Transit
+
+I apologize, but I am currently unable to provide you with the specific legal requirements and procedures for handling retroactive issuance of Preferential Certificates of Origin (PCOs) for shipments already in transit due to technical connectivity issues with our authoritative knowledge base and glossary systems.
+
+## Current Technical Status
+
+**System Connectivity Issues Encountered:**
+- ✗ Glossary Tool - Connection Failed ",40712.73,200,Success
+2026-02-25T18:25:09.362201,stress,Complex,What are the legal implications of incorrect origin declarations?,"I apologize, but I am currently unable to provide you with comprehensive guidance on your questions due to technical connectivity issues with our knowledge base and glossary systems.
+
+## Your Questions
+
+You asked about two critical topics:
+
+1. **How to navigate conflicting rules of origin between overlapping FTAs**
+2. **Legal implications of incorrect origin declarations**
+
+## Technical Issues Encountered
+
+All attempts to retrieve authoritative information from our systems resulted in connection",46334.06,200,Success
+2026-02-25T18:25:12.663176,stress,Complex,What are the implications of minimal operations provisions on my manufacturing process?,,117.42,200,Success
+2026-02-25T18:25:12.750565,stress,Complex,How do I calculate regional value content for products with components from multiple FTA partners?,"# Calculating Regional Value Content for Products with Components from Multiple FTA Partners
+
+I apologize, but I encountered significant technical difficulties while attempting to retrieve comprehensive information about calculating Regional Value Content (RVC) for products with components from multiple FTA partner countries.
+
+## Technical Issues Encountered
+
+All attempts to access our knowledge base and glossary systems resulted in connection errors, preventing me from retrieving the authoritat",48240.66,200,Success
+2026-02-25T18:25:15.611995,stress,Complex,"I need to understand the full eligibility criteria for Back-to-back Preferential Certificate of Origin. Can you provide detailed information about the requirements, application process, supporting doc","# Back-to-back Preferential Certificate of Origin - Comprehensive Guide
+
+I apologize, but I am currently unable to provide you with the comprehensive information you requested about **Back-to-back Preferential Certificate of Origin (B2B PCO)** due to persistent technical connectivity issues with our primary knowledge systems.
+
+## Technical Issues Encountered
+
+**Time of Attempt:** February 25, 2026, 10:24:46 UTC
+
+All attempts to retrieve authoritative information from our systems have failed with",46210.68,200,Success
+2026-02-25T18:25:19.801092,stress,Complex,What are the implications of minimal operations provisions on my manufacturing process?,"# Implications of Minimal Operations Provisions on Manufacturing Process
+
+## Current Status
+
+I attempted to retrieve comprehensive information about minimal operations provisions and their implications on your manufacturing process. Unfortunately, I encountered **persistent technical connectivity failures** across all knowledge base systems, preventing me from accessing the authoritative FTA texts and regulatory provisions needed to provide you with accurate guidance.
+
+---
+
+## What Are Minimal O",61975.82,200,Success
+2026-02-25T18:25:21.419139,stress,Complex,How do I handle cumulation of origin across multiple countries under RCEP?,"I apologize, but I am currently unable to provide you with comprehensive guidance on navigating conflicting rules of origin between overlapping FTAs and handling cumulation of origin across multiple countries under RCEP due to technical connectivity issues with our knowledge base systems.
+
+## Technical Issues Encountered
+
+All attempts to retrieve authoritative information from our legal databases resulted in connection failures:
+
+- ❌ **Glossary tool** - Failed to retrieve guidelines on cumulatio",40961.15,200,Success
+2026-02-25T18:25:26.730776,stress,Complex,"I'm exporting electronics to multiple ASEAN countries. Can you explain the complete process for obtaining Preferential Certificates of Origin for each country, including the specific requirements, doc",,36103.0,200,Success
+2026-02-25T18:25:29.067931,stress,Complex,"I have a shipment ready to export but I'm unsure about certificate requirements. Can you help me determine which type of certificate I need, verify my product's eligibility for preferential treatment,",,35185.42,200,Success
+2026-02-25T18:25:59.453513,stress,Simple,What is customs clearance?,"# What is Customs Clearance?
+
+## Definition and Overview
+
+**Customs clearance** is the mandatory process through which goods must pass when entering or leaving a country's borders. It is the official procedure by which customs authorities verify, inspect, and authorize the import or export of goods, ensuring compliance with all applicable laws, regulations, and trade requirements.
+
+Based on the information retrieved from web sources, the customs clearance process in international trade typically",36421.19,200,Success
+2026-02-25T18:26:01.551320,stress,Complex,How do I handle retroactive issuance of PCOs for shipments already in transit?,"Handling Retroactive Issuance of PCOs for Shipments Already in Transit
+
+I apologize, but I am currently unable to provide you with comprehensive guidance on retroactive issuance of Preferential Certificates of Origin (PCOs) for shipments already in transit due to technical connectivity issues with our knowledge base systems.
+
+## Technical Issues Encountered
+
+All attempts to retrieve authoritative information from our systems resulted in connection failures:
+
+- ❌ **Glossary tool** - Failed to ret",44101.39,200,Success

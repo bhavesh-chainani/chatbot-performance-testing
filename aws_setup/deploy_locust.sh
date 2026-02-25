@@ -50,14 +50,21 @@ WORKER_COUNT=${WORKER_COUNT:-5}
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# -- Resolve AMI --------------------------------------------------------------
+# -- Resolve AMI (SSM = latest AL2, then fallbacks) --------------------------
 
-AMI_ID=$(aws ec2 describe-images \
-    --owners amazon \
-    --filters "Name=name,Values=amzn2-ami-hvm-*-x86_64-gp2" "Name=state,Values=available" \
-    --query 'Images | sort_by(@, &CreationDate) | [-1].ImageId' \
-    --output text \
-    --region "$AWS_REGION" 2>/dev/null)
+AMI_ID=$(aws ssm get-parameters \
+    --names /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2 \
+    --query 'Parameters[0].Value' --output text \
+    --region "$AWS_REGION" 2>/dev/null) || true
+
+if [ -z "$AMI_ID" ] || [ "$AMI_ID" == "None" ]; then
+    AMI_ID=$(aws ec2 describe-images \
+        --owners amazon \
+        --filters "Name=name,Values=amzn2-ami-hvm-*-x86_64-gp2" "Name=state,Values=available" \
+        --query 'Images | sort_by(@, &CreationDate) | [-1].ImageId' \
+        --output text \
+        --region "$AWS_REGION" 2>/dev/null) || true
+fi
 
 if [ -z "$AMI_ID" ] || [ "$AMI_ID" == "None" ]; then
     case $AWS_REGION in
@@ -90,7 +97,19 @@ aws cloudformation create-stack \
     --region "$AWS_REGION"
 
 echo "Waiting for stack creation (3-5 min)..."
-aws cloudformation wait stack-create-complete --stack-name "$STACK_NAME" --region "$AWS_REGION"
+if ! aws cloudformation wait stack-create-complete --stack-name "$STACK_NAME" --region "$AWS_REGION"; then
+    echo ""
+    echo "Stack creation failed (ROLLBACK_COMPLETE). Recent failures:"
+    aws cloudformation describe-stack-events \
+        --stack-name "$STACK_NAME" \
+        --region "$AWS_REGION" \
+        --query 'StackEvents[?ResourceStatus==`CREATE_FAILED`].[LogicalResourceId,ResourceStatusReason]' \
+        --output table 2>/dev/null || true
+    echo ""
+    echo "Full events: aws cloudformation describe-stack-events --stack-name $STACK_NAME --region $AWS_REGION"
+    echo "Delete before retry: aws cloudformation delete-stack --stack-name $STACK_NAME --region $AWS_REGION"
+    exit 1
+fi
 
 MASTER_IP=$(aws cloudformation describe-stacks \
     --stack-name "$STACK_NAME" \

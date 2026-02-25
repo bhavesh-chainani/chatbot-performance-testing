@@ -1,166 +1,179 @@
 # AWS Setup – Full-Scale Locust (Master + Workers)
 
-Deploy 1 master + 5 workers for load / stress / endurance / breakpoint tests at 500–1000 users.
+All commands in this guide use the key **`~/.ssh/locust-testing.pem`**. Save your key there, or replace that path in the commands below.
 
-| Test | Users | Duration |
-|------|------:|----------|
-| **Load** | 500 | 20 min |
-| **Stress** | 750 | 20 min |
-| **Endurance** | 500 | 2 hours (fits 70M token budget) |
-| **Breakpoint** | ramp to 1000 | 30 min |
+Run everything from your **project directory** (where `src/`, `config/`, `.env`, and `requirements.txt` are) unless a step says you are on the master or a worker.
 
-**Infrastructure:** 1× `c5.large` (master) + 5× `c5.xlarge` (workers). ~200–250 users per worker.
+---
 
-**Cost:** Running all 4 tests in one session is roughly **$11–$14** (on-demand, us-east-1). See **[docs/AWS_COSTS.md](docs/AWS_COSTS.md)** for a full breakdown.
+## Test profiles
+
+| Test        | Users  | Duration |
+|------------|--------|----------|
+| Load       | 500    | 20 min   |
+| Stress     | 750    | 20 min   |
+| Endurance  | 500    | 2 hours  |
+| Breakpoint | to 1000| 30 min   |
+
+**Infrastructure:** 1 master + 2–5 workers. **Cost:** ~$5–$6 for all 4 tests in one go. See [docs/AWS_COSTS.md](docs/AWS_COSTS.md).
 
 ---
 
 ## Prerequisites
 
-1. AWS Account  
-2. AWS CLI configured (`aws configure`)  
-3. EC2 Key Pair  
+- AWS account, AWS CLI configured (`aws configure`)
+- EC2 key pair named `locust-testing` (key file at `~/.ssh/locust-testing.pem`)
+
+**Create the key if needed:**
+
+```bash
+aws ec2 create-key-pair --key-name locust-testing --query 'KeyMaterial' --output text > ~/.ssh/locust-testing.pem
+chmod 400 ~/.ssh/locust-testing.pem
+```
 
 ---
 
-## Step 0: Get Your Session Cookie
+## Step 0: Session cookie
 
-The chatbot uses SSO. Locust authenticates with a **session cookie** from the browser.
-
-1. Open **https://cfoti.org** and log in.  
-2. DevTools (F12) → **Application** → **Cookies** → `https://cfoti.org`  
-3. Copy the **`session`** cookie value.  
-4. Put it in `.env`:
+1. Log in at **https://cfoti.org** in your browser.
+2. DevTools (F12) → Application → Cookies → `https://cfoti.org` → copy the **`session`** cookie value.
+3. Put it in `.env` in the project root:
 
 ```env
 CHATBOT_URL=https://cfoti.org
-SESSION_COOKIE=paste-your-session-cookie-value-here
+SESSION_COOKIE=<paste-session-cookie-here>
 ```
 
-Session lasts ~24 hours; refresh if you get 401s.
+Cookie lasts ~24 hours; refresh if you get 401s.
 
 ---
 
 ## Step 1: Deploy
 
+From the project directory:
+
 ```bash
 ./aws_setup/deploy_locust.sh
 ```
 
-Use defaults (master `c5.large`, workers `c5.xlarge`, 5 workers) or change as prompted. Enter your key pair name.
+When prompted: stack name (Enter for `locust-cluster`), **EC2 Key Pair name: `locust-testing`**, then Enter for the rest (master/worker types, 5 workers). Wait ~3–5 min.
+
+If the stack fails (ROLLBACK_COMPLETE), fix the cause, then:
+
+```bash
+aws cloudformation delete-stack --stack-name locust-cluster --region us-east-1
+```
+
+Wait until the stack is gone, then run `./aws_setup/deploy_locust.sh` again.
 
 ---
 
 ## Step 2: Get IPs
 
+From the project directory:
+
 ```bash
 ./aws_setup/get_ips_simple.sh
 ```
 
-Set:
+Set these variables (replace with the values from the script output):
 
 ```bash
-export MASTER_IP=<master-public-ip>
-export MASTER_PRIVATE=<master-private-ip>
-export KEY=~/.ssh/<your-key>.pem
+export MASTER_IP=3.87.139.5
+export MASTER_PRIVATE=172.31.40.17
+export WORKER_IP=3.88.136.146
 ```
+
+Use your **Master Public IP**, **Master Private IP**, and **Worker IP** (from “Worker instances only”). If you have multiple workers, set `WORKER_IP` for the first; run the worker steps once per worker IP. Keep this terminal open so the variables are set for the next steps.
 
 ---
 
 ## Step 3: Copy files to master
 
+From the project directory (after setting the variables in Step 2):
+
 ```bash
-ssh -i $KEY ec2-user@$MASTER_IP "mkdir -p ~/chatbot-performance-testing"
-scp -i $KEY -r src/ config/ .env requirements.txt ec2-user@$MASTER_IP:~/chatbot-performance-testing/
+ssh -i ~/.ssh/locust-testing.pem ec2-user@$MASTER_IP "mkdir -p ~/chatbot-performance-testing"
+scp -i ~/.ssh/locust-testing.pem -r src/ config/ .env requirements.txt ec2-user@$MASTER_IP:~/chatbot-performance-testing/
 ```
 
 ---
 
-## Step 4: Copy files to every worker
+## Step 4: Copy files to each worker
 
-Use the worker IPs printed by `get_ips_simple.sh`, or:
-
-```bash
-aws ec2 describe-instances \
-  --filters "Name=tag:aws:cloudformation:stack-name,Values=locust-cluster" "Name=instance-state-name,Values=running" \
-  --query 'Reservations[*].Instances[*].[Tags[?Key==`Name`].Value|[0],PublicIpAddress]' --output text
-```
-
-For each worker IP:
+For **each** worker, run (replace `$WORKER_IP` with that worker’s IP if you have more than one):
 
 ```bash
-ssh -i $KEY ec2-user@<worker-ip> "mkdir -p ~/chatbot-performance-testing"
-scp -i $KEY -r src/ config/ .env requirements.txt ec2-user@<worker-ip>:~/chatbot-performance-testing/
+ssh -i ~/.ssh/locust-testing.pem ec2-user@$WORKER_IP "mkdir -p ~/chatbot-performance-testing"
+scp -i ~/.ssh/locust-testing.pem -r src/ config/ .env requirements.txt ec2-user@$WORKER_IP:~/chatbot-performance-testing/
 ```
 
 ---
 
-## Step 5: Install deps on master and all workers
+## Step 5: Install dependencies
 
-On **master** and on **each worker**:
+From the project directory:
+
+```bash
+ssh -i ~/.ssh/locust-testing.pem ec2-user@$MASTER_IP "cd ~/chatbot-performance-testing && pip3 install -r requirements.txt"
+ssh -i ~/.ssh/locust-testing.pem ec2-user@$WORKER_IP "cd ~/chatbot-performance-testing && pip3 install -r requirements.txt"
+```
+
+If you have multiple workers, run the second line for each worker (set `WORKER_IP` to that worker’s IP, or run with the IP in the command).
+
+---
+
+## Step 6: Start the master
+
+From the project directory:
+
+```bash
+ssh -i ~/.ssh/locust-testing.pem ec2-user@$MASTER_IP
+```
+
+On the master:
 
 ```bash
 cd ~/chatbot-performance-testing
-pip3 install -r requirements.txt
-```
-
----
-
-## Step 6: Start master
-
-SSH to master:
-
-```bash
-ssh -i $KEY ec2-user@$MASTER_IP
-cd ~/chatbot-performance-testing
-
 TEST_TYPE=load locust -f src/locustfile.py --master
 ```
 
-Leave this running. Web UI: **http://\<MASTER_IP\>:8089**
+Leave this terminal open. In your browser open **http://$MASTER_IP:8089** (or paste the master public IP: e.g. http://3.87.139.5:8089).
 
 ---
 
-## Step 7: Start workers
+## Step 7: Start the workers
 
-On **each worker** (separate SSH sessions), run:
+From the project directory (in a **new** terminal, so `$WORKER_IP` and `$MASTER_PRIVATE` are still set from Step 2), for **each** worker run:
 
 ```bash
-cd ~/chatbot-performance-testing
-TEST_TYPE=load locust -f src/locustfile.py --worker --master-host=$MASTER_PRIVATE
+ssh -i ~/.ssh/locust-testing.pem ec2-user@$WORKER_IP "cd ~/chatbot-performance-testing && TEST_TYPE=load locust -f src/locustfile.py --worker --master-host=$MASTER_PRIVATE"
 ```
 
-Use **Master Private IP** for `--master-host`. Start all 5 workers, then in the master UI click **Start swarming**.
+Start every worker, then in the Locust web UI click **Start swarming**.
 
-| Test type | Master | Each worker |
-|-----------|--------|-------------|
-| Load | `TEST_TYPE=load locust -f src/locustfile.py --master` | `TEST_TYPE=load locust -f src/locustfile.py --worker --master-host=$MASTER_PRIVATE` |
-| Stress | `TEST_TYPE=stress ... --master` | `TEST_TYPE=stress ... --worker --master-host=$MASTER_PRIVATE` |
-| Endurance | `TEST_TYPE=endurance ... --master` | `TEST_TYPE=endurance ... --worker --master-host=$MASTER_PRIVATE` |
-| Breakpoint | `TEST_TYPE=breakpoint ... --master` | `TEST_TYPE=breakpoint ... --worker --master-host=$MASTER_PRIVATE` |
+For other test types, change `TEST_TYPE` (e.g. `TEST_TYPE=stress`, `TEST_TYPE=endurance`, `TEST_TYPE=breakpoint`).
 
 ---
 
 ## Step 8: Download reports
 
-Reports are on the **master**. From your local machine:
+Run metadata is on the **master**; response-time CSV is on the **workers**. From the project directory:
 
 ```bash
 mkdir -p reports
-scp -i $KEY "ec2-user@$MASTER_IP:~/chatbot-performance-testing/reports/*" ./reports/
-```
-
-Generate HTML:
-
-```bash
+scp -i ~/.ssh/locust-testing.pem "ec2-user@$MASTER_IP:~/chatbot-performance-testing/reports/run_meta_*.json" ./reports/
+scp -i ~/.ssh/locust-testing.pem ec2-user@$WORKER_IP:~/chatbot-performance-testing/reports/response_times_load.csv ./reports/response_times_load.csv
 python src/generate_report.py
 ```
 
-Use `--exclude-empty` to drop rows with no answer.
+If you have multiple workers, run the second `scp` for each worker (change the local filename if needed so you don’t overwrite). Use `--exclude-empty` to skip rows with no answer: `python src/generate_report.py --exclude-empty`
 
 ---
 
 ## Step 9: Cleanup
+
+From the project directory:
 
 ```bash
 aws cloudformation delete-stack --stack-name locust-cluster
@@ -170,10 +183,15 @@ aws cloudformation delete-stack --stack-name locust-cluster
 
 ## Quick reference
 
-| | |
-|---|--|
-| Deploy | `./aws_setup/deploy_locust.sh` |
-| IPs | `./aws_setup/get_ips_simple.sh` |
-| Web UI | http://\<master-public-ip\>:8089 |
-| Master | `locust -f src/locustfile.py --master` |
-| Workers | `locust -f src/locustfile.py --worker --master-host=\<master-private-ip\>` |
+| Step            | What you do |
+|-----------------|-------------|
+| 1 Deploy        | `./aws_setup/deploy_locust.sh` → key name `locust-testing` |
+| 2 IPs           | `./aws_setup/get_ips_simple.sh` → note master public, master private, worker IP(s) |
+| 3–4 Copy        | `scp -i ~/.ssh/locust-testing.pem ...` to master and each worker |
+| 5 Install       | `ssh -i ~/.ssh/locust-testing.pem ec2-user@<IP> "cd ~/chatbot-performance-testing && pip3 install -r requirements.txt"` for master and each worker |
+| 6 Master        | SSH to master, then `TEST_TYPE=load locust -f src/locustfile.py --master` |
+| 7 Workers       | `ssh -i ~/.ssh/locust-testing.pem ec2-user@<WORKER_IP> "cd ... && TEST_TYPE=load locust ... --worker --master-host=<MASTER_PRIVATE>"` for each worker |
+| 8 Reports       | `scp` run_meta from master, response_times CSV from each worker, then `python src/generate_report.py` |
+| 9 Cleanup       | `aws cloudformation delete-stack --stack-name locust-cluster` |
+
+**Web UI:** http://&lt;master-public-ip&gt;:8089

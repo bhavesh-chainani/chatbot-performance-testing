@@ -19,6 +19,7 @@ from datetime import datetime
 from pathlib import Path
 
 from locust import task, between, events, LoadTestShape, HttpUser
+from locust.runners import WorkerRunner
 
 import sys
 project_root = Path(__file__).parent.parent
@@ -79,15 +80,16 @@ def on_test_start(environment, **kwargs):
         run_time = f"{int(run_time)}s" if run_time else ACTIVE_RUN_TIME
     host = CHATBOT_URL
 
-    # Write run metadata for the report
+    # Write run metadata only on master (or standalone). Workers don't get UI params and would write config defaults.
     meta_path = reports / f"run_meta_{TEST_TYPE}.json"
-    with open(meta_path, "w") as f:
-        json.dump({
-            "users": users,
-            "spawn_rate": spawn_rate,
-            "host": host,
-            "run_time": run_time,
-        }, f, indent=2)
+    if not isinstance(runner, WorkerRunner):
+        with open(meta_path, "w") as f:
+            json.dump({
+                "users": users,
+                "spawn_rate": spawn_rate,
+                "host": host,
+                "run_time": run_time,
+            }, f, indent=2)
 
     if not RESPONSE_TIME_CSV.exists() or RESPONSE_TIME_CSV.stat().st_size == 0:
         with open(RESPONSE_TIME_CSV, "w", newline="") as f:

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chatbot Performance Report – LOAD</title>
+<style>
+  :root {
+    --bg: #0f172a; --surface: #1e293b; --border: #334155;
+    --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8;
+    --green: #4ade80; --yellow: #fbbf24; --red: #f87171;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+    padding: 2rem; max-width: 1400px; margin: 0 auto;
+  }
+  h1 { color: var(--accent); font-size: 1.8rem; margin-bottom: .25rem; }
+  .subtitle { color: var(--muted); font-size: .9rem; margin-bottom: 2rem; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.2rem; text-align: center;
+  }
+  .card .value { font-size: 2rem; font-weight: 700; color: var(--accent); }
+  .card .label { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+
+  h2 { font-size: 1.2rem; margin: 2rem 0 1rem; color: var(--accent); }
+
+  table {
+    width: 100%; border-collapse: collapse; font-size: .85rem;
+    background: var(--surface); border-radius: 8px; overflow: hidden;
+  }
+  th {
+    background: #0f172a; color: var(--muted); text-transform: uppercase;
+    font-size: .75rem; letter-spacing: .05em; padding: .75rem 1rem; text-align: left;
+  }
+  td { padding: .6rem 1rem; border-top: 1px solid var(--border); }
+  tr:hover td { background: rgba(56, 189, 248, 0.04); }
+
+  .question { max-width: 320px; word-break: break-word; }
+  .answer { max-width: 380px; word-break: break-word; color: var(--muted); font-size: .8rem; }
+  .ts { white-space: nowrap; color: var(--muted); font-size: .8rem; }
+
+  .success { color: var(--green); font-weight: 600; }
+  .error   { color: var(--red); font-weight: 600; }
+  .rt-ok   { color: var(--green); font-weight: 600; }
+  .rt-warn { color: var(--yellow); font-weight: 600; }
+  .rt-slow { color: var(--red); font-weight: 600; }
+
+  .footer { margin-top: 3rem; text-align: center; color: var(--muted); font-size: .8rem; }
+</style>
+</head>
+<body>
+
+<h1>Chatbot Performance Report — LOAD Test</h1>
+<p class="subtitle">Generated 2026-02-25 21:13:40 &middot; 27 total requests &middot; 0 errors</p>
+
+<div class="cards">
+  <div class="card"><div class="value">27</div><div class="label">Successful Requests</div></div>
+  <div class="card"><div class="value">29357.1 ms</div><div class="label">Avg Response Time</div></div>
+  <div class="card"><div class="value">28199.0 ms</div><div class="label">Median (p50)</div></div>
+  <div class="card"><div class="value">47758.9 ms</div><div class="label">p95 Response Time</div></div>
+  <div class="card"><div class="value">49914.2 ms</div><div class="label">p99 Response Time</div></div>
+  <div class="card"><div class="value">49914.2 ms</div><div class="label">Max Response Time</div></div>
+</div>
+
+<h2>Response Time by Category</h2>
+<table>
+<thead><tr>
+  <th>Category</th><th>Count</th><th>Min (ms)</th><th>Avg (ms)</th>
+  <th>Median (ms)</th><th>p95 (ms)</th><th>p99 (ms)</th><th>Max (ms)</th>
+</tr></thead>
+<tbody>
+            <tr>
+                <td>Complex</td>
+                <td>20</td>
+                <td>21333.8</td>
+                <td>31100.0</td>
+                <td>28913.1</td>
+                <td>49914.2</td>
+                <td>49914.2</td>
+                <td>49914.2</td>
+            </tr>
+            <tr>
+                <td>Simple</td>
+                <td>7</td>
+                <td>20149.5</td>
+                <td>24377.5</td>
+                <td>21566.8</td>
+                <td>33401.0</td>
+                <td>33401.0</td>
+                <td>33401.0</td>
+            </tr>
+</tbody>
+</table>
+
+<h2>Request Details</h2>
+<table>
+<thead><tr>
+  <th>Time</th><th>Category</th><th>Question</th><th>Answer</th>
+  <th>Response Time (ms)</th><th>Status</th>
+</tr></thead>
+<tbody>
+            <tr>
+                <td class="ts">2026-02-25T18:09:40</td>
+                <td>Simple</td>
+                <td class="question">What is an FTA?</td>
+                <td class="answer">## What is an FTA?
+
+**FTA** stands for **Free Trade Agreement**.
+
+A Free Trade Agreement (FTA) is a treaty between two or more countries that aims to reduce or eliminate barriers to trade and investment. The primary objectives of FTAs include:
+
+- **Reducing or eliminating tariffs** (customs duties) </td>
+                <td class="rt-slow">20149.5</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:09:43</td>
+                <td>Simple</td>
+                <td class="question">What is an HS code?</td>
+                <td class="answer">## What is an HS Code?
+
+An **HS Code** (Harmonized System Code) is an internationally standardized system of names and numbers used to classify traded products. It is a critical component of international trade and customs procedures.
+
+### Key Features of HS Codes:
+
+- **Standardized Classification**</td>
+                <td class="rt-slow">21566.8</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:09:44</td>
+                <td>Simple</td>
+                <td class="question">What is a Certificate of Origin?</td>
+                <td class="answer">## What is a Certificate of Origin?
+
+I encountered technical difficulties accessing both the glossary and knowledge base systems to retrieve the authoritative definition and detailed information about Certificates of Origin from our FTA legal databases.
+
+Based on general trade documentation principl</td>
+                <td class="rt-slow">20390.7</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:09:44</td>
+                <td>Complex</td>
+                <td class="question">How do I determine substantial transformation for goods processed in Singapore for a Back-to-Back PCO?</td>
+                <td class="answer">## Determining Substantial Transformation for Back-to-Back PCO
+
+I apologize, but I encountered technical difficulties accessing both the glossary and knowledge base systems, which contain the authoritative information about Back-to-Back PCO (Preferential Certificate of Origin) procedures and substan</td>
+                <td class="rt-slow">21778.2</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:09:45</td>
+                <td>Simple</td>
+                <td class="question">What is ASEAN?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties while attempting to retrieve information about HS codes and ASEAN from our knowledge base and glossary systems. All connection attempts to these resources failed during the search process.
+
+However, I can provide you with general guidance on thes</td>
+                <td class="rt-slow">20721.2</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:09:45</td>
+                <td>Complex</td>
+                <td class="question">How do I handle cumulation of origin across multiple countries under RCEP?</td>
+                <td class="answer">## Cumulation of Origin Under RCEP
+
+I apologize, but I encountered technical difficulties accessing both the knowledge base and glossary systems that contain the detailed legal information about RCEP cumulation of origin procedures. These systems are currently unavailable due to connection errors.
+
+</td>
+                <td class="rt-slow">21333.8</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:10:12</td>
+                <td>Complex</td>
+                <td class="question">How do I handle origin certification for goods that undergo processing in multiple countries?</td>
+                <td class="answer">Handling Origin Certification for Goods Processed in Multiple Countries
+
+I apologize, but I am currently unable to retrieve the authoritative information from our legal databases and knowledge base systems due to technical connectivity issues. Both the glossary tool and knowledge base tool are exper</td>
+                <td class="rt-slow">23955.1</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:10:13</td>
+                <td>Simple</td>
+                <td class="question">What is an HS code?</td>
+                <td class="answer">What is an HS Code?
+
+## Definition and Purpose
+
+An **HS Code** (Harmonized System Code) is an internationally standardized system of names and numbers used to classify traded products. It is a critical component of international trade and customs procedures.
+
+### Key Characteristics:
+
+**Structure:**</td>
+                <td class="rt-slow">26214.1</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:10:14</td>
+                <td>Complex</td>
+                <td class="question">How do I navigate conflicting rules of origin between overlapping FTAs?</td>
+                <td class="answer">Navigating Conflicting Rules of Origin Between Overlapping FTAs
+
+I encountered technical connectivity issues with the knowledge base and glossary tools while attempting to retrieve specific guidance on this topic. However, I can provide you with general guidance based on standard trade practices:
+
+#</td>
+                <td class="rt-slow">29164.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:10:14</td>
+                <td>Complex</td>
+                <td class="question">What documentation is required for proving origin when components come from multiple countries?</td>
+                <td class="answer">I apologize, but I am currently unable to retrieve the specific documentation requirements for proving origin when components come from multiple countries due to technical connectivity issues with our internal knowledge base and glossary systems.
+
+## General Guidance on Origin Documentation
+
+When pr</td>
+                <td class="rt-slow">24897.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:10:16</td>
+                <td>Complex</td>
+                <td class="question">How do I handle origin certification for goods that undergo processing in multiple countries?</td>
+                <td class="answer">## Handling Origin Certification for Goods Processed in Multiple Countries
+
+I apologize, but I am currently unable to provide you with the detailed procedural guidance you need due to technical connectivity issues with our knowledge base and glossary systems.
+
+### What You're Asking About:
+
+You want</td>
+                <td class="rt-slow">28923.7</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:10:16</td>
+                <td>Complex</td>
+                <td class="question">What strategies can I use to optimize tariff benefits across multiple FTAs?</td>
+                <td class="answer">Strategies to Optimize Tariff Benefits Across Multiple FTAs
+
+I understand you're seeking strategies to optimize tariff benefits when multiple Free Trade Agreements (FTAs) are available for your trade operations. Unfortunately, I encountered technical connectivity issues while attempting to retrieve </td>
+                <td class="rt-slow">28902.4</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:10:44</td>
+                <td>Complex</td>
+                <td class="question">How do I determine substantial transformation for goods processed in Singapore for a Back-to-Back PCO?</td>
+                <td class="answer">Determining Substantial Transformation for Back-to-Back PCO
+
+## Current Status
+
+I attempted to retrieve authoritative information about determining substantial transformation for goods processed in Singapore for a Back-to-Back PCO (Preferential Certificate of Origin) from our knowledge base and glos</td>
+                <td class="rt-slow">28194.2</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:10:45</td>
+                <td>Complex</td>
+                <td class="question">How do I manage product-specific rules vs. general rules for complex manufactured goods?</td>
+                <td class="answer">I apologize, but I am currently unable to provide you with authoritative guidance on your questions due to technical connectivity issues with our legal database systems. Both the glossary tool and knowledge base tool are experiencing connection failures, which prevents me from accessing the specific</td>
+                <td class="rt-slow">29964.1</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:10:45</td>
+                <td>Complex</td>
+                <td class="question">What are the implications of minimal operations provisions on my manufacturing process?</td>
+                <td class="answer"># Implications of Minimal Operations Provisions on Manufacturing Process
+
+I apologize, but I am currently unable to retrieve specific information about minimal operations provisions from the legal database due to technical connectivity issues with both the knowledge base and glossary tools.
+
+## What</td>
+                <td class="rt-slow">27323.0</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:10:47</td>
+                <td>Complex</td>
+                <td class="question">How do I handle cumulation of origin across multiple countries under RCEP?</td>
+                <td class="answer">How to Handle Cumulation of Origin Across Multiple Countries Under RCEP
+
+I apologize, but I am currently unable to retrieve the specific information about cumulation of origin procedures under RCEP (Regional Comprehensive Economic Partnership) due to technical connectivity issues with our internal k</td>
+                <td class="rt-slow">28358.0</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:10:47</td>
+                <td>Simple</td>
+                <td class="question">What is a bill of lading?</td>
+                <td class="answer">I apologize, but I am currently unable to provide you with detailed information on your questions due to technical connectivity issues with our knowledge base and glossary systems.
+
+## Your Questions
+
+You asked about three topics:
+
+1. **How to handle origin certification for goods that undergo proce</td>
+                <td class="rt-slow">28199.0</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:11:09</td>
+                <td>Complex</td>
+                <td class="question">How do I handle partial shipments with a single PCO?</td>
+                <td class="answer">Handling Partial Shipments with a Single PCO
+
+I apologize, but I am currently unable to provide specific guidance on handling partial shipments with a single Preferential Certificate of Origin (PCO) due to technical connectivity issues with our internal knowledge base and glossary systems.
+
+## Curre</td>
+                <td class="rt-slow">26890.4</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:11:13</td>
+                <td>Complex</td>
+                <td class="question">What are the implications of minimal operations provisions on my manufacturing process?</td>
+                <td class="answer">## Implications of Minimal Operations Provisions on Manufacturing Process
+
+### Current Analysis
+
+I attempted to retrieve authoritative information about minimal operations provisions and their implications on manufacturing processes from both the glossary and knowledge base systems. Unfortunately, b</td>
+                <td class="rt-slow">25276.7</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:11:23</td>
+                <td>Simple</td>
+                <td class="question">What is a bill of lading?</td>
+                <td class="answer">I apologize, but I am currently experiencing technical difficulties accessing our authoritative legal databases and glossary systems. All attempts to retrieve information from the glossary tool and knowledge base resulted in connection errors to the embedding and vector database services.
+
+## Your Q</td>
+                <td class="rt-slow">33401.0</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:11:24</td>
+                <td>Complex</td>
+                <td class="question">How do I handle partial shipments with a single PCO?</td>
+                <td class="answer"># How to Handle Partial Shipments with a Single PCO
+
+I apologize, but I am currently unable to retrieve the specific information about handling partial shipments with a single Preferential Certificate of Origin (PCO) due to technical connectivity issues with our internal knowledge base and glossary </td>
+                <td class="rt-slow">32445.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:11:39</td>
+                <td>Complex</td>
+                <td class="question">I'm new to international trade and need comprehensive guidance. Can you explain the differences between Ordinary Certificate of Origin and Preferential Certificate of Origin, when to use each, the app</td>
+                <td class="answer"># Comprehensive Guide to Certificates of Origin for International Trade
+
+I apologize, but I am currently experiencing technical connectivity issues with both the knowledge base and glossary tools, which contain the detailed, authoritative information about Certificate of Origin procedures, applicati</td>
+                <td class="rt-slow">49914.2</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:11:40</td>
+                <td>Complex</td>
+                <td class="question">How do I handle origin certification for goods that undergo processing in multiple countries?</td>
+                <td class="answer">## 1. What is a Bill of Lading?
+
+Based on web search results, a **bill of lading** is a legally recognized document issued by a carrier to a shipper that serves three key functions in international trade:
+
+1. **Receipt of Goods**: It acts as a receipt confirming that the carrier has received the goo</td>
+                <td class="rt-slow">47758.9</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:11:50</td>
+                <td>Complex</td>
+                <td class="question">What are the verification procedures if my PCO is challenged by foreign customs?</td>
+                <td class="answer"># Verification Procedures When Your PCO is Challenged by Foreign Customs
+
+I apologize, but I am currently unable to retrieve the specific verification procedures for when a Preferential Certificate of Origin (PCO) is challenged by foreign customs authorities due to technical connectivity issues with</td>
+                <td class="rt-slow">37000.7</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:11:50</td>
+                <td>Complex</td>
+                <td class="question">How do I handle cumulation of origin across multiple countries under RCEP?</td>
+                <td class="answer">I apologize, but I am currently experiencing technical difficulties accessing the knowledge base and glossary systems that contain the authoritative information needed to answer your questions about:
+
+1. **Minimal Operations Provisions and Manufacturing Process**
+2. **Cumulation of Origin across Mul</td>
+                <td class="rt-slow">33128.5</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:12:04</td>
+                <td>Complex</td>
+                <td class="question">What strategies can I use to optimize tariff benefits across multiple FTAs?</td>
+                <td class="answer">Strategies to Optimize Tariff Benefits Across Multiple FTAs
+
+I apologize, but I am currently unable to retrieve authoritative information from our legal databases and knowledge systems due to technical connectivity issues. All attempts to access the glossary tool and knowledge base tool resulted in </td>
+                <td class="rt-slow">37103.4</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T18:12:07</td>
+                <td>Complex</td>
+                <td class="question">What documentation is required for proving origin when components come from multiple countries?</td>
+                <td class="answer"># Documentation Required for Proving Origin When Components Come from Multiple Countries
+
+I apologize, but I am currently unable to retrieve the specific documentation requirements for proving origin when components come from multiple countries due to technical connectivity issues with our internal </td>
+                <td class="rt-slow">39687.3</td>
+                <td class="success">Success</td>
+            </tr>
+</tbody>
+</table>
+
+<div class="footer">Chatbot Performance Testing &middot; load test</div>
+</body>
+</html>

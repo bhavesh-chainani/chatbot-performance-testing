@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chatbot Performance Report – LOAD</title>
+<style>
+  :root {
+    --bg: #0f172a; --surface: #1e293b; --border: #334155;
+    --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8;
+    --green: #4ade80; --yellow: #fbbf24; --red: #f87171;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+    padding: 2rem; max-width: 1400px; margin: 0 auto;
+  }
+  h1 { color: var(--accent); font-size: 1.8rem; margin-bottom: .25rem; }
+  .subtitle { color: var(--muted); font-size: .9rem; margin-bottom: 2rem; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.2rem; text-align: center;
+  }
+  .card .value { font-size: 2rem; font-weight: 700; color: var(--accent); }
+  .card .label { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+
+  h2 { font-size: 1.2rem; margin: 2rem 0 1rem; color: var(--accent); }
+
+  table {
+    width: 100%; border-collapse: collapse; font-size: .85rem;
+    background: var(--surface); border-radius: 8px; overflow: hidden;
+  }
+  th {
+    background: #0f172a; color: var(--muted); text-transform: uppercase;
+    font-size: .75rem; letter-spacing: .05em; padding: .75rem 1rem; text-align: left;
+  }
+  td { padding: .6rem 1rem; border-top: 1px solid var(--border); }
+  tr:hover td { background: rgba(56, 189, 248, 0.04); }
+
+  .question { max-width: 320px; word-break: break-word; }
+  .answer { max-width: 380px; word-break: break-word; color: var(--muted); font-size: .8rem; }
+  .ts { white-space: nowrap; color: var(--muted); font-size: .8rem; }
+
+  .success { color: var(--green); font-weight: 600; }
+  .error   { color: var(--red); font-weight: 600; }
+  .rt-ok   { color: var(--green); font-weight: 600; }
+  .rt-warn { color: var(--yellow); font-weight: 600; }
+  .rt-slow { color: var(--red); font-weight: 600; }
+
+  .footer { margin-top: 3rem; text-align: center; color: var(--muted); font-size: .8rem; }
+
+  .params-table { max-width: 480px; margin-bottom: 2rem; }
+  .params-table td:first-child { color: var(--muted); font-size: .85rem; }
+  .params-table td:last-child { font-weight: 600; }
+</style>
+</head>
+<body>
+
+<h1>Chatbot Performance Report — LOAD Test</h1>
+<p class="subtitle">Generated 2026-02-25 23:50:48 &middot; 122 total requests &middot; 0 errors</p>
+
+<h2>Test Parameters</h2>
+<table class="params-table">
+<tbody>
+  <tr><td>Number of users (peak concurrency)</td><td>100</td></tr>
+  <tr><td>Spawn rate (users started/second)</td><td>20</td></tr>
+  <tr><td>Host</td><td>https://cfoti.org</td></tr>
+  <tr><td>Run time</td><td>5m</td></tr>
+</tbody>
+</table>
+
+
+<div class="cards">
+  <div class="card"><div class="value">122</div><div class="label">Successful Requests</div></div>
+  <div class="card"><div class="value">103277.8 ms</div><div class="label">Avg Response Time</div></div>
+  <div class="card"><div class="value">100815.3 ms</div><div class="label">Median (p50)</div></div>
+  <div class="card"><div class="value">147014.6 ms</div><div class="label">p95 Response Time</div></div>
+  <div class="card"><div class="value">160717.3 ms</div><div class="label">p99 Response Time</div></div>
+  <div class="card"><div class="value">167630.2 ms</div><div class="label">Max Response Time</div></div>
+</div>
+
+<h2>Response Time by Category</h2>
+<table>
+<thead><tr>
+  <th>Category</th><th>Count</th><th>Min (ms)</th><th>Avg (ms)</th>
+  <th>Median (ms)</th><th>p95 (ms)</th><th>p99 (ms)</th><th>Max (ms)</th>
+</tr></thead>
+<tbody>
+            <tr>
+                <td>Complex</td>
+                <td>109</td>
+                <td>53791.6</td>
+                <td>103862.6</td>
+                <td>102010.4</td>
+                <td>147014.6</td>
+                <td>160717.3</td>
+                <td>167630.2</td>
+            </tr>
+            <tr>
+                <td>Simple</td>
+                <td>13</td>
+                <td>59844.6</td>
+                <td>98374.7</td>
+                <td>92202.3</td>
+                <td>159265.8</td>
+                <td>159265.8</td>
+                <td>159265.8</td>
+            </tr>
+</tbody>
+</table>
+
+<h2>Request Details</h2>
+<table>
+<thead><tr>
+  <th>Time</th><th>Category</th><th>Question</th><th>Answer</th>
+  <th>Response Time (ms)</th><th>Status</th>
+</tr></thead>
+<tbody>
+            <tr>
+                <td class="ts">2026-02-25T15:35:01</td>
+                <td>Complex</td>
+                <td class="question">How do I calculate regional value content for products with components from multiple FTA partners?</td>
+                <td class="answer">## Regional Value Content (RVC) Calculation for Products with Components from Multiple FTA Partners
+
+I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems that contain the detailed information about Regional Value Content (RVC) calculations for produ</td>
+                <td class="rt-slow">53791.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:06</td>
+                <td>Complex</td>
+                <td class="question">What are the implications of third-country invoicing on PCO eligibility?</td>
+                <td class="answer">## Implications of Third-Country Invoicing on PCO Eligibility
+
+I apologize, but I encountered technical difficulties accessing both the glossary database and knowledge base to retrieve the specific information about third-country invoicing implications on Preferential Certificate of Origin (PCO) eli</td>
+                <td class="rt-slow">60081.8</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:14</td>
+                <td>Complex</td>
+                <td class="question">How do I handle origin certification for goods that undergo processing in multiple countries?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems that contain the detailed information about origin certification procedures for goods processed in multiple countries.
+
+Based on the nature of your question, you're asking about a complex area of </td>
+                <td class="rt-slow">67856.8</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:17</td>
+                <td>Complex</td>
+                <td class="question">I need to understand the full eligibility criteria for Back-to-back Preferential Certificate of Origin. Can you provide detailed information about the requirements, application process, supporting doc</td>
+                <td class="answer">I apologize, but I encountered technical difficulties while attempting to retrieve information about Back-to-back Preferential Certificate of Origin from our knowledge base and glossary systems. Both the glossary tool and knowledge base tool experienced connection timeouts and were unable to return </td>
+                <td class="rt-slow">68702.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:17</td>
+                <td>Complex</td>
+                <td class="question">I need to understand the full eligibility criteria for Back-to-back Preferential Certificate of Origin. Can you provide detailed information about the requirements, application process, supporting doc</td>
+                <td class="answer">Back-to-Back Preferential Certificate of Origin - Comprehensive Guide
+
+I apologize, but I encountered technical difficulties accessing both the glossary and knowledge base systems, which contain the authoritative information about Back-to-Back Preferential Certificate of Origin requirements. These s</td>
+                <td class="rt-slow">70123.9</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:18</td>
+                <td>Simple</td>
+                <td class="question">What is a bill of lading?</td>
+                <td class="answer">## What is a Bill of Lading?
+
+I encountered technical difficulties accessing both the glossary and knowledge base systems to retrieve the authoritative definition of a bill of lading from our trade documentation resources. 
+
+However, based on general international trade practice, a **bill of lading*</td>
+                <td class="rt-slow">67033.2</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:22</td>
+                <td>Complex</td>
+                <td class="question">How do I handle partial shipments with a single PCO?</td>
+                <td class="answer">## Handling Partial Shipments with a Single PCO
+
+I apologize, but I encountered technical difficulties accessing both the glossary database and knowledge base to retrieve the specific information about handling partial shipments with a single PCO (Preferential Certificate of Origin).
+
+### Current An</td>
+                <td class="rt-slow">74333.2</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:25</td>
+                <td>Simple</td>
+                <td class="question">What is a packing list?</td>
+                <td class="answer">## What is a Packing List?
+
+I apologize, but I encountered technical difficulties accessing both the glossary and knowledge base systems to retrieve the authoritative definition and requirements for a packing list in international trade contexts.
+
+Based on general trade documentation practices, a **</td>
+                <td class="rt-slow">75713.1</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:29</td>
+                <td>Simple</td>
+                <td class="question">What is customs clearance?</td>
+                <td class="answer">## What is Customs Clearance?
+
+Based on the information retrieved from web sources:
+
+**Customs clearance is the procedural step in international trade whereby goods moving across a border are officially inspected, documented, and authorized by the customs authority of the importing or exporting coun</td>
+                <td class="rt-slow">82153.3</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:30</td>
+                <td>Simple</td>
+                <td class="question">What is an FTA?</td>
+                <td class="answer">## What is an FTA?
+
+An **FTA (Free Trade Agreement)** is a treaty between two or more countries designed to reduce or eliminate barriers to trade and investment. These agreements aim to facilitate the exchange of goods and services by:
+
+- **Reducing or eliminating tariffs** (customs duties) on impor</td>
+                <td class="rt-slow">75436.8</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:32</td>
+                <td>Complex</td>
+                <td class="question">What strategies can I use to optimize tariff benefits across multiple FTAs?</td>
+                <td class="answer">I apologize, but I'm currently unable to retrieve sufficient information from our knowledge base and glossary systems to provide you with comprehensive strategies for optimizing tariff benefits across multiple FTAs. The systems encountered connectivity issues while attempting to access the relevant </td>
+                <td class="rt-slow">76490.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:33</td>
+                <td>Complex</td>
+                <td class="question">I'm new to international trade and need comprehensive guidance. Can you explain the differences between Ordinary Certificate of Origin and Preferential Certificate of Origin, when to use each, the app</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems that contain the comprehensive information you requested about Certificates of Origin. The connection to these databases timed out during my attempt to retrieve the detailed guidance on:
+
+- Differ</td>
+                <td class="rt-slow">83413.1</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:33</td>
+                <td>Simple</td>
+                <td class="question">What is a Certificate of Origin?</td>
+                <td class="answer">## What is a Certificate of Origin?
+
+I encountered technical difficulties accessing the knowledge base and glossary systems to retrieve detailed information about Certificates of Origin. However, I can provide you with general guidance based on standard international trade practices.
+
+A **Certificat</td>
+                <td class="rt-slow">87195.3</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:33</td>
+                <td>Complex</td>
+                <td class="question">How do I handle partial shipments with a single PCO?</td>
+                <td class="answer">I encountered technical difficulties accessing both the glossary and knowledge base systems to retrieve information about handling partial shipments with a single PCO (Preferential Certificate of Origin).
+
+## Current Analysis
+
+**PCO** typically stands for **Preferential Certificate of Origin**, whic</td>
+                <td class="rt-slow">84646.1</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:33</td>
+                <td>Complex</td>
+                <td class="question">How do I navigate conflicting rules of origin between overlapping FTAs?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems needed to provide you with comprehensive guidance on navigating conflicting rules of origin between overlapping FTAs.
+
+## Understanding Your Question
+
+You're asking about how to handle situations </td>
+                <td class="rt-slow">86345.8</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:43</td>
+                <td>Complex</td>
+                <td class="question">How do I handle origin certification for goods that undergo processing in multiple countries?</td>
+                <td class="answer">## Handling Origin Certification for Goods Processed in Multiple Countries
+
+I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems that contain the detailed FTA-specific rules and procedures for origin certification when goods undergo processing in mu</td>
+                <td class="rt-slow">87483.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:43</td>
+                <td>Complex</td>
+                <td class="question">How do I handle cumulation of origin across multiple countries under RCEP?</td>
+                <td class="answer">## Cumulation of Origin Under RCEP
+
+I apologize, but I encountered technical difficulties accessing both the glossary and knowledge base systems that contain the detailed information about RCEP cumulation of origin procedures. These systems are currently unavailable due to connection timeouts.
+
+### </td>
+                <td class="rt-slow">86215.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:44</td>
+                <td>Complex</td>
+                <td class="question">What are the verification procedures if my PCO is challenged by foreign customs?</td>
+                <td class="answer">## Verification Procedures for Challenged PCO (Preferential Certificate of Origin)
+
+I apologize, but I encountered technical difficulties accessing both the glossary and knowledge base systems that contain the detailed verification procedures for when your Preferential Certificate of Origin (PCO) is</td>
+                <td class="rt-slow">95418.4</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:45</td>
+                <td>Complex</td>
+                <td class="question">How do I manage product-specific rules vs. general rules for complex manufactured goods?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems needed to provide you with comprehensive guidance on managing product-specific rules versus general rules for complex manufactured goods.
+
+## Current Status
+
+Based on your question about managing </td>
+                <td class="rt-slow">93158.3</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:45</td>
+                <td>Complex</td>
+                <td class="question">I need to understand the full eligibility criteria for Back-to-back Preferential Certificate of Origin. Can you provide detailed information about the requirements, application process, supporting doc</td>
+                <td class="answer">I apologize, but I'm currently unable to retrieve the detailed information about Back-to-back Preferential Certificate of Origin from our knowledge base and glossary systems due to technical connectivity issues.
+
+## What I Was Attempting to Retrieve:
+
+I was working to gather comprehensive informatio</td>
+                <td class="rt-slow">88607.8</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:45</td>
+                <td>Complex</td>
+                <td class="question">How do I handle retroactive issuance of PCOs for shipments already in transit?</td>
+                <td class="answer">## Handling Retroactive Issuance of PCOs for Shipments Already in Transit
+
+I attempted to retrieve information about handling retroactive issuance of PCOs (Preferential Certificates of Origin) for shipments already in transit. Unfortunately, I encountered technical difficulties accessing both the gl</td>
+                <td class="rt-slow">87380.7</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:45</td>
+                <td>Complex</td>
+                <td class="question">What are the specific origin criteria differences between ASEAN-China FTA and RCEP for electronic components?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties while attempting to retrieve information from our knowledge base systems. The connection to both the glossary tool and knowledge base tool failed during the query process.
+
+## Current Status
+
+### What I attempted to do:
+- ✅ Identified your questi</td>
+                <td class="rt-slow">86157.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:45</td>
+                <td>Complex</td>
+                <td class="question">How do I navigate conflicting rules of origin between overlapping FTAs?</td>
+                <td class="answer">## Navigating Conflicting Rules of Origin Between Overlapping FTAs
+
+I attempted to retrieve comprehensive guidance on navigating conflicting rules of origin between overlapping FTAs from our knowledge base and glossary systems. Unfortunately, I encountered technical connectivity issues that prevente</td>
+                <td class="rt-slow">91944.0</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:45</td>
+                <td>Complex</td>
+                <td class="question">What are the implications of minimal operations provisions on my manufacturing process?</td>
+                <td class="answer">I encountered technical difficulties accessing both the glossary and knowledge base systems to retrieve information about minimal operations provisions. However, I can provide you with guidance based on your question.
+
+## Understanding Minimal Operations Provisions
+
+**Minimal operations provisions**</td>
+                <td class="rt-slow">89123.1</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:35:49</td>
+                <td>Complex</td>
+                <td class="question">What are the implications of minimal operations provisions on my manufacturing process?</td>
+                <td class="answer">I encountered technical difficulties accessing both the glossary and knowledge base systems to retrieve information about minimal operations provisions. However, I can provide you with guidance based on your question.
+
+## Understanding Minimal Operations Provisions
+
+**Minimal operations provisions**</td>
+                <td class="rt-slow">89792.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:06</td>
+                <td>Complex</td>
+                <td class="question">How do I handle retroactive issuance of PCOs for shipments already in transit?</td>
+                <td class="answer">## Handling Retroactive Issuance of PCOs for Shipments Already in Transit
+
+I apologize, but I encountered technical difficulties accessing both the knowledge base and glossary systems that contain the specific procedures and requirements for retroactive issuance of Preferential Certificates of Origi</td>
+                <td class="rt-slow">111038.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:06</td>
+                <td>Simple</td>
+                <td class="question">What is a letter of credit?</td>
+                <td class="answer">## What is a Letter of Credit?
+
+A **letter of credit (L/C)** is a written commitment issued by a bank on behalf of an importer that guarantees payment to the exporter, provided the exporter presents documents that prove the goods have been shipped and meet the terms specified in the credit. 
+
+### Ho</td>
+                <td class="rt-slow">114776.1</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:06</td>
+                <td>Complex</td>
+                <td class="question">My company manufactures products using components from multiple countries. How do I determine the origin of my finished product for FTA purposes, what documentation is required to prove origin, and wh</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems needed to provide you with comprehensive information about Rules of Origin (ROO), documentation requirements, and FTA tariff benefits for your specific situation.
+
+However, I can provide you with </td>
+                <td class="rt-slow">113299.7</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:06</td>
+                <td>Complex</td>
+                <td class="question">What are the implications of minimal operations provisions on my manufacturing process?</td>
+                <td class="answer">## How to Contact SBF for Trade Advice
+
+To contact the Singapore Business Federation (SBF) for trade advice, please click the **'Email' button in the bottom right corner of the screen** to arrange a call or a one-to-one advisory session. Our specialists can provide tailored insights based on your pr</td>
+                <td class="rt-slow">60850.4</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:06</td>
+                <td>Complex</td>
+                <td class="question">What are the specific origin criteria differences between ASEAN-China FTA and RCEP for electronic components?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties while attempting to retrieve information from our knowledge base systems. The connection to both the glossary tool and knowledge base tool failed during the search process.
+
+## Current Status
+
+**What I attempted to do:**
+- ✅ Initiated search for </td>
+                <td class="rt-slow">106007.8</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:06</td>
+                <td>Complex</td>
+                <td class="question">What are the verification procedures if my PCO is challenged by foreign customs?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties while attempting to retrieve information about verification procedures when your Preferential Certificate of Origin (PCO) is challenged by foreign customs authorities. 
+
+The knowledge base and glossary systems, which contain the authoritative inf</td>
+                <td class="rt-slow">105777.4</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:08</td>
+                <td>Complex</td>
+                <td class="question">What are the implications of minimal operations provisions on my manufacturing process?</td>
+                <td class="answer">## Understanding Minimal Operations Provisions
+
+I attempted to retrieve comprehensive information about minimal operations provisions from our knowledge base and glossary systems to provide you with detailed guidance. However, I encountered technical connectivity issues that prevented me from access</td>
+                <td class="rt-slow">105646.5</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:08</td>
+                <td>Complex</td>
+                <td class="question">My company manufactures products using components from multiple countries. How do I determine the origin of my finished product for FTA purposes, what documentation is required to prove origin, and wh</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems needed to provide you with comprehensive information about Rules of Origin (ROO), documentation requirements, and FTA tariff benefits for your specific situation.
+
+However, I can provide you with </td>
+                <td class="rt-slow">116369.8</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:14</td>
+                <td>Complex</td>
+                <td class="question">What are the implications of minimal operations provisions on my manufacturing process?</td>
+                <td class="answer">I encountered technical difficulties accessing both the glossary and knowledge base systems to retrieve detailed information about minimal operations provisions. However, I can provide you with a general framework based on standard trade compliance principles.
+
+## What Are Minimal Operations Provisi</td>
+                <td class="rt-slow">115892.9</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:17</td>
+                <td>Complex</td>
+                <td class="question">How do I handle cumulation of origin across multiple countries under RCEP?</td>
+                <td class="answer">## Cumulation of Origin Under RCEP
+
+I apologize, but I encountered technical difficulties accessing both the knowledge base and glossary systems that contain the detailed legal texts and procedures for RCEP (Regional Comprehensive Economic Partnership) cumulation of origin rules.
+
+### What I Was Att</td>
+                <td class="rt-slow">120711.4</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:17</td>
+                <td>Complex</td>
+                <td class="question">What are the implications of minimal operations provisions on my manufacturing process?</td>
+                <td class="answer">## Implications of Minimal Operations Provisions on Manufacturing Processes
+
+I attempted to retrieve comprehensive information about minimal operations provisions from our knowledge base and glossary systems to provide you with detailed guidance. However, I encountered technical connectivity issues </td>
+                <td class="rt-slow">123208.4</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:19</td>
+                <td>Complex</td>
+                <td class="question">How do I handle origin certification for goods that undergo processing in multiple countries?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing our knowledge base and glossary systems to retrieve the specific information needed to answer your questions about:
+
+1. **Retroactive issuance of PCOs (Preferential Certificate of Origin) for shipments already in transit**
+2. **Origin c</td>
+                <td class="rt-slow">102540.8</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:21</td>
+                <td>Complex</td>
+                <td class="question">I'm new to international trade and need comprehensive guidance. Can you explain the differences between Ordinary Certificate of Origin and Preferential Certificate of Origin, when to use each, the app</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems that contain the comprehensive information you need about Certificate of Origin procedures, application requirements, and FTA eligibility criteria.
+
+Based on your comprehensive question about orig</td>
+                <td class="rt-slow">64391.0</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:27</td>
+                <td>Complex</td>
+                <td class="question">How do I calculate regional value content for products with components from multiple FTA partners?</td>
+                <td class="answer">## Regional Value Content (RVC) Calculation for Products with Multi-FTA Components
+
+I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems that contain the detailed information about Regional Value Content (RVC) calculation methodologies for products </td>
+                <td class="rt-slow">130954.8</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:28</td>
+                <td>Complex</td>
+                <td class="question">How do I handle origin certification for goods that undergo processing in multiple countries?</td>
+                <td class="answer">## Handling Origin Certification for Goods Processed in Multiple Countries
+
+I apologize, but I am currently unable to retrieve sufficient information from our knowledge base and specialized tools due to technical connectivity issues. The systems that contain detailed information about:
+
+- **Cumulati</td>
+                <td class="rt-slow">129315.7</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:28</td>
+                <td>Complex</td>
+                <td class="question">How do I calculate regional value content for products with components from multiple FTA partners?</td>
+                <td class="answer">## Regional Value Content (RVC) Calculation for Products with Components from Multiple FTA Partners
+
+I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems that contain the detailed information about Regional Value Content (RVC) calculation methodolog</td>
+                <td class="rt-slow">133293.5</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:32</td>
+                <td>Complex</td>
+                <td class="question">What are the implications of third-country invoicing on PCO eligibility?</td>
+                <td class="answer">I encountered technical difficulties while attempting to retrieve information about the implications of third-country invoicing on PCO eligibility. Both the glossary tool and knowledge base tool experienced connection errors during the search process.
+
+## Current Analysis
+
+Based on your question, yo</td>
+                <td class="rt-slow">136875.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:36</td>
+                <td>Complex</td>
+                <td class="question">How do I determine substantial transformation for goods processed in Singapore for a Back-to-Back PCO?</td>
+                <td class="answer">## Determining Substantial Transformation for Goods Processed in Singapore for a Back-to-Back PCO
+
+I apologize, but I encountered technical connectivity issues when attempting to retrieve the detailed information about substantial transformation criteria for Back-to-Back PCO (Proof of Certificate of</td>
+                <td class="rt-slow">69420.1</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:36</td>
+                <td>Complex</td>
+                <td class="question">I'm new to international trade and need comprehensive guidance. Can you explain the differences between Ordinary Certificate of Origin and Preferential Certificate of Origin, when to use each, the app</td>
+                <td class="answer"># Comprehensive Guide to Certificates of Origin
+
+I apologize, but I encountered technical connectivity issues with our knowledge base and glossary systems when attempting to retrieve the detailed information you requested about Certificates of Origin. However, I can provide you with a general framew</td>
+                <td class="rt-slow">84579.7</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:37</td>
+                <td>Complex</td>
+                <td class="question">What are the legal implications of incorrect origin declarations?</td>
+                <td class="answer">## Legal Implications of Incorrect Origin Declarations
+
+I encountered technical difficulties accessing the knowledge base and glossary systems to retrieve comprehensive information about the legal implications of incorrect origin declarations. However, I can provide you with important context about </td>
+                <td class="rt-slow">141610.3</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:37</td>
+                <td>Complex</td>
+                <td class="question">What are the specific origin criteria differences between ASEAN-China FTA and RCEP for electronic components?</td>
+                <td class="answer">I apologize, but I'm currently unable to retrieve the information needed to answer your questions due to technical connectivity issues with the knowledge base and glossary systems.
+
+## What I Was Attempting to Retrieve:
+
+### 1. **Packing List Definition**
+I attempted to query the glossary system to </td>
+                <td class="rt-slow">70333.3</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:38</td>
+                <td>Complex</td>
+                <td class="question">My company manufactures products using components from multiple countries. How do I determine the origin of my finished product for FTA purposes, what documentation is required to prove origin, and wh</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing our knowledge base and glossary systems to retrieve the comprehensive information you need about Rules of Origin determination, documentation requirements, and FTA selection for products manufactured with components from multiple countr</td>
+                <td class="rt-slow">143328.5</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:41</td>
+                <td>Complex</td>
+                <td class="question">How do I manage product-specific rules vs. general rules for complex manufactured goods?</td>
+                <td class="answer">I apologize, but I'm currently unable to retrieve the necessary information from our knowledge base and glossary systems due to technical connectivity issues. However, I can provide you with a brief overview based on standard trade practices:
+
+## What is an FTA?
+
+**FTA** stands for **Free Trade Agre</td>
+                <td class="rt-slow">67453.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:42</td>
+                <td>Complex</td>
+                <td class="question">How do I navigate conflicting rules of origin between overlapping FTAs?</td>
+                <td class="answer">I encountered technical difficulties accessing both the glossary and knowledge base systems to retrieve specific guidance on navigating conflicting rules of origin between overlapping FTAs. 
+
+## Current Analysis
+
+When multiple Free Trade Agreements (FTAs) overlap between the same trading partners, b</td>
+                <td class="rt-slow">138573.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:42</td>
+                <td>Complex</td>
+                <td class="question">How do I handle retroactive issuance of PCOs for shipments already in transit?</td>
+                <td class="answer">## Handling Retroactive Issuance of PCOs for Shipments Already in Transit
+
+I apologize, but I encountered technical difficulties accessing both the knowledge base and glossary systems that contain the specific procedures and requirements for retroactive issuance of Preferential Certificates of Origi</td>
+                <td class="rt-slow">147014.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:42</td>
+                <td>Complex</td>
+                <td class="question">How do I handle cumulation of origin across multiple countries under RCEP?</td>
+                <td class="answer">I encountered technical difficulties while attempting to retrieve information about RCEP cumulation of origin from our knowledge base and glossary systems. Both the glossary tool and knowledge base tool experienced connection errors when trying to access the relevant information.
+
+## What I Was Atte</td>
+                <td class="rt-slow">144289.9</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:42</td>
+                <td>Complex</td>
+                <td class="question">How do I navigate conflicting rules of origin between overlapping FTAs?</td>
+                <td class="answer">## Navigating Conflicting Rules of Origin Between Overlapping FTAs
+
+I apologize, but I encountered technical difficulties while attempting to retrieve comprehensive information about navigating conflicting rules of origin between overlapping FTAs. The knowledge base and glossary systems experienced </td>
+                <td class="rt-slow">82304.7</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:44</td>
+                <td>Complex</td>
+                <td class="question">I'm exporting electronics to multiple ASEAN countries. Can you explain the complete process for obtaining Preferential Certificates of Origin for each country, including the specific requirements, doc</td>
+                <td class="answer">Thank you for your enquiry regarding Preferential Certificates of Origin (PCO) for exporting electronics from Singapore to ASEAN countries.
+
+I'd be happy to assist you with the complete PCO process, including specific requirements, documentation, and product eligibility verification under relevant F</td>
+                <td class="rt-slow">77871.0</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:47</td>
+                <td>Complex</td>
+                <td class="question">What are the specific origin criteria differences between ASEAN-China FTA and RCEP for electronic components?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing our knowledge base and glossary systems to retrieve the specific origin criteria differences between ASEAN-China FTA and RCEP for electronic components.
+
+## Current Status
+
+**What I attempted to retrieve:**
+- ✗ ASEAN-China FTA (ACFTA) o</td>
+                <td class="rt-slow">102010.4</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:36:47</td>
+                <td>Complex</td>
+                <td class="question">What documentation is required for proving origin when components come from multiple countries?</td>
+                <td class="answer">I encountered technical difficulties accessing both the glossary and knowledge base systems to retrieve the specific documentation requirements for proving origin when components come from multiple countries. 
+
+## Current Analysis
+
+Your question relates to **Rules of Origin (ROO) documentation and c</td>
+                <td class="rt-slow">143230.7</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:01</td>
+                <td>Complex</td>
+                <td class="question">What documentation is required for proving origin when components come from multiple countries?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing our knowledge base and glossary systems while attempting to retrieve comprehensive information about FTA tariff optimization strategies and origin documentation requirements.
+
+## Current Analysis
+
+Based on your questions, you are seekin</td>
+                <td class="rt-slow">86648.1</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:01</td>
+                <td>Complex</td>
+                <td class="question">How do I handle partial shipments with a single PCO?</td>
+                <td class="answer">I apologize, but I'm currently unable to retrieve the necessary information to fully answer your questions due to technical connectivity issues with the knowledge base and glossary systems.
+
+## What I understand from your questions:
+
+1. **What is customs clearance?** - You're asking for a definition</td>
+                <td class="rt-slow">86741.0</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:01</td>
+                <td>Complex</td>
+                <td class="question">What are the implications of third-country invoicing on PCO eligibility?</td>
+                <td class="answer">## Third-Country Invoicing and PCO Eligibility
+
+### Current Analysis:
+
+**PCO (Preferential Certificate of Origin)** is a document used to claim preferential tariff treatment under Free Trade Agreements (FTAs). Your question concerns how **third-country invoicing** (when the commercial invoice is iss</td>
+                <td class="rt-slow">95334.4</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:03</td>
+                <td>Simple</td>
+                <td class="question">What is an HS code?</td>
+                <td class="answer">## What is an HS Code?
+
+An **HS Code** (Harmonized System Code) is an internationally standardized system of names and numbers used to classify traded products. It is a critical component of international trade and customs procedures.
+
+### Key Characteristics:
+
+- **Structure**: HS codes are typicall</td>
+                <td class="rt-slow">159265.8</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:03</td>
+                <td>Complex</td>
+                <td class="question">What are the implications of third-country invoicing on PCO eligibility?</td>
+                <td class="answer">## Implications of Third-Country Invoicing on PCO Eligibility
+
+I apologize, but I encountered technical difficulties while attempting to retrieve information from our knowledge base and glossary systems regarding the implications of third-country invoicing on PCO (Preferential Certificate of Origin)</td>
+                <td class="rt-slow">158836.2</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:04</td>
+                <td>Complex</td>
+                <td class="question">How do I handle partial shipments with a single PCO?</td>
+                <td class="answer">## Handling Partial Shipments with a Single PCO
+
+I apologize, but I encountered technical difficulties accessing both the glossary and knowledge base systems to retrieve the specific procedures for handling partial shipments with a single PCO (Preferential Certificate of Origin).
+
+**PCO** typically </td>
+                <td class="rt-slow">160006.3</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:04</td>
+                <td>Complex</td>
+                <td class="question">My company manufactures products using components from multiple countries. How do I determine the origin of my finished product for FTA purposes, what documentation is required to prove origin, and wh</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems that contain the detailed information about Rules of Origin (ROO), FTA documentation requirements, and comparative FTA benefits. These systems are currently unavailable due to connection errors.
+
+</td>
+                <td class="rt-slow">167630.2</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:05</td>
+                <td>Complex</td>
+                <td class="question">I'm new to international trade and need comprehensive guidance. Can you explain the differences between Ordinary Certificate of Origin and Preferential Certificate of Origin, when to use each, the app</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems that contain the comprehensive information you requested about Certificates of Origin. The connection errors prevented me from retrieving the detailed guidance on:
+
+- Differences between Ordinary </td>
+                <td class="rt-slow">160009.8</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:08</td>
+                <td>Complex</td>
+                <td class="question">How do I handle retroactive issuance of PCOs for shipments already in transit?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems needed to provide you with comprehensive information about certificate requirements and retroactive issuance of Preferential Certificates of Origin (PCOs).
+
+## What I Was Attempting to Retrieve
+
+I</td>
+                <td class="rt-slow">78266.9</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:08</td>
+                <td>Complex</td>
+                <td class="question">How do I handle cumulation of origin across multiple countries under RCEP?</td>
+                <td class="answer">I apologize, but I'm currently unable to retrieve the necessary information to answer your questions about the Certificate of Origin and RCEP cumulation procedures. The knowledge base and glossary tools are experiencing connection issues at this moment.
+
+## What I Was Attempting to Retrieve
+
+I was w</td>
+                <td class="rt-slow">89981.1</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:11</td>
+                <td>Complex</td>
+                <td class="question">What strategies can I use to optimize tariff benefits across multiple FTAs?</td>
+                <td class="answer"># Strategies to Optimize Tariff Benefits Across Multiple FTAs
+
+## Current Analysis
+
+I understand you're seeking strategies to optimize tariff benefits when multiple Free Trade Agreements (FTAs) are available for your trade scenario. This is a complex area of international trade that requires careful</td>
+                <td class="rt-slow">109183.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:13</td>
+                <td>Complex</td>
+                <td class="question">What strategies can I use to optimize tariff benefits across multiple FTAs?</td>
+                <td class="answer">I apologize for the technical difficulties encountered while attempting to retrieve information from our knowledge base and glossary systems. Unfortunately, I was unable to access the necessary resources to provide you with comprehensive answers to your questions about:
+
+1. **Specific origin criteri</td>
+                <td class="rt-slow">83756.2</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:17</td>
+                <td>Complex</td>
+                <td class="question">How do I manage product-specific rules vs. general rules for complex manufactured goods?</td>
+                <td class="answer">I encountered technical difficulties accessing both the glossary and knowledge base systems to retrieve information about managing product-specific rules versus general rules for complex manufactured goods.
+
+## Current Analysis
+
+Based on your question, you're seeking guidance on how to navigate betw</td>
+                <td class="rt-slow">160717.3</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:23</td>
+                <td>Complex</td>
+                <td class="question">I need to understand the full eligibility criteria for Back-to-back Preferential Certificate of Origin. Can you provide detailed information about the requirements, application process, supporting doc</td>
+                <td class="answer">I apologize, but I encountered technical difficulties while attempting to retrieve information from our knowledge base and glossary systems to answer your comprehensive questions about minimal operations provisions and Back-to-back Preferential Certificate of Origin.
+
+## Current Status
+
+I attempted </td>
+                <td class="rt-slow">95257.5</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:23</td>
+                <td>Complex</td>
+                <td class="question">How do I calculate regional value content for products with components from multiple FTA partners?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing our knowledge base and glossary systems to retrieve the specific information you requested about:
+
+1. **Handling origin certification for goods that undergo processing in multiple countries**
+2. **Calculating regional value content (RVC</td>
+                <td class="rt-slow">96985.7</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:26</td>
+                <td>Complex</td>
+                <td class="question">How do I handle retroactive issuance of PCOs for shipments already in transit?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing our knowledge base and glossary systems to retrieve the specific information you need about:
+
+1. **Managing product-specific rules vs. general rules for complex manufactured goods**
+2. **Handling retroactive issuance of PCOs (Preferenti</td>
+                <td class="rt-slow">98659.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:26</td>
+                <td>Complex</td>
+                <td class="question">What are the verification procedures if my PCO is challenged by foreign customs?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing our knowledge base and glossary systems to retrieve the comprehensive information you requested about Back-to-back Preferential Certificate of Origin (PCO).
+
+## Current Status
+
+I attempted to retrieve information on the following topics</td>
+                <td class="rt-slow">98087.2</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:33</td>
+                <td>Complex</td>
+                <td class="question">How do I handle cumulation of origin across multiple countries under RCEP?</td>
+                <td class="answer">I apologize, but I'm currently unable to retrieve the necessary information to answer your questions about PCO verification procedures and RCEP cumulation of origin. 
+
+## Current Status
+
+I attempted to access our knowledge base and glossary systems to retrieve detailed information about:
+
+1. **PCO (</td>
+                <td class="rt-slow">99600.8</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:34</td>
+                <td>Complex</td>
+                <td class="question">How do I handle origin certification for goods that undergo processing in multiple countries?</td>
+                <td class="answer">## Certificate of Origin Guidance - Information Currently Unavailable
+
+Thank you for reaching out with your comprehensive questions about Certificates of Origin (CoO). I understand you're seeking guidance on:
+
+- Differences between Ordinary Certificate of Origin (OCO) and Preferential Certificate of</td>
+                <td class="rt-slow">107817.9</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:34</td>
+                <td>Complex</td>
+                <td class="question">How do I manage product-specific rules vs. general rules for complex manufactured goods?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing our knowledge base and glossary systems to retrieve the specific information you requested about:
+
+1. **Handling partial shipments with a single PCO (Preferential Certificate of Origin)**
+2. **Managing product-specific rules vs. general</td>
+                <td class="rt-slow">106455.3</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:35</td>
+                <td>Complex</td>
+                <td class="question">I'm new to international trade and need comprehensive guidance. Can you explain the differences between Ordinary Certificate of Origin and Preferential Certificate of Origin, when to use each, the app</td>
+                <td class="answer">Certificate of Origin - Comprehensive Guide
+
+I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems to retrieve the detailed regulatory information you requested about Certificates of Origin.
+
+However, I can provide you with a general framework based </td>
+                <td class="rt-slow">107676.4</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:35</td>
+                <td>Simple</td>
+                <td class="question">What is a bill of lading?</td>
+                <td class="answer">## What is a Bill of Lading?
+
+A **Bill of Lading (B/L)** is one of the most important documents in international trade and shipping. It serves three primary functions:
+
+### Key Functions:
+
+1. **Receipt of Goods**: It acts as a receipt issued by the carrier (shipping company) acknowledging that they </td>
+                <td class="rt-slow">139118.9</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:37</td>
+                <td>Complex</td>
+                <td class="question">How do I determine substantial transformation for goods processed in Singapore for a Back-to-Back PCO?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing our knowledge base and glossary systems to retrieve the specific information you need about navigating conflicting rules of origin between overlapping FTAs and determining substantial transformation for Back-to-Back PCO (Proof of Certif</td>
+                <td class="rt-slow">108270.0</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:39</td>
+                <td>Complex</td>
+                <td class="question">My company manufactures products using components from multiple countries. How do I determine the origin of my finished product for FTA purposes, what documentation is required to prove origin, and wh</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems needed to provide you with accurate information about RCEP cumulation of origin and related FTA procedures. The connection errors prevented me from retrieving the specific legal texts and regulato</td>
+                <td class="rt-slow">112795.7</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:41</td>
+                <td>Complex</td>
+                <td class="question">I need to understand the full eligibility criteria for Back-to-back Preferential Certificate of Origin. Can you provide detailed information about the requirements, application process, supporting doc</td>
+                <td class="answer">Back-to-Back Preferential Certificate of Origin
+
+I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems that contain the detailed information about Back-to-Back Preferential Certificates of Origin. The connection to these critical resources timed out </td>
+                <td class="rt-slow">110645.3</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:42</td>
+                <td>Complex</td>
+                <td class="question">How do I navigate conflicting rules of origin between overlapping FTAs?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing our knowledge base and glossary systems to retrieve the specific information about RCEP cumulation of origin and navigating conflicting rules of origin between overlapping FTAs.
+
+Based on your questions, you are seeking guidance on:
+
+1.</td>
+                <td class="rt-slow">82624.1</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:46</td>
+                <td>Complex</td>
+                <td class="question">I'm new to international trade and need comprehensive guidance. Can you explain the differences between Ordinary Certificate of Origin and Preferential Certificate of Origin, when to use each, the app</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing our knowledge base and glossary systems to retrieve the comprehensive information you requested about Certificates of Origin, Rules of Origin, and FTA procedures.
+
+Based on your questions, you are seeking guidance on several critical ar</td>
+                <td class="rt-slow">97807.0</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:50</td>
+                <td>Simple</td>
+                <td class="question">What is a bill of lading?</td>
+                <td class="answer">I encountered technical difficulties accessing the knowledge base and glossary systems to retrieve detailed information about your questions. However, I can provide you with general guidance based on standard international trade practices:
+
+## What is a Bill of Lading?
+
+A **Bill of Lading (B/L)** is</td>
+                <td class="rt-slow">116024.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:57</td>
+                <td>Complex</td>
+                <td class="question">How do I calculate regional value content for products with components from multiple FTA partners?</td>
+                <td class="answer">Regional Value Content (RVC) Calculation for Products with Components from Multiple FTA Partners
+
+I apologize, but I am currently unable to retrieve the specific information needed to provide you with accurate guidance on calculating Regional Value Content (RVC) for products with components from mul</td>
+                <td class="rt-slow">122896.4</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:58</td>
+                <td>Complex</td>
+                <td class="question">How do I handle partial shipments with a single PCO?</td>
+                <td class="answer">## Handling Partial Shipments with a Single PCO
+
+I understand you're asking about how to handle partial shipments using a single PCO (Preferential Certificate of Origin). Unfortunately, I encountered technical connectivity issues with both the glossary and knowledge base systems, which prevented me </td>
+                <td class="rt-slow">99023.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:58</td>
+                <td>Complex</td>
+                <td class="question">What are the specific origin criteria differences between ASEAN-China FTA and RCEP for electronic components?</td>
+                <td class="answer">## Origin Criteria Differences Between ASEAN-China FTA and RCEP for Electronic Components
+
+I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems needed to retrieve the specific origin criteria differences between ASEAN-China FTA and RCEP for electron</td>
+                <td class="rt-slow">103042.8</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:58</td>
+                <td>Complex</td>
+                <td class="question">What are the implications of minimal operations provisions on my manufacturing process?</td>
+                <td class="answer">I apologize, but I'm currently experiencing technical difficulties accessing the knowledge base and web search tools needed to provide you with comprehensive information about both of your questions.
+
+## What I Was Attempting to Retrieve
+
+### 1. How to Contact SBF for Trade Advice
+I attempted to sea</td>
+                <td class="rt-slow">109197.2</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:59</td>
+                <td>Complex</td>
+                <td class="question">What strategies can I use to optimize tariff benefits across multiple FTAs?</td>
+                <td class="answer">Strategies to Optimize Tariff Benefits Across Multiple FTAs
+
+I apologize, but I am currently unable to retrieve the detailed information needed to provide comprehensive strategies for optimizing tariff benefits across multiple FTAs due to technical connectivity issues with our specialized knowledge </td>
+                <td class="rt-slow">88482.0</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:37:59</td>
+                <td>Complex</td>
+                <td class="question">How do I handle retroactive issuance of PCOs for shipments already in transit?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing our knowledge base and glossary systems to retrieve the specific information needed to answer your questions about:
+
+1. **Calculating Regional Value Content (RVC) for products with components from multiple FTA partners**
+2. **Handling r</td>
+                <td class="rt-slow">87783.1</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:01</td>
+                <td>Complex</td>
+                <td class="question">How do I navigate conflicting rules of origin between overlapping FTAs?</td>
+                <td class="answer">## Navigating Conflicting Rules of Origin Between Overlapping FTAs
+
+I understand you're seeking guidance on how to navigate situations where multiple Free Trade Agreements (FTAs) exist between the same trading partners, potentially creating overlapping or conflicting Rules of Origin requirements.
+
+U</td>
+                <td class="rt-slow">126514.9</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:01</td>
+                <td>Complex</td>
+                <td class="question">What are the implications of third-country invoicing on PCO eligibility?</td>
+                <td class="answer">I apologize, but I am currently unable to retrieve sufficient information about your questions regarding PCO (Preferential Certificate of Origin) procedures due to technical connectivity issues with the knowledge base systems.
+
+## Your Questions
+You asked about:
+1. **How to handle retroactive issuan</td>
+                <td class="rt-slow">113103.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:01</td>
+                <td>Complex</td>
+                <td class="question">How do I handle cumulation of origin across multiple countries under RCEP?</td>
+                <td class="answer">Handling Cumulation of Origin Across Multiple Countries Under RCEP
+
+I apologize, but I encountered technical difficulties while attempting to retrieve the specific information about RCEP cumulation of origin procedures from our knowledge base systems.
+
+## Current Status
+
+**What I attempted to retrie</td>
+                <td class="rt-slow">106956.7</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:02</td>
+                <td>Complex</td>
+                <td class="question">How do I manage product-specific rules vs. general rules for complex manufactured goods?</td>
+                <td class="answer">I apologize, but I am currently experiencing technical connectivity issues with both the **knowledge base** and **glossary systems**, which are essential for providing you with accurate and comprehensive information about Rules of Origin, documentation requirements, and FTA-specific guidance.
+
+## Wh</td>
+                <td class="rt-slow">109292.7</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:02</td>
+                <td>Complex</td>
+                <td class="question">I'm exporting electronics to multiple ASEAN countries. Can you explain the complete process for obtaining Preferential Certificates of Origin for each country, including the specific requirements, doc</td>
+                <td class="answer">Thank you for your enquiry about obtaining Preferential Certificates of Origin (PCO) for exporting electronics to multiple ASEAN countries.
+
+---
+
+## Current Status
+
+I attempted to retrieve comprehensive information about PCO processes, requirements, and FTA eligibility verification for ASEAN countri</td>
+                <td class="rt-slow">134053.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:08</td>
+                <td>Complex</td>
+                <td class="question">How do I determine substantial transformation for goods processed in Singapore for a Back-to-Back PCO?</td>
+                <td class="answer">## Current Analysis
+
+I was attempting to retrieve comprehensive information about **Back-to-Back Preferential Certificate of Origin (PCO)** and **substantial transformation** requirements for goods processed in Singapore. Unfortunately, I encountered technical connectivity issues with both the knowl</td>
+                <td class="rt-slow">104492.4</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:13</td>
+                <td>Complex</td>
+                <td class="question">What strategies can I use to optimize tariff benefits across multiple FTAs?</td>
+                <td class="answer">Strategies to Optimize Tariff Benefits Across Multiple FTAs
+
+I understand you're looking for strategies to optimize tariff benefits across multiple Free Trade Agreements for your manufacturing operations that use components from multiple countries. However, I encountered technical difficulties acces</td>
+                <td class="rt-slow">91303.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:13</td>
+                <td>Complex</td>
+                <td class="question">How do I handle cumulation of origin across multiple countries under RCEP?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing our knowledge base and glossary systems to retrieve the specific information you requested about:
+
+1. **Retroactive issuance of PCOs (Preferential Certificates of Origin) for shipments already in transit**
+2. **Origin certification for </td>
+                <td class="rt-slow">108891.1</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:13</td>
+                <td>Complex</td>
+                <td class="question">How do I calculate regional value content for products with components from multiple FTA partners?</td>
+                <td class="answer">## Current Analysis
+
+I attempted to retrieve information about calculating Regional Value Content (RVC) for products with components from multiple FTA partners. Unfortunately, I encountered technical connectivity issues with both the glossary tool and knowledge base tool, which prevented me from acc</td>
+                <td class="rt-slow">98605.0</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:14</td>
+                <td>Complex</td>
+                <td class="question">What are the verification procedures if my PCO is challenged by foreign customs?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing our knowledge base and glossary systems to retrieve the specific information you requested about minimal operations provisions and PCO verification procedures.
+
+## Current Status
+
+I attempted to retrieve information on:
+- **Minimal oper</td>
+                <td class="rt-slow">122806.9</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:14</td>
+                <td>Complex</td>
+                <td class="question">What strategies can I use to optimize tariff benefits across multiple FTAs?</td>
+                <td class="answer"># Strategies to Optimize Tariff Benefits Across Multiple FTAs
+
+## Current Status
+
+I attempted to retrieve comprehensive information about FTA tariff optimization strategies from our knowledge base and glossary systems. Unfortunately, I encountered technical connectivity issues with both the **glossa</td>
+                <td class="rt-slow">113498.1</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:14</td>
+                <td>Simple</td>
+                <td class="question">What is the difference between FOB and CIF?</td>
+                <td class="answer">Difference Between FOB and CIF
+
+I apologize, but I am currently unable to retrieve the detailed information about FOB (Free On Board) and CIF (Cost, Insurance and Freight) from our knowledge base and glossary systems due to technical connectivity issues.
+
+### What I Attempted to Retrieve:
+
+**Researc</td>
+                <td class="rt-slow">95939.5</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:15</td>
+                <td>Complex</td>
+                <td class="question">What are the legal implications of incorrect origin declarations?</td>
+                <td class="answer">## Legal Implications of Incorrect Origin Declarations
+
+I attempted to retrieve comprehensive information about the legal implications of incorrect origin declarations from our knowledge base and glossary systems. Unfortunately, I encountered technical connectivity issues that prevented me from acce</td>
+                <td class="rt-slow">95089.3</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:18</td>
+                <td>Complex</td>
+                <td class="question">I'm new to international trade and need comprehensive guidance. Can you explain the differences between Ordinary Certificate of Origin and Preferential Certificate of Origin, when to use each, the app</td>
+                <td class="answer">## Comprehensive Guide to Certificates of Origin for International Trade
+
+I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems that contain the detailed information you requested about Certificates of Origin.
+
+### What I Was Attempting to Retrieve:
+</td>
+                <td class="rt-slow">106580.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:25</td>
+                <td>Complex</td>
+                <td class="question">How do I handle retroactive issuance of PCOs for shipments already in transit?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing our knowledge base and glossary systems to retrieve the specific information about PCO (Preferential Certificate of Origin) procedures you requested.
+
+## Your Questions
+
+You asked about three important aspects of PCO handling:
+
+1. **Ver</td>
+                <td class="rt-slow">120390.8</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:27</td>
+                <td>Complex</td>
+                <td class="question">How do I handle retroactive issuance of PCOs for shipments already in transit?</td>
+                <td class="answer">Handling Retroactive Issuance of Preferential Certificates of Origin (PCOs)
+
+I apologize, but I am currently unable to retrieve the specific regulatory procedures and requirements for retroactive issuance of Preferential Certificates of Origin from our authoritative knowledge base and FTA legal docu</td>
+                <td class="rt-slow">100251.9</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:30</td>
+                <td>Complex</td>
+                <td class="question">What are the implications of third-country invoicing on PCO eligibility?</td>
+                <td class="answer">## Implications of Third-Country Invoicing on PCO Eligibility
+
+### Current Analysis
+
+I attempted to retrieve comprehensive information about the implications of third-country invoicing on Preferential Certificate of Origin (PCO) eligibility from our knowledge base and glossary systems. Unfortunately</td>
+                <td class="rt-slow">108958.9</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:34</td>
+                <td>Complex</td>
+                <td class="question">I'm new to international trade and need comprehensive guidance. Can you explain the differences between Ordinary Certificate of Origin and Preferential Certificate of Origin, when to use each, the app</td>
+                <td class="answer"># Comprehensive Guide to Certificates of Origin
+
+I apologize, but I encountered persistent technical connectivity issues with our knowledge base and glossary systems when attempting to retrieve the detailed information you requested about Certificates of Origin. All attempts to access our authoritat</td>
+                <td class="rt-slow">111025.8</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:40</td>
+                <td>Complex</td>
+                <td class="question">I'm exporting electronics to multiple ASEAN countries. Can you explain the complete process for obtaining Preferential Certificates of Origin for each country, including the specific requirements, doc</td>
+                <td class="answer">## Regarding Your Questions on PCO Process
+
+Thank you for reaching out regarding Preferential Certificates of Origin (PCO) for your electronics exports to ASEAN countries. I understand you have **two separate questions**:
+
+1. **Retroactive PCO issuance** for shipments already in transit
+2. **Complet</td>
+                <td class="rt-slow">114530.4</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:40</td>
+                <td>Simple</td>
+                <td class="question">What is a packing list?</td>
+                <td class="answer">## What is a Packing List?
+
+Unfortunately, I encountered technical connectivity issues when attempting to retrieve detailed information about packing lists from our knowledge base and glossary systems. Both the glossary tool and knowledge base tool experienced connection timeouts and were unable to </td>
+                <td class="rt-slow">114167.9</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:45</td>
+                <td>Complex</td>
+                <td class="question">How do I calculate regional value content for products with components from multiple FTA partners?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing our knowledge base and glossary systems to retrieve the specific information needed to answer your questions about:
+
+1. **Third-country invoicing implications on PCO (Preferential Certificate of Origin) eligibility**
+2. **Regional Value</td>
+                <td class="rt-slow">97165.4</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:45</td>
+                <td>Complex</td>
+                <td class="question">My company manufactures products using components from multiple countries. How do I determine the origin of my finished product for FTA purposes, what documentation is required to prove origin, and wh</td>
+                <td class="answer">I apologize, but I am currently unable to retrieve the comprehensive information you need due to technical connectivity issues with our knowledge base and glossary systems. However, I can provide you with a framework for understanding your requirements based on your question.
+
+## Your Three Key Requ</td>
+                <td class="rt-slow">124148.8</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:45</td>
+                <td>Complex</td>
+                <td class="question">What are the verification procedures if my PCO is challenged by foreign customs?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems needed to provide you with comprehensive information about your questions regarding:
+
+1. **Strategies to optimize tariff benefits across multiple FTAs**
+2. **Documentation requirements for proving</td>
+                <td class="rt-slow">101378.7</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:46</td>
+                <td>Complex</td>
+                <td class="question">How do I calculate regional value content for products with components from multiple FTA partners?</td>
+                <td class="answer">I apologize, but I am currently unable to provide you with comprehensive information about calculating Regional Value Content (RVC) for products with components from multiple FTA partners due to system connectivity issues.
+
+## What I Was Attempting to Retrieve
+
+I was working to gather detailed infor</td>
+                <td class="rt-slow">93788.1</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:46</td>
+                <td>Complex</td>
+                <td class="question">How do I handle partial shipments with a single PCO?</td>
+                <td class="answer">## Understanding PCO and Partial Shipments
+
+**PCO** typically stands for **Preferential Certificate of Origin**, which is a document used to claim preferential tariff treatment under Free Trade Agreements (FTAs).
+
+## Current Analysis
+
+I attempted to retrieve comprehensive information about handling </td>
+                <td class="rt-slow">88191.1</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:46</td>
+                <td>Complex</td>
+                <td class="question">What are the implications of minimal operations provisions on my manufacturing process?</td>
+                <td class="answer">## Implications of Minimal Operations Provisions on Manufacturing Process
+
+I apologize, but I encountered technical difficulties accessing both the glossary and knowledge base systems that contain the authoritative information about minimal operations provisions and their implications for manufactur</td>
+                <td class="rt-slow">96211.0</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:46</td>
+                <td>Complex</td>
+                <td class="question">How do I handle partial shipments with a single PCO?</td>
+                <td class="answer">I encountered technical difficulties accessing the knowledge base and glossary systems needed to retrieve the specific information about RCEP cumulation of origin and PCO (Proof of Certification of Origin) procedures for partial shipments.
+
+## Current Status
+
+Based on your questions, you are seeking</td>
+                <td class="rt-slow">120157.1</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:52</td>
+                <td>Complex</td>
+                <td class="question">I'm new to international trade and need comprehensive guidance. Can you explain the differences between Ordinary Certificate of Origin and Preferential Certificate of Origin, when to use each, the app</td>
+                <td class="answer">## Certificate of Origin - Comprehensive Guide
+
+I apologize, but I encountered technical connectivity issues with both the glossary database and knowledge base systems when attempting to retrieve the comprehensive information you requested. However, I can provide you with a structured overview based</td>
+                <td class="rt-slow">108268.8</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:52</td>
+                <td>Complex</td>
+                <td class="question">What strategies can I use to optimize tariff benefits across multiple FTAs?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing our knowledge base and glossary systems to retrieve the specific information you need about navigating conflicting rules of origin between overlapping FTAs and strategies to optimize tariff benefits.
+
+## Current Status
+
+**What I attempt</td>
+                <td class="rt-slow">127661.3</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:53</td>
+                <td>Complex</td>
+                <td class="question">What documentation is required for proving origin when components come from multiple countries?</td>
+                <td class="answer">I encountered technical difficulties accessing the knowledge base and glossary systems to retrieve information about your questions. However, I can provide you with a general framework based on standard international trade practices:
+
+## 1. What is Customs Clearance?
+
+**Customs clearance** is the pr</td>
+                <td class="rt-slow">107778.1</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:57</td>
+                <td>Simple</td>
+                <td class="question">What is a Certificate of Origin?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing our knowledge base and glossary systems to retrieve the detailed information you requested about:
+
+1. **Certificate of Origin (CO)** - What it is and its purpose
+2. **Handling origin certification for goods processed in multiple countri</td>
+                <td class="rt-slow">92202.3</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:38:59</td>
+                <td>Complex</td>
+                <td class="question">How do I manage product-specific rules vs. general rules for complex manufactured goods?</td>
+                <td class="answer">I apologize, but I am currently unable to retrieve the necessary information to provide you with comprehensive details about Back-to-back Preferential Certificate of Origin (PCO) requirements. 
+
+## Current Status
+
+I attempted to access our knowledge base and glossary systems to gather information ab</td>
+                <td class="rt-slow">90443.6</td>
+                <td class="success">Success</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-02-25T15:39:03</td>
+                <td>Simple</td>
+                <td class="question">What countries have FTAs with Singapore?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems needed to provide you with accurate information about your questions. Based on the situation, here's what I can address:
+
+## Your Questions
+
+You've asked about several important topics:
+
+1. **How </td>
+                <td class="rt-slow">59844.6</td>
+                <td class="success">Success</td>
+            </tr>
+</tbody>
+</table>
+
+<div class="footer">Chatbot Performance Testing &middot; load test</div>
+</body>
+</html>

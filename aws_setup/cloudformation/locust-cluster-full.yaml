@@ -46,7 +46,7 @@ Conditions:
   HasWorker1: !Or [!Equals [!Ref WorkerCount, 2], !Equals [!Ref WorkerCount, 3], !Equals [!Ref WorkerCount, 4], !Equals [!Ref WorkerCount, 5]]
   HasWorker2: !Or [!Equals [!Ref WorkerCount, 3], !Equals [!Ref WorkerCount, 4], !Equals [!Ref WorkerCount, 5]]
   HasWorker3: !Or [!Equals [!Ref WorkerCount, 4], !Equals [!Ref WorkerCount, 5]]
-  HasWorker4: !Or [!Equals [!Ref WorkerCount, 5]]
+  HasWorker4: !Equals [!Ref WorkerCount, 5]
   HasWorker5: !Equals [!Ref WorkerCount, 5]
 
 Resources:
@@ -64,7 +64,7 @@ Resources:
           FromPort: 5557
           ToPort: 5558
           CidrIp: 0.0.0.0/0
-          Description: Master–worker
+          Description: Master-worker
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22

@@ -20,13 +20,15 @@ STACK_STATUS=$(aws cloudformation describe-stacks \
     --region "$AWS_REGION" 2>/dev/null)
 
 if [ -z "$STACK_STATUS" ] || [ "$STACK_STATUS" == "None" ]; then
-    echo "Error: Stack '$STACK_NAME' not found!"
+    echo "Error: Stack '$STACK_NAME' not found in $AWS_REGION!"
+    echo ""
+    echo "Deploy first: ./aws_setup/deploy_locust.sh"
     echo ""
     echo "Available stacks:"
     aws cloudformation list-stacks \
         --query 'StackSummaries[?StackStatus!=`DELETE_COMPLETE`].[StackName,StackStatus]' \
         --output table \
-        --region "$AWS_REGION"
+        --region "$AWS_REGION" 2>/dev/null || true
     echo ""
     echo "Usage: ./aws_setup/get_ips_simple.sh [stack-name]"
     exit 1
@@ -71,13 +73,20 @@ echo "  scp -i ~/.ssh/${KEY_PAIR}.pem -r src/ config/ .env requirements.txt ec2-
 echo ""
 echo "On master:  TEST_TYPE=load locust -f src/locustfile.py --master"
 echo "On workers: TEST_TYPE=load locust -f src/locustfile.py --worker --master-host=$MASTER_PRIVATE"
+echo ""
+echo "Download reports (from local, in project dir):"
+echo "  scp -i ~/.ssh/${KEY_PAIR}.pem \"ec2-user@$MASTER_PUBLIC:~/chatbot-performance-testing/reports/*\" ./reports/"
 echo "=========================================="
 echo ""
-echo "Worker instances (for copying files / starting workers):"
+echo "Worker instances only (copy files + start worker):"
 aws ec2 describe-instances \
     --region "$AWS_REGION" \
     --filters "Name=tag:aws:cloudformation:stack-name,Values=$STACK_NAME" "Name=instance-state-name,Values=running" \
     --query 'Reservations[*].Instances[*].[Tags[?Key==`Name`].Value | [0], PublicIpAddress]' \
     --output text 2>/dev/null | while read -r name ip; do
-    [ -n "$ip" ] && echo "  $name  $ip"
+    if [ -n "$ip" ] && [ "$name" != "locust-master" ]; then
+        echo "  $name  $ip"
+        echo "    SSH:    ssh -i ~/.ssh/${KEY_PAIR}.pem ec2-user@$ip"
+        echo "    Worker: TEST_TYPE=load locust -f src/locustfile.py --worker --master-host=$MASTER_PRIVATE"
+    fi
 done
