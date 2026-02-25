@@ -164,12 +164,15 @@ TEST_TYPE=breakpoint locust -f src/locustfile.py --headless --run-time 5m
 
 ## Step 7: Download Reports
 
-**From your local machine:**
+**From your local machine** (exit SSH first, or use a new terminal):
 
 ```bash
+cd /path/to/chatbot-performance-testing
 mkdir -p reports
-scp -i $KEY ec2-user@$IP:~/chatbot-performance-testing/reports/* ./reports/
+scp -i $KEY "ec2-user@$IP:~/chatbot-performance-testing/reports/*" ./reports/
 ```
+
+> Quotes around the remote path prevent zsh from expanding `*` locally.
 
 ---
 
@@ -177,6 +180,12 @@ scp -i $KEY ec2-user@$IP:~/chatbot-performance-testing/reports/* ./reports/
 
 ```bash
 python src/generate_report.py
+```
+
+To exclude rows with no answer from the report:
+
+```bash
+python src/generate_report.py --exclude-empty
 ```
 
 Generates `reports/report_<test_type>.html` with:
