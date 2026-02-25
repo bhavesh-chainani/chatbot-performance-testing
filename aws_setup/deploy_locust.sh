@@ -1,18 +1,18 @@
 #!/bin/bash
-# Deploy Locust cluster on AWS for chatbot performance testing
-# Sized for 500-1000 concurrent users (load / stress / endurance / breakpoint)
+# Deploy a single EC2 instance for chatbot performance testing
+# Sized for simple tests: 10-20 concurrent users
 
 set -e
 
 echo "=========================================="
-echo "  Deploy Locust Cluster on AWS"
+echo "  Deploy Locust on AWS (Single Instance)"
 echo "=========================================="
 echo ""
-echo "Test profiles this cluster supports:"
-echo "  load       – 500 users,  20 min"
-echo "  stress     – 750 users,  20 min"
-echo "  endurance  – 500 users,  8 hours"
-echo "  breakpoint – ramp to 1000, 30 min"
+echo "Test profiles:"
+echo "  load       – 10 users,  5 min"
+echo "  stress     – 10 users,  5 min"
+echo "  endurance  – 10 users, 10 min"
+echo "  breakpoint – ramp to 20, 5 min"
 echo ""
 
 # -- Pre-flight checks -------------------------------------------------------
@@ -42,17 +42,11 @@ if [ -z "$KEY_PAIR" ]; then
     exit 1
 fi
 
-read -p "Master instance type [c5.large]: " MASTER_TYPE
-MASTER_TYPE=${MASTER_TYPE:-c5.large}
-
-read -p "Worker instance type [c5.xlarge]: " WORKER_TYPE
-WORKER_TYPE=${WORKER_TYPE:-c5.xlarge}
-
-read -p "Number of workers (2 for 500 users, 3 for 750, 4 for 1000) [3]: " WORKER_COUNT
-WORKER_COUNT=${WORKER_COUNT:-3}
+read -p "Instance type [t3.small]: " INSTANCE_TYPE
+INSTANCE_TYPE=${INSTANCE_TYPE:-t3.small}
 
 echo ""
-echo "Cluster: 1x $MASTER_TYPE master + ${WORKER_COUNT}x $WORKER_TYPE workers"
+echo "Deploying: 1x $INSTANCE_TYPE (standalone, no workers needed)"
 
 # -- Resolve AMI for the region -----------------------------------------------
 
@@ -90,9 +84,7 @@ aws cloudformation create-stack \
     --stack-name "$STACK_NAME" \
     --template-body file:///tmp/locust-cluster.yaml \
     --parameters \
-        ParameterKey=InstanceTypeMaster,ParameterValue="$MASTER_TYPE" \
-        ParameterKey=InstanceTypeWorker,ParameterValue="$WORKER_TYPE" \
-        ParameterKey=WorkerCount,ParameterValue="$WORKER_COUNT" \
+        ParameterKey=InstanceType,ParameterValue="$INSTANCE_TYPE" \
         ParameterKey=KeyPairName,ParameterValue="$KEY_PAIR" \
     --capabilities CAPABILITY_IAM \
     --region "$AWS_REGION"
@@ -104,14 +96,9 @@ aws cloudformation wait stack-create-complete \
 
 # -- Print outputs ------------------------------------------------------------
 
-MASTER_IP=$(aws cloudformation describe-stacks \
+INSTANCE_IP=$(aws cloudformation describe-stacks \
     --stack-name "$STACK_NAME" \
-    --query 'Stacks[0].Outputs[?OutputKey==`MasterPublicIP`].OutputValue' \
-    --output text --region "$AWS_REGION")
-
-MASTER_PRIVATE_IP=$(aws cloudformation describe-stacks \
-    --stack-name "$STACK_NAME" \
-    --query 'Stacks[0].Outputs[?OutputKey==`MasterPrivateIP`].OutputValue' \
+    --query 'Stacks[0].Outputs[?OutputKey==`InstancePublicIP`].OutputValue' \
     --output text --region "$AWS_REGION")
 
 echo ""
@@ -119,25 +106,21 @@ echo "=========================================="
 echo "  Deployment Complete!"
 echo "=========================================="
 echo ""
-echo "Master Public IP:  $MASTER_IP"
-echo "Master Private IP: $MASTER_PRIVATE_IP"
-echo "Locust Web UI:     http://$MASTER_IP:8089"
+echo "Instance IP:   $INSTANCE_IP"
+echo "Locust Web UI: http://$INSTANCE_IP:8089"
 echo ""
-echo "Next steps – see SIMPLE_SETUP.md for full guide:"
+echo "Next steps:"
 echo ""
-echo "1. Copy files to master:"
+echo "1. Copy files:"
 echo "   scp -i ~/.ssh/$KEY_PAIR.pem -r src/ config/ .env requirements.txt \\"
-echo "       ec2-user@$MASTER_IP:/home/ec2-user/chatbot-performance-testing/"
+echo "       ec2-user@$INSTANCE_IP:~/chatbot-performance-testing/"
 echo ""
-echo "2. SSH into master:"
-echo "   ssh -i ~/.ssh/$KEY_PAIR.pem ec2-user@$MASTER_IP"
+echo "2. SSH in:"
+echo "   ssh -i ~/.ssh/$KEY_PAIR.pem ec2-user@$INSTANCE_IP"
 echo ""
-echo "3. Start master (pick a test type):"
-echo "   cd /home/ec2-user/chatbot-performance-testing"
-echo "   TEST_TYPE=load locust -f src/locustfile.py --master"
+echo "3. Run a test (no --master/--worker needed):"
+echo "   cd ~/chatbot-performance-testing"
+echo "   TEST_TYPE=load locust -f src/locustfile.py"
 echo ""
-echo "4. On each worker:"
-echo "   TEST_TYPE=load locust -f src/locustfile.py --worker --master-host=$MASTER_PRIVATE_IP"
-echo ""
-echo "5. Open web UI: http://$MASTER_IP:8089"
+echo "4. Open web UI: http://$INSTANCE_IP:8089"
 echo "=========================================="

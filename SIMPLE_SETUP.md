@@ -1,25 +1,27 @@
-# AWS Setup Guide – Chatbot Performance Testing
+# AWS Setup Guide – Simple Tests
 
-Deploy a Locust cluster on AWS EC2 to run 4 test types against your chatbot.
+Deploy a single EC2 instance to run all 4 test types against your chatbot.
 
-| Test | Concurrent Users | Duration | Purpose |
-|------|----------------:|----------|---------|
-| **Load** | 500 | 20 min | Baseline under expected traffic |
-| **Stress** | 750 | 20 min | Beyond normal capacity |
-| **Endurance** | 500 | 8 hours | Sustained load, detect memory leaks |
-| **Breakpoint** | ramp to 1000 | 30 min | Find the breaking point |
+| Test | Users | Duration |
+|------|------:|----------|
+| **Load** | 10 | 5 min |
+| **Stress** | 10 | 5 min |
+| **Endurance** | 10 | 10 min |
+| **Breakpoint** | ramp to 20 | 5 min |
+
+**Infrastructure:** 1x `t3.small` (~$0.02/hr). No workers needed.
 
 ---
 
 ## Prerequisites
 
-1. AWS Account with `ec2:*` and `cloudformation:*` permissions
-2. AWS CLI installed and configured (`aws configure`)
-3. An EC2 Key Pair
+1. AWS Account
+2. AWS CLI configured (`aws configure`)
+3. EC2 Key Pair
 
 ---
 
-## Step 1: Create an EC2 Key Pair (if you don't have one)
+## Step 1: Create EC2 Key Pair (if you don't have one)
 
 ```bash
 aws ec2 create-key-pair \
@@ -31,144 +33,121 @@ chmod 400 ~/.ssh/locust-testing.pem
 
 ---
 
-## Step 2: Deploy the Cluster
+## Step 2: Deploy the Instance
 
 ```bash
 ./aws_setup/deploy_locust.sh
 ```
 
-When prompted, use these recommended settings:
+When prompted:
+- Stack name: `locust-cluster` (default)
+- Key Pair: your key name (e.g. `locust-testing`)
+- Instance type: `t3.small` (default, plenty for 10-20 users)
 
-| Parameter | Recommended | Why |
-|-----------|-------------|-----|
-| Master instance | `c5.large` | Coordinates workers + web UI |
-| Worker instance | `c5.xlarge` | 4 vCPU, 8 GB – generates load |
-| Worker count | **3** | 3 workers handles up to 1000 users comfortably |
-
-Wait 3-5 minutes for the stack to finish.
-
-> **Cost note:** A 3-worker `c5.xlarge` cluster costs ~$0.68/hr. Don't forget to tear it down when done (Step 9).
+Wait 2-3 minutes.
 
 ---
 
-## Step 3: Get Instance IPs
+## Step 3: Get Instance IP
 
 ```bash
 ./aws_setup/get_ips_simple.sh
 ```
 
-You'll get two IPs — save both:
-- **Master Public IP** → for SSH and browser access (e.g. `54.226.255.173`)
-- **Master Private IP** → for worker `--master-host` flag (e.g. `172.31.16.115`)
+Save the IP:
 
 ```bash
-# Set these for the rest of the guide:
-export MASTER_PUBLIC_IP=<your-master-public-ip>
-export MASTER_PRIVATE_IP=<your-master-private-ip>
+export IP=<your-instance-ip>
 export KEY=~/.ssh/locust-testing.pem
 ```
 
 ---
 
-## Step 4: Copy Project Files to EC2
+## Step 4: Copy Files to EC2
 
 ```bash
-# Create directory on master
-ssh -i $KEY ec2-user@$MASTER_PUBLIC_IP \
+ssh -i $KEY ec2-user@$IP \
   "mkdir -p ~/chatbot-performance-testing && sudo chown -R ec2-user:ec2-user ~/chatbot-performance-testing"
 
-# Copy files
 scp -i $KEY -r src/ config/ .env requirements.txt \
-  ec2-user@$MASTER_PUBLIC_IP:~/chatbot-performance-testing/
+  ec2-user@$IP:~/chatbot-performance-testing/
 ```
-
-If workers are on **separate instances**, repeat the copy for each worker IP.
 
 ---
 
-## Step 5: Install Dependencies on EC2
-
-SSH into the master (and each worker if separate):
+## Step 5: Install Dependencies
 
 ```bash
-ssh -i $KEY ec2-user@$MASTER_PUBLIC_IP
+ssh -i $KEY ec2-user@$IP
 ```
 
-Then on the instance:
+On the instance:
 
 ```bash
 cd ~/chatbot-performance-testing
 pip3 install -r requirements.txt
-pip3 install "urllib3<2.0" --upgrade   # Amazon Linux 2 compatibility fix
+pip3 install "urllib3<2.0" --upgrade
 ```
 
 ---
 
 ## Step 6: Run a Test
 
-Pick a test type and start the master, then the workers.
-
-### Start the Master
-
-On the master instance:
+Still on the EC2 instance — pick a test type and run Locust directly (no master/worker):
 
 ```bash
 cd ~/chatbot-performance-testing
 
-# Pick one:
-TEST_TYPE=load       locust -f src/locustfile.py --master
-# TEST_TYPE=stress     locust -f src/locustfile.py --master
-# TEST_TYPE=endurance  locust -f src/locustfile.py --master
-# TEST_TYPE=breakpoint locust -f src/locustfile.py --master
+# Load test (10 users, 5 min)
+TEST_TYPE=load locust -f src/locustfile.py
+
+# Stress test (10 users, 5 min)
+TEST_TYPE=stress locust -f src/locustfile.py
+
+# Endurance test (10 users, 10 min)
+TEST_TYPE=endurance locust -f src/locustfile.py
+
+# Breakpoint test (ramp to 20 users, 5 min)
+TEST_TYPE=breakpoint locust -f src/locustfile.py
 ```
 
-Keep this terminal open — you'll see "Waiting for workers to connect."
+Open the web UI in your browser:
 
-### Start Each Worker
+```
+http://<your-instance-ip>:8089
+```
 
-Open a new terminal, SSH into each worker instance, and run:
+| Test | Users | Spawn Rate |
+|------|------:|-----------:|
+| Load | 10 | 2/s |
+| Stress | 10 | 2/s |
+| Endurance | 10 | 2/s |
+| Breakpoint | *(auto-ramped)* | — |
+
+Click **Start swarming**. For breakpoint, the shape class handles ramping automatically.
+
+### Headless mode (no browser)
+
+Run all 4 tests back-to-back without the web UI:
 
 ```bash
 cd ~/chatbot-performance-testing
 
-# Use the SAME TEST_TYPE as the master:
-TEST_TYPE=load locust -f src/locustfile.py --worker --master-host=<MASTER_PRIVATE_IP>
+TEST_TYPE=load locust -f src/locustfile.py --headless -u 10 -r 2 --run-time 5m
+TEST_TYPE=stress locust -f src/locustfile.py --headless -u 10 -r 2 --run-time 5m
+TEST_TYPE=endurance locust -f src/locustfile.py --headless -u 10 -r 2 --run-time 10m
+TEST_TYPE=breakpoint locust -f src/locustfile.py --headless --run-time 5m
 ```
-
-> **Important:** Use the **private IP** for `--master-host`, not the public IP.
-
-### Launch from the Web UI
-
-Open your browser:
-
-```
-http://<MASTER_PUBLIC_IP>:8089
-```
-
-The settings per test type:
-
-| Test | Users | Spawn Rate | Run Time |
-|------|------:|-----------:|----------|
-| Load | 500 | 25/s | 20m |
-| Stress | 750 | 38/s | 20m |
-| Endurance | 500 | 25/s | 8h |
-| Breakpoint | *(auto-ramped by shape class)* | — | 30m |
-
-For **load / stress / endurance**: enter the Users and Spawn Rate, click "Start swarming", and stop after the run time.
-
-For **breakpoint**: the `BreakpointShape` class handles ramping automatically — just click Start.
 
 ---
 
 ## Step 7: Download Reports
 
-**From your local machine** (not EC2):
+**From your local machine:**
 
 ```bash
 mkdir -p reports
-
-# Download the CSV
-scp -i $KEY ec2-user@$MASTER_PUBLIC_IP:~/chatbot-performance-testing/reports/* ./reports/
+scp -i $KEY ec2-user@$IP:~/chatbot-performance-testing/reports/* ./reports/
 ```
 
 ---
@@ -179,29 +158,17 @@ scp -i $KEY ec2-user@$MASTER_PUBLIC_IP:~/chatbot-performance-testing/reports/* .
 python src/generate_report.py
 ```
 
-This reads each `reports/response_times_<test_type>.csv` and generates a `reports/report_<test_type>.html` file containing:
-
-- **Summary cards** — avg, median, p95, p99, max response times
-- **Per-category breakdown** — Simple vs Complex question stats
-- **Full request table** — every question asked, the chatbot's answer, and the e2e response time
-
-Open the HTML in a browser to view the report.
+Generates `reports/report_<test_type>.html` with:
+- Summary stats (avg, median, p95, p99, max response times)
+- Per-category breakdown (Simple vs Complex)
+- Full table — every question asked, chatbot answer, and e2e response time
 
 ---
 
-## Step 9: Cleanup (Important!)
-
-Delete the CloudFormation stack to stop billing:
+## Step 9: Cleanup
 
 ```bash
 aws cloudformation delete-stack --stack-name locust-cluster
-```
-
-Verify deletion:
-
-```bash
-aws cloudformation describe-stacks --stack-name locust-cluster
-# Should return "DELETE_IN_PROGRESS" or error once deleted
 ```
 
 ---
@@ -209,19 +176,12 @@ aws cloudformation describe-stacks --stack-name locust-cluster
 ## Quick Reference
 
 ```bash
-# SSH into master
-ssh -i $KEY ec2-user@$MASTER_PUBLIC_IP
+# SSH in
+ssh -i $KEY ec2-user@$IP
 
-# Run all 4 tests back-to-back (on master):
-cd ~/chatbot-performance-testing
-for t in load stress endurance breakpoint; do
-  echo "=== Starting $t test ==="
-  TEST_TYPE=$t locust -f src/locustfile.py --master --headless \
-    --expect-workers=3 --run-time=$(grep run_time config/test_config.yaml | grep $t -A3 | head -1 | awk '{print $2}' | tr -d '"')
-done
+# Web UI
+http://<IP>:8089
+
+# Tear down
+aws cloudformation delete-stack --stack-name locust-cluster
 ```
-
-## IP Summary
-
-- **Public IP** → SSH from your machine, open web UI at `:8089`
-- **Private IP** → Worker's `--master-host` value (internal AWS network)

@@ -8,10 +8,10 @@ Simulates real users logging in, sending questions, and receiving answers — th
 
 | Test | Users | Duration | Purpose |
 |------|------:|----------|---------|
-| **Load** | 500 | 20 min | Baseline under expected traffic |
-| **Stress** | 750 | 20 min | Beyond normal capacity |
-| **Endurance** | 500 | 8 hours | Sustained load, memory leaks |
-| **Breakpoint** | ramp → 1000 | 30 min | Find the breaking point |
+| **Load** | 10 | 5 min | Baseline under expected traffic |
+| **Stress** | 10 | 5 min | Beyond normal capacity |
+| **Endurance** | 10 | 10 min | Sustained load, detect degradation |
+| **Breakpoint** | ramp to 20 | 5 min | Find the breaking point |
 
 ## Quick Start
 
@@ -25,7 +25,7 @@ API_ENDPOINT_LOGIN=/api/auth/login
 API_ENDPOINT_SEND=/api/chat
 ```
 
-### 2. Run Locally (single machine)
+### 2. Install & Run Locally
 
 ```bash
 pip install -r requirements.txt
@@ -34,15 +34,15 @@ pip install -r requirements.txt
 TEST_TYPE=load locust -f src/locustfile.py
 ```
 
-Open `http://localhost:8089` and enter the user count / spawn rate for your test.
+Open `http://localhost:8089`, enter 10 users / spawn rate 2, and click Start.
 
-### 3. Run on AWS (for full scale)
+### 3. Run on AWS
 
 ```bash
 ./aws_setup/deploy_locust.sh
 ```
 
-See **[SIMPLE_SETUP.md](SIMPLE_SETUP.md)** for the complete step-by-step AWS guide.
+Deploys a single `t3.small` instance (~$0.02/hr). See **[SIMPLE_SETUP.md](SIMPLE_SETUP.md)** for the full step-by-step guide.
 
 ### 4. Generate Report
 
@@ -52,7 +52,7 @@ After a test finishes:
 python src/generate_report.py
 ```
 
-Opens `reports/report_<test_type>.html` — shows every question asked, the chatbot's answer, and e2e response time with summary statistics.
+Generates `reports/report_<test_type>.html` — shows every question asked, the chatbot's answer, and e2e response time with summary statistics.
 
 ## Project Structure
 
@@ -67,9 +67,9 @@ Opens `reports/report_<test_type>.html` — shows every question asked, the chat
 │   └── test_config.py         # Loads config, selects active profile via TEST_TYPE
 ├── aws_setup/
 │   ├── cloudformation/
-│   │   └── locust-cluster.yaml  # CloudFormation template (c5 instances)
-│   ├── deploy_locust.sh         # One-command cluster deploy
-│   └── get_ips_simple.sh        # Retrieve master/worker IPs
+│   │   └── locust-cluster.yaml  # CloudFormation template (single t3.small)
+│   ├── deploy_locust.sh         # One-command deploy
+│   └── get_ips_simple.sh        # Retrieve instance IP
 ├── .env                         # Your credentials (not committed)
 ├── requirements.txt
 ├── SIMPLE_SETUP.md              # Full AWS setup walkthrough

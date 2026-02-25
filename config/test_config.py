@@ -61,22 +61,22 @@ LOGIN_PASSWORD = _get_config('authentication.password', '', 'LOGIN_PASSWORD')
 TEST_TYPE = os.getenv('TEST_TYPE', 'load').lower()
 
 # ---- Test Profiles ----
-LOAD_TEST_USERS = _get_config('load_test.users', 500)
-LOAD_TEST_SPAWN_RATE = _get_config('load_test.spawn_rate', 25)
-LOAD_TEST_RUN_TIME = _get_config('load_test.run_time', '20m')
+LOAD_TEST_USERS = _get_config('load_test.users', 10)
+LOAD_TEST_SPAWN_RATE = _get_config('load_test.spawn_rate', 2)
+LOAD_TEST_RUN_TIME = _get_config('load_test.run_time', '5m')
 
-STRESS_TEST_USERS = _get_config('stress_test.users', 750)
-STRESS_TEST_SPAWN_RATE = _get_config('stress_test.spawn_rate', 38)
-STRESS_TEST_RUN_TIME = _get_config('stress_test.run_time', '20m')
+STRESS_TEST_USERS = _get_config('stress_test.users', 10)
+STRESS_TEST_SPAWN_RATE = _get_config('stress_test.spawn_rate', 2)
+STRESS_TEST_RUN_TIME = _get_config('stress_test.run_time', '5m')
 
-ENDURANCE_TEST_USERS = _get_config('endurance_test.users', 500)
-ENDURANCE_TEST_SPAWN_RATE = _get_config('endurance_test.spawn_rate', 25)
-ENDURANCE_TEST_RUN_TIME = _get_config('endurance_test.run_time', '8h')
+ENDURANCE_TEST_USERS = _get_config('endurance_test.users', 10)
+ENDURANCE_TEST_SPAWN_RATE = _get_config('endurance_test.spawn_rate', 2)
+ENDURANCE_TEST_RUN_TIME = _get_config('endurance_test.run_time', '10m')
 
-BREAKPOINT_MAX_USERS = _get_config('breakpoint_test.max_users', 1000)
-BREAKPOINT_RAMP_USERS_PER_STEP = _get_config('breakpoint_test.ramp_users_per_step', 50)
-BREAKPOINT_STEP_DURATION = _get_config('breakpoint_test.step_duration_seconds', 90)
-BREAKPOINT_RUN_TIME = _get_config('breakpoint_test.run_time', '30m')
+BREAKPOINT_MAX_USERS = _get_config('breakpoint_test.max_users', 20)
+BREAKPOINT_RAMP_USERS_PER_STEP = _get_config('breakpoint_test.ramp_users_per_step', 5)
+BREAKPOINT_STEP_DURATION = _get_config('breakpoint_test.step_duration_seconds', 60)
+BREAKPOINT_RUN_TIME = _get_config('breakpoint_test.run_time', '5m')
 
 # Map TEST_TYPE to the right profile values
 _PROFILES = {
