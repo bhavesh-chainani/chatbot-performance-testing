@@ -61,6 +61,16 @@ def on_test_start(environment, **kwargs):
     reports.mkdir(parents=True, exist_ok=True)
     RESPONSE_TIME_CSV = reports / f"response_times_{TEST_TYPE}.csv"
 
+    # Write run metadata for the report (users, spawn rate, host, run time)
+    meta_path = reports / f"run_meta_{TEST_TYPE}.json"
+    with open(meta_path, "w") as f:
+        json.dump({
+            "users": ACTIVE_USERS,
+            "spawn_rate": ACTIVE_SPAWN_RATE,
+            "host": CHATBOT_URL,
+            "run_time": ACTIVE_RUN_TIME,
+        }, f, indent=2)
+
     if not RESPONSE_TIME_CSV.exists() or RESPONSE_TIME_CSV.stat().st_size == 0:
         with open(RESPONSE_TIME_CSV, "w", newline="") as f:
             csv.writer(f).writerow([

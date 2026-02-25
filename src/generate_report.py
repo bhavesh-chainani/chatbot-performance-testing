@@ -13,6 +13,7 @@ Usage:
 """
 
 import csv
+import json
 import statistics
 import sys
 from datetime import datetime
@@ -22,6 +23,18 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 from config.test_config import REPORTS_DIR
+
+
+def load_run_meta(csv_path: Path, test_type: str) -> dict:
+    """Load run metadata (users, spawn_rate, host, run_time) if present."""
+    meta_path = csv_path.parent / f"run_meta_{test_type}.json"
+    if not meta_path.exists():
+        return {}
+    try:
+        with open(meta_path) as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return {}
 
 
 def load_csv(csv_path: Path) -> list[dict]:
@@ -63,7 +76,13 @@ def _esc(text: str) -> str:
     )
 
 
-def generate_html(rows: list[dict], test_type: str, exclude_empty_answers: bool = False) -> str:
+def generate_html(
+    rows: list[dict],
+    test_type: str,
+    exclude_empty_answers: bool = False,
+    run_meta: dict = None,
+) -> str:
+    run_meta = run_meta or {}
     if exclude_empty_answers:
         rows = [r for r in rows if r.get("answer", "").strip()]
     success_rows = [r for r in rows if r.get("status") == "Success"]
@@ -79,6 +98,26 @@ def generate_html(rows: list[dict], test_type: str, exclude_empty_answers: bool 
         cat_stats[cat] = compute_stats(cat_times)
 
     generated_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # Test run parameters (if available)
+    params_html = ""
+    if run_meta:
+        params_html = """
+<h2>Test Parameters</h2>
+<table class="params-table">
+<tbody>
+  <tr><td>Number of users (peak concurrency)</td><td>{users}</td></tr>
+  <tr><td>Spawn rate (users started/second)</td><td>{spawn_rate}</td></tr>
+  <tr><td>Host</td><td>{host}</td></tr>
+  <tr><td>Run time</td><td>{run_time}</td></tr>
+</tbody>
+</table>
+""".format(
+            users=run_meta.get("users", "—"),
+            spawn_rate=run_meta.get("spawn_rate", "—"),
+            host=_esc(str(run_meta.get("host", "—"))),
+            run_time=run_meta.get("run_time", "—"),
+        )
 
     cat_rows_html = ""
     for cat in categories:
@@ -174,12 +213,17 @@ def generate_html(rows: list[dict], test_type: str, exclude_empty_answers: bool 
   .rt-slow {{ color: var(--red); font-weight: 600; }}
 
   .footer {{ margin-top: 3rem; text-align: center; color: var(--muted); font-size: .8rem; }}
+
+  .params-table {{ max-width: 480px; margin-bottom: 2rem; }}
+  .params-table td:first-child {{ color: var(--muted); font-size: .85rem; }}
+  .params-table td:last-child {{ font-weight: 600; }}
 </style>
 </head>
 <body>
 
 <h1>Chatbot Performance Report — {_esc(test_type.upper())} Test</h1>
 <p class="subtitle">Generated {generated_at} &middot; {len(rows)} total requests &middot; {len(error_rows)} errors</p>
+{params_html}
 
 <div class="cards">
   <div class="card"><div class="value">{overall['count']}</div><div class="label">Successful Requests</div></div>
@@ -242,7 +286,8 @@ def main():
             continue
 
         test_type = rows[0].get("test_type", csv_path.stem.replace("response_times_", ""))
-        html = generate_html(rows, test_type, exclude_empty_answers=exclude_empty)
+        run_meta = load_run_meta(csv_path, test_type)
+        html = generate_html(rows, test_type, exclude_empty_answers=exclude_empty, run_meta=run_meta)
 
         out_path = csv_path.with_name(f"report_{test_type}.html")
         out_path.write_text(html)
