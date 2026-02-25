@@ -61,14 +61,32 @@ def on_test_start(environment, **kwargs):
     reports.mkdir(parents=True, exist_ok=True)
     RESPONSE_TIME_CSV = reports / f"response_times_{TEST_TYPE}.csv"
 
-    # Write run metadata for the report (users, spawn rate, host, run time)
+    # Use actual run params from Locust runner when available (UI/headless), else config
+    runner = getattr(environment, "runner", None)
+    users = getattr(runner, "target_user_count", None) if runner is not None else None
+    if users is None or users == 0:
+        users = ACTIVE_USERS
+    spawn_rate = getattr(runner, "spawn_rate", None) if runner is not None else None
+    if spawn_rate is None or spawn_rate == 0:
+        spawn_rate = ACTIVE_SPAWN_RATE
+    run_time = getattr(runner, "run_time", None) if runner is not None else None
+    if run_time is None:
+        opts = getattr(environment, "parsed_options", None)
+        run_time = getattr(opts, "run_time", None) if opts else None
+    if run_time is None:
+        run_time = ACTIVE_RUN_TIME
+    if isinstance(run_time, (int, float)):
+        run_time = f"{int(run_time)}s" if run_time else ACTIVE_RUN_TIME
+    host = CHATBOT_URL
+
+    # Write run metadata for the report
     meta_path = reports / f"run_meta_{TEST_TYPE}.json"
     with open(meta_path, "w") as f:
         json.dump({
-            "users": ACTIVE_USERS,
-            "spawn_rate": ACTIVE_SPAWN_RATE,
-            "host": CHATBOT_URL,
-            "run_time": ACTIVE_RUN_TIME,
+            "users": users,
+            "spawn_rate": spawn_rate,
+            "host": host,
+            "run_time": run_time,
         }, f, indent=2)
 
     if not RESPONSE_TIME_CSV.exists() or RESPONSE_TIME_CSV.stat().st_size == 0:
