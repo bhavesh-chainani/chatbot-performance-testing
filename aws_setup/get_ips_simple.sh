@@ -1,23 +1,23 @@
 #!/bin/bash
-# Get instance IP from CloudFormation stack
+# Get master and worker IPs from CloudFormation stack (full-scale)
 
 STACK_NAME=${1:-locust-cluster}
 AWS_REGION=${AWS_REGION:-$(aws configure get region)}
+KEY_PAIR=${KEY_PAIR:-locust-testing}
 
 if [ -z "$AWS_REGION" ]; then
     echo "Error: AWS region not set. Run 'aws configure' or set AWS_REGION"
     exit 1
 fi
 
-echo "Getting instance IP from stack: $STACK_NAME"
+echo "Stack: $STACK_NAME (region: $AWS_REGION)"
 echo ""
 
-# Check if stack exists
 STACK_STATUS=$(aws cloudformation describe-stacks \
-    --stack-name $STACK_NAME \
+    --stack-name "$STACK_NAME" \
     --query 'Stacks[0].StackStatus' \
     --output text \
-    --region $AWS_REGION 2>/dev/null)
+    --region "$AWS_REGION" 2>/dev/null)
 
 if [ -z "$STACK_STATUS" ] || [ "$STACK_STATUS" == "None" ]; then
     echo "Error: Stack '$STACK_NAME' not found!"
@@ -26,36 +26,58 @@ if [ -z "$STACK_STATUS" ] || [ "$STACK_STATUS" == "None" ]; then
     aws cloudformation list-stacks \
         --query 'StackSummaries[?StackStatus!=`DELETE_COMPLETE`].[StackName,StackStatus]' \
         --output table \
-        --region $AWS_REGION
+        --region "$AWS_REGION"
     echo ""
-    echo "Usage: ./aws_setup/get_ips_simple.sh <your-stack-name>"
+    echo "Usage: ./aws_setup/get_ips_simple.sh [stack-name]"
     exit 1
 fi
 
-echo "Stack Status: $STACK_STATUS"
-echo ""
-
-if [ "$STACK_STATUS" == "CREATE_IN_PROGRESS" ]; then
-    echo "Stack is still creating. Wait a few minutes and try again."
+if [ "$STACK_STATUS" == "CREATE_IN_PROGRESS" ] || [ "$STACK_STATUS" == "UPDATE_IN_PROGRESS" ]; then
+    echo "Stack is still updating. Wait a few minutes and try again."
     exit 1
 fi
 
-INSTANCE_IP=$(aws cloudformation describe-stacks \
-    --stack-name $STACK_NAME \
-    --query 'Stacks[0].Outputs[?OutputKey==`InstancePublicIP`].OutputValue' \
+MASTER_PUBLIC=$(aws cloudformation describe-stacks \
+    --stack-name "$STACK_NAME" \
+    --query 'Stacks[0].Outputs[?OutputKey==`MasterPublicIP`].OutputValue' \
     --output text \
-    --region $AWS_REGION)
+    --region "$AWS_REGION")
 
-if [ -n "$INSTANCE_IP" ] && [ "$INSTANCE_IP" != "None" ]; then
-    echo "=========================================="
-    echo "Instance Public IP: $INSTANCE_IP"
-    echo ""
-    echo "SSH Command:"
-    echo "  ssh -i ~/.ssh/locust-testing.pem ec2-user@$INSTANCE_IP"
-    echo ""
-    echo "Locust Web UI:"
-    echo "  http://$INSTANCE_IP:8089"
-    echo "=========================================="
-else
-    echo "Could not find instance IP. Check stack name and region."
+MASTER_PRIVATE=$(aws cloudformation describe-stacks \
+    --stack-name "$STACK_NAME" \
+    --query 'Stacks[0].Outputs[?OutputKey==`MasterPrivateIP`].OutputValue' \
+    --output text \
+    --region "$AWS_REGION")
+
+if [ -z "$MASTER_PUBLIC" ] || [ "$MASTER_PUBLIC" == "None" ]; then
+    echo "Could not find master IP. Check stack name and region."
+    exit 1
 fi
+
+echo "=========================================="
+echo "  Master + workers"
+echo "=========================================="
+echo ""
+echo "Master Public IP:  $MASTER_PUBLIC  (SSH + web UI)"
+echo "Master Private IP: $MASTER_PRIVATE  (use for workers: --master-host=$MASTER_PRIVATE)"
+echo ""
+echo "Locust Web UI:     http://$MASTER_PUBLIC:8089"
+echo ""
+echo "SSH to master:"
+echo "  ssh -i ~/.ssh/${KEY_PAIR}.pem ec2-user@$MASTER_PUBLIC"
+echo ""
+echo "Copy project to master:"
+echo "  scp -i ~/.ssh/${KEY_PAIR}.pem -r src/ config/ .env requirements.txt ec2-user@$MASTER_PUBLIC:~/chatbot-performance-testing/"
+echo ""
+echo "On master:  TEST_TYPE=load locust -f src/locustfile.py --master"
+echo "On workers: TEST_TYPE=load locust -f src/locustfile.py --worker --master-host=$MASTER_PRIVATE"
+echo "=========================================="
+echo ""
+echo "Worker instances (for copying files / starting workers):"
+aws ec2 describe-instances \
+    --region "$AWS_REGION" \
+    --filters "Name=tag:aws:cloudformation:stack-name,Values=$STACK_NAME" "Name=instance-state-name,Values=running" \
+    --query 'Reservations[*].Instances[*].[Tags[?Key==`Name`].Value | [0], PublicIpAddress]' \
+    --output text 2>/dev/null | while read -r name ip; do
+    [ -n "$ip" ] && echo "  $name  $ip"
+done

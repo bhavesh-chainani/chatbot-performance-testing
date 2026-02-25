@@ -6,12 +6,14 @@ Simulates real users logging in, sending questions, and receiving answers — th
 
 ## Test Types
 
-| Test | Users | Duration | Purpose |
-|------|------:|----------|---------|
-| **Load** | 10 | 5 min | Baseline under expected traffic |
-| **Stress** | 10 | 5 min | Beyond normal capacity |
-| **Endurance** | 10 | 10 min | Sustained load, detect degradation |
-| **Breakpoint** | ramp to 20 | 5 min | Find the breaking point |
+Config defaults are set for full-scale AWS (500–1000 users).
+
+| Test | Users (full-scale) | Duration | Purpose |
+|------|-------------------|----------|---------|
+| **Load** | 500 | 20 min | Baseline under expected traffic |
+| **Stress** | 750 | 20 min | Beyond normal capacity |
+| **Endurance** | 500 | 8 hours | Sustained load, detect degradation |
+| **Breakpoint** | ramp to 1000 | 30 min | Find the breaking point |
 
 ## Quick Start
 
@@ -42,7 +44,7 @@ Open `http://localhost:8089`, enter 10 users / spawn rate 2, and click Start.
 ./aws_setup/deploy_locust.sh
 ```
 
-Deploys a single `t3.small` instance (~$0.02/hr). See **[SIMPLE_SETUP.md](SIMPLE_SETUP.md)** for the full step-by-step guide.
+Deploys 1 master + 5 workers (full-scale). See **[AWS_SETUP.md](AWS_SETUP.md)** for step-by-step instructions.
 
 ### 4. Generate Report
 
@@ -67,12 +69,12 @@ Generates `reports/report_<test_type>.html` — shows every question asked, the 
 │   └── test_config.py         # Loads config, selects active profile via TEST_TYPE
 ├── aws_setup/
 │   ├── cloudformation/
-│   │   └── locust-cluster.yaml  # CloudFormation template (single t3.small)
-│   ├── deploy_locust.sh         # One-command deploy
-│   └── get_ips_simple.sh        # Retrieve instance IP
+│   │   └── locust-cluster-full.yaml  # Master + workers
+│   ├── deploy_locust.sh         # Deploy full-scale cluster
+│   └── get_ips_simple.sh        # Get master + worker IPs
 ├── .env                         # Your credentials (not committed)
 ├── requirements.txt
-├── SIMPLE_SETUP.md              # Full AWS setup walkthrough
+├── AWS_SETUP.md                 # AWS setup walkthrough
 └── README.md
 ```
 

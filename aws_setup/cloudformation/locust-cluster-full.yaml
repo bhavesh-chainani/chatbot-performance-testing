@@ -1,0 +1,219 @@
+# Full-scale Locust cluster: 1 master + up to 5 workers
+# For 500-1000 concurrent users (load / stress / endurance / breakpoint)
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Locust cluster for full-scale chatbot tests.
+  Sizing: 500 users (2-3 workers), 750 (3-4 workers), 1000 (5 workers).
+
+Parameters:
+  InstanceTypeMaster:
+    Type: String
+    Default: c5.large
+    Description: Master – web UI and coordination
+    AllowedValues:
+      - c5.large
+      - c5.xlarge
+      - t3.large
+      - t3.xlarge
+
+  InstanceTypeWorker:
+    Type: String
+    Default: c5.xlarge
+    Description: Workers – generate load (~200-250 users each)
+    AllowedValues:
+      - c5.large
+      - c5.xlarge
+      - c5.2xlarge
+      - t3.xlarge
+
+  WorkerCount:
+    Type: Number
+    Default: 5
+    MinValue: 2
+    MaxValue: 5
+    Description: "Workers: 2 for 500 users, 3-4 for 750, 5 for 1000"
+
+  KeyPairName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: EC2 Key Pair for SSH
+
+  AllowedCIDR:
+    Type: String
+    Default: 0.0.0.0/0
+    Description: CIDR for web UI and SSH
+
+Conditions:
+  HasWorker1: !Or [!Equals [!Ref WorkerCount, 2], !Equals [!Ref WorkerCount, 3], !Equals [!Ref WorkerCount, 4], !Equals [!Ref WorkerCount, 5]]
+  HasWorker2: !Or [!Equals [!Ref WorkerCount, 3], !Equals [!Ref WorkerCount, 4], !Equals [!Ref WorkerCount, 5]]
+  HasWorker3: !Or [!Equals [!Ref WorkerCount, 4], !Equals [!Ref WorkerCount, 5]]
+  HasWorker4: !Or [!Equals [!Ref WorkerCount, 5]]
+  HasWorker5: !Equals [!Ref WorkerCount, 5]
+
+Resources:
+  LocustSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Locust full-scale cluster
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8089
+          ToPort: 8089
+          CidrIp: !Ref AllowedCIDR
+          Description: Locust web UI
+        - IpProtocol: tcp
+          FromPort: 5557
+          ToPort: 5558
+          CidrIp: 0.0.0.0/0
+          Description: Master–worker
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref AllowedCIDR
+          Description: SSH
+
+  LocustMasterInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c55b159cbfafe1f0
+      InstanceType: !Ref InstanceTypeMaster
+      KeyName: !Ref KeyPairName
+      SecurityGroupIds:
+        - !Ref LocustSecurityGroup
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y
+          yum install -y python3 python3-pip git
+          pip3 install locust pyyaml python-dotenv requests boto3
+          pip3 install "urllib3<2.0" --upgrade
+          mkdir -p /home/ec2-user/chatbot-performance-testing/reports
+          chown -R ec2-user:ec2-user /home/ec2-user/chatbot-performance-testing
+      Tags:
+        - Key: Name
+          Value: locust-master
+        - Key: Purpose
+          Value: load-testing
+
+  LocustWorker1:
+    Type: AWS::EC2::Instance
+    Condition: HasWorker1
+    Properties:
+      ImageId: ami-0c55b159cbfafe1f0
+      InstanceType: !Ref InstanceTypeWorker
+      KeyName: !Ref KeyPairName
+      SecurityGroupIds:
+        - !Ref LocustSecurityGroup
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y
+          yum install -y python3 python3-pip git
+          pip3 install locust pyyaml python-dotenv requests boto3
+          pip3 install "urllib3<2.0" --upgrade
+          mkdir -p /home/ec2-user/chatbot-performance-testing
+          chown -R ec2-user:ec2-user /home/ec2-user/chatbot-performance-testing
+      Tags:
+        - Key: Name
+          Value: locust-worker-1
+  LocustWorker2:
+    Type: AWS::EC2::Instance
+    Condition: HasWorker2
+    Properties:
+      ImageId: ami-0c55b159cbfafe1f0
+      InstanceType: !Ref InstanceTypeWorker
+      KeyName: !Ref KeyPairName
+      SecurityGroupIds:
+        - !Ref LocustSecurityGroup
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y
+          yum install -y python3 python3-pip git
+          pip3 install locust pyyaml python-dotenv requests boto3
+          pip3 install "urllib3<2.0" --upgrade
+          mkdir -p /home/ec2-user/chatbot-performance-testing
+          chown -R ec2-user:ec2-user /home/ec2-user/chatbot-performance-testing
+      Tags:
+        - Key: Name
+          Value: locust-worker-2
+  LocustWorker3:
+    Type: AWS::EC2::Instance
+    Condition: HasWorker3
+    Properties:
+      ImageId: ami-0c55b159cbfafe1f0
+      InstanceType: !Ref InstanceTypeWorker
+      KeyName: !Ref KeyPairName
+      SecurityGroupIds:
+        - !Ref LocustSecurityGroup
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y
+          yum install -y python3 python3-pip git
+          pip3 install locust pyyaml python-dotenv requests boto3
+          pip3 install "urllib3<2.0" --upgrade
+          mkdir -p /home/ec2-user/chatbot-performance-testing
+          chown -R ec2-user:ec2-user /home/ec2-user/chatbot-performance-testing
+      Tags:
+        - Key: Name
+          Value: locust-worker-3
+  LocustWorker4:
+    Type: AWS::EC2::Instance
+    Condition: HasWorker4
+    Properties:
+      ImageId: ami-0c55b159cbfafe1f0
+      InstanceType: !Ref InstanceTypeWorker
+      KeyName: !Ref KeyPairName
+      SecurityGroupIds:
+        - !Ref LocustSecurityGroup
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y
+          yum install -y python3 python3-pip git
+          pip3 install locust pyyaml python-dotenv requests boto3
+          pip3 install "urllib3<2.0" --upgrade
+          mkdir -p /home/ec2-user/chatbot-performance-testing
+          chown -R ec2-user:ec2-user /home/ec2-user/chatbot-performance-testing
+      Tags:
+        - Key: Name
+          Value: locust-worker-4
+  LocustWorker5:
+    Type: AWS::EC2::Instance
+    Condition: HasWorker5
+    Properties:
+      ImageId: ami-0c55b159cbfafe1f0
+      InstanceType: !Ref InstanceTypeWorker
+      KeyName: !Ref KeyPairName
+      SecurityGroupIds:
+        - !Ref LocustSecurityGroup
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y
+          yum install -y python3 python3-pip git
+          pip3 install locust pyyaml python-dotenv requests boto3
+          pip3 install "urllib3<2.0" --upgrade
+          mkdir -p /home/ec2-user/chatbot-performance-testing
+          chown -R ec2-user:ec2-user /home/ec2-user/chatbot-performance-testing
+      Tags:
+        - Key: Name
+          Value: locust-worker-5
+
+Outputs:
+  MasterPublicIP:
+    Description: Master public IP (SSH + web UI)
+    Value: !GetAtt LocustMasterInstance.PublicIp
+    Export:
+      Name: !Sub '${AWS::StackName}-MasterPublicIP'
+  MasterPrivateIP:
+    Description: Master private IP (use for workers --master-host)
+    Value: !GetAtt LocustMasterInstance.PrivateIp
+    Export:
+      Name: !Sub '${AWS::StackName}-MasterPrivateIP'
+  LocustWebUI:
+    Description: Locust web UI URL
+    Value: !Sub 'http://${LocustMasterInstance.PublicIp}:8089'
+  SecurityGroupId:
+    Description: Security Group ID
+    Value: !Ref LocustSecurityGroup
