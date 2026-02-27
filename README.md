@@ -57,22 +57,7 @@ To run headless:
 TEST_TYPE=load locust -f src/locustfile.py --headless -u 10 -r 2 --run-time 5m
 ```
 
-## 3. Run on AWS (full-scale)
-
-To run full-scale (master + workers on EC2), use:
-
-```bash
-./aws_setup/deploy_locust.sh
-```
-
-Then follow **`AWS_SETUP.md`** for:
-
-- Getting master/worker IPs.  
-- Copying files to master and workers.  
-- Starting master (`--master`) and workers (`--worker --master-host=<master-private-ip>`).  
-- Downloading reports and cleaning up the stack.  
-
-## 4. Generate HTML Report
+## 3. Generate HTML Report
 
 After copying reports back to your machine:
 
@@ -103,11 +88,7 @@ This generates `reports/report_<test_type>.html` with:
 ├── config/
 │   ├── test_config.yaml       # Test profiles (users, spawn rate, run_time)
 │   └── test_config.py         # Loads config, selects active profile via TEST_TYPE
-├── aws_setup/
-│   ├── cloudformation/
-│   │   └── locust-cluster-full.yaml  # Full-scale: master + workers
-│   ├── deploy_locust.sh              # Deploy full-scale cluster
-│   └── get_ips_simple.sh             # Get master + worker IPs (SSH / commands)
+├── aws_setup/                        # AWS helpers (used on main branch; optional for simple_testing)
 ├── docs/
 │   ├── AWS_COSTS.md                  # EC2 cost + token estimates
 │   ├── TOKEN_SCOPE_ORIGINAL.md       # Original token scope (8h endurance)
