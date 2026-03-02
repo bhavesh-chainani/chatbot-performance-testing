@@ -11,21 +11,49 @@ The weights at the bottom control how frequently each category appears.
 # Fast responses expected - basic trade and certificate questions
 # ============================================================================
 DIRECT_QUESTIONS = [
-    "What is a Certificate of Origin?",
-    "What does PCO stand for?",
-    "What is an HS code?",
-    "What is an FTA?",
-    "What countries have FTAs with Singapore?",
-    "How do I contact SBF for trade advice?",
-    "What is a tariff?",
-    "What is customs clearance?",
-    "What is ASEAN?",
-    "What documents are needed for exporting?",
-    "What is a commercial invoice?",
-    "What is a packing list?",
-    "What is a bill of lading?",
-    "What is the difference between FOB and CIF?",
-    "What is a letter of credit?",
+    "Which Free Trade Agreements (FTAs) can I utilise when exporting umbrellas (HS Code: 6601.99.00.03) from Singapore to Australia?",
+    "I am importing blowers under 125kW from China to Singapore. I don't know the HS code of my product. Could you provide some suggestions?",
+    "We are a manufacturing company looking to export plastic bottles to customers in other countries. Can you please advise the steps and processes we have to take?",
+    "I would like to export beet sugar with HS code 1701.12 from Singapore to either Laos or New Zealand. What FTAs can I leverage?",
+    "My company manufactures porcelain cups in Singapore and sells them to customers in the Philippines. I would like to find out more about FTAs and whether they can help me in my exports.",
+    "I would like to export my product of HS 4819.60 from Singapore to India. What is the duty rate and what FTAs can I leverage?",
+    "Could you help me identify if my product with HS code 4415.10.01 is eligible for tariff concessions for export to Mexico from Singapore?",
+    "I would like to know more about the import duties for export from Singapore to US. HS code for my product is 9404.21.00.10. Estimated export value for each mattress is $150.",
+    "I am exporting meat with HS code 0210.19.90 from Singapore to Indonesia. The export value is 10,000 SGD. Which FTAs can I leverage?",
+    "Please provide guidance on enjoying FTA tariffs benefit for the export of S$100,000 worth of electric motors (HS code: 8501.10.10.30) from Singapore to the United Kingdom.",
+    "I am exporting T-Shirt with HS code 6109.10.10 from Singapore to Thailand. What FTAs would be beneficial for my export?",
+    "I have an energy product with HS code 2710.12.15.10 that is made in Canada and to be exported to the US. My goods do not meet the rules of origin under the USMCA. What is the tariff?",
+    "Are there any tariffs for the import of fresh apples with HS code 0808.10.00.45 into the US from Canada?",
+    "My company exports an energy resource with HS code 2710.12.18.05 from Mexico to the US, will there be additional tariffs?",
+    "I am exporting 1001.19.00.25 from Singapore to the US. Are there any additional tariffs?",
+    "I am exporting 3305.20 from Japan to the US. Are there any additional tariffs?",
+    "What tariff will my aluminium rods with HS code 7604.29.10.10 be subject to if it was manufactured in Russia and exported to the US?",
+    "I am importing iron pipes with HS code 7303.00.00.30 from Malaysia to the US. What are the additional tariffs that apply?",
+    "I am exporting umbrella parts with HS code 6603.90.41 from Brazil to the US. What are the additional tariffs?",
+    "I am exporting propulsion engines with HS code 8408.10.00.05 from Germany to the US. What tariffs apply?",
+    "I am an automobile manufacturer importing parts of a suspension system with HS code 8708.80.55 from Germany which will be assembled in the US. Am I eligible for lower tariffs?",
+    "I am exporting steel forgings of gear boxes with HS code 8708.40.75.70 from China to the US. What tariffs apply?",
+    "I am exporting fruits with HS code 0811.10.00.50 from Thailand to the US. What tariffs apply?",
+    "I am exporting salmon with HS code 0303.11 from Norway to the US. What tariffs apply?",
+    "I am exporting essential oils with HS code 3301.29.51.03 from France to the US. What tariffs apply?",
+    "I am exporting t-shirts with HS code 6109.10.00.14 from Colombia to the US. What tariffs apply?",
+    "What is the validity period of back-to-back COs issued by Singapore Customs, and can validity be extended?",
+    "Can we issue a back-to-back PCO when the import CO was issued under a different FTA than the export FTA?",
+    "What's the practical difference between RVC build-up and build-down methods and when is each preferable?",
+    "What are the consequences and corrective actions if I inadvertently use an incorrect HS code on a Certificate of Origin?",
+    "How do I identify appropriate HS codes and market requirements for exporting headphones to the Philippines?",
+    "What is Singapore Customs' approach to border controls against counterfeit goods?",
+    "How many FTAs has Singapore signed versus those currently in force, and where can I verify the latest status?",
+    "Can a non-preferential Certificate of Origin be issued after shipment, and what evidence is required?",
+    "Which agreements used by Singapore allow exporter self-certification, and what are the eligibility conditions?",
+    "How do I calculate RVC for a plastic household item under ATIGA and document it for possible verification?",
+    "When forming a Japan–Singapore joint-venture apparel retailer, which FTAs, domestic laws, and compliance obligations need to be taken into account?",
+    "What is the process to revise or correct a Manufacturing Cost Statement that has already been submitted?",
+    "In what ways do digital trade provisions in relevant agreements create sector-specific opportunities and advantages, and how do they improve market access and cross-border dealings?",
+    "Which official sources provide documentation or certification showing that companies from certain countries are eligible to participate in Singapore government procurement under specific agreements?",
+    "If software classified as strategic goods technology is hosted on a server in Singapore for global download, what authorisations are required under Singapore's Strategic Goods (Control) regime?",
+    "Where do I access certified lists or notices indicating country eligibility for Singapore public tenders under certain agreements?",
+    "What is the authoritative source for eligibility criteria and certifications for foreign suppliers in Singapore government procurement under specified agreements?",
 ]
 
 # ============================================================================
@@ -33,26 +61,23 @@ DIRECT_QUESTIONS = [
 # Detailed multi-part queries that may take longer to process
 # ============================================================================
 INDIRECT_QUESTIONS = [
-    "I'm exporting electronics to multiple ASEAN countries. Can you explain the complete process for obtaining Preferential Certificates of Origin for each country, including the specific requirements, documentation needed, and how to verify product eligibility under different FTAs?",
-    "I need to understand the full eligibility criteria for Back-to-back Preferential Certificate of Origin. Can you provide detailed information about the requirements, application process, supporting documents needed, processing time, and any common issues that might cause rejection?",
-    "My company manufactures products using components from multiple countries. How do I determine the origin of my finished product for FTA purposes, what documentation is required to prove origin, and which Free Trade Agreements would provide the best tariff benefits for my specific product category?",
-    "I'm new to international trade and need comprehensive guidance. Can you explain the differences between Ordinary Certificate of Origin and Preferential Certificate of Origin, when to use each, the application procedures, required documents, processing timelines, and how to check product eligibility for preferential tariffs under various FTAs?",
-    "I have a shipment ready to export but I'm unsure about certificate requirements. Can you help me determine which type of certificate I need, verify my product's eligibility for preferential treatment, guide me through the complete application process including all required documents, and explain how to avoid common mistakes that could delay or reject my application?",
-    "How do I determine substantial transformation for goods processed in Singapore for a Back-to-Back PCO?",
-    "What are the specific origin criteria differences between ASEAN-China FTA and RCEP for electronic components?",
-    "How do I handle cumulation of origin across multiple countries under RCEP?",
-    "What are the implications of third-country invoicing on PCO eligibility?",
-    "How do I navigate conflicting rules of origin between overlapping FTAs?",
-    "What strategies can I use to optimize tariff benefits across multiple FTAs?",
-    "How do I handle partial shipments with a single PCO?",
-    "What are the legal implications of incorrect origin declarations?",
-    "How do I manage product-specific rules vs. general rules for complex manufactured goods?",
-    "What documentation is required for proving origin when components come from multiple countries?",
-    "How do I handle retroactive issuance of PCOs for shipments already in transit?",
-    "What are the verification procedures if my PCO is challenged by foreign customs?",
-    "How do I calculate regional value content for products with components from multiple FTA partners?",
-    "What are the implications of minimal operations provisions on my manufacturing process?",
-    "How do I handle origin certification for goods that undergo processing in multiple countries?",
+    "Which Free Trade Agreements (FTAs) can I utilise when exporting compact disks (HS Code: 8523.41.10) from Singapore to Indonesia?",
+    "What is the PCO application process for the export of my product with HS code 3924.90.90 from Singapore to Vietnam with an estimated export value of 5,000 SGD under the ATIGA FTA?",
+    "I would like to leverage the AKFTA FTA for my export of 1701.12.20 from Singapore to South Korea. What is a PCO and how do I apply for it?",
+    "How do I qualify for preferential treatment under the ATIGA for my export of water pumps with HS code 8413.20.90 from Singapore to Indonesia?",
+    "We import fresh mangoes (HS 0804.50) from Indonesia into Singapore and plan to re-export them to the Philippines. Can we request a back-to-back PCO under ATIGA?",
+    "We import Korean cosmetics (HS 3304) under RCEP into Singapore and re-export to Japan with no further processing. Can we apply for a back-to-back RCEP certificate?",
+    "Can we ship goods directly from China to Indonesia with a Singapore invoice and still claim ACFTA preference?",
+    "We assemble vacuum cleaners (HS Code 8508.19.10) in Singapore from Chinese parts and export to Indonesia. Does simple assembly confer Singapore origin, or should we apply for a back-to-back PCO instead?",
+    "We import headphones (HS 8518.30.10) from China and sell to Vietnam. Can CPTPP preferences ever apply, and what proof would be required?",
+    "For shipments from Singapore to Australia with goods sourced from Japan and Korea, what are the steps to claim AANZFTA or RCEP preferences?",
+    "Under which FTAs, if any, can India-origin goods use a back-to-back mechanism via Singapore?",
+    "If I import products from South Korea into Singapore, store them in Singapore, and then export them to Vietnam. Is there any FTA I can use to obtain duty savings on import into Vietnam?",
+    "I import machinery parts from Japan to Singapore and would like to re-export to India. The HS code of the machinery parts are 8401.10. Am I eligible for any FTAs?",
+    "I import brooms with HS code 9603.10.20 from China to Singapore and would like to re-export to Malaysia. Am I eligible for any FTAs?",
+    "I import meat with HS code 0201.30.01 from Australia to Singapore and re-export to Japan. Am I eligible for preferential tariffs?",
+    "We plan to bring microprocessors (HS 8542.31) from Japan into Singapore for consolidation, then ship them to Indonesia. Can we claim preferential tariff treatment on the Indonesia leg?",
+    "I want to import semiconductor integrated circuits from South Korea to Singapore and intend to re-export them to Vietnam. The HS code is 8542.31. Am I eligible for any FTAs?",
 ]
 
 # ============================================================================
@@ -66,8 +91,8 @@ INDIRECT_QUESTIONS = [
 # - 1 direct question
 # - 3 indirect questions
 # ============================================================================
-DIRECT_WEIGHT = 1      # Direct questions
-INDIRECT_WEIGHT = 5    # Indirect questions
+DIRECT_WEIGHT = 2      # Direct questions
+INDIRECT_WEIGHT = 8    # Indirect questions
 
 # ============================================================================
 # Combined Sample Messages
