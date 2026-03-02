@@ -7,10 +7,10 @@ The weights at the bottom control how frequently each category appears.
 """
 
 # ============================================================================
-# Simple Questions
+# Direct Questions
 # Fast responses expected - basic trade and certificate questions
 # ============================================================================
-SIMPLE_QUESTIONS = [
+DIRECT_QUESTIONS = [
     "What is a Certificate of Origin?",
     "What does PCO stand for?",
     "What is an HS code?",
@@ -29,10 +29,10 @@ SIMPLE_QUESTIONS = [
 ]
 
 # ============================================================================
-# Complex Questions
+# Indirect Questions
 # Detailed multi-part queries that may take longer to process
 # ============================================================================
-COMPLEX_QUESTIONS = [
+INDIRECT_QUESTIONS = [
     "I'm exporting electronics to multiple ASEAN countries. Can you explain the complete process for obtaining Preferential Certificates of Origin for each country, including the specific requirements, documentation needed, and how to verify product eligibility under different FTAs?",
     "I need to understand the full eligibility criteria for Back-to-back Preferential Certificate of Origin. Can you provide detailed information about the requirements, application process, supporting documents needed, processing time, and any common issues that might cause rejection?",
     "My company manufactures products using components from multiple countries. How do I determine the origin of my finished product for FTA purposes, what documentation is required to prove origin, and which Free Trade Agreements would provide the best tariff benefits for my specific product category?",
@@ -61,13 +61,13 @@ COMPLEX_QUESTIONS = [
 # These weights control how frequently each category appears in the test
 # Higher weight = more frequent appearance
 #
-# Example: If SIMPLE_WEIGHT=1, COMPLEX_WEIGHT=3
+# Example: If DIRECT_WEIGHT=1, INDIRECT_WEIGHT=3
 # Then for every 4 questions, you'll get:
-# - 1 simple question
-# - 3 complex questions
+# - 1 direct question
+# - 3 indirect questions
 # ============================================================================
-SIMPLE_WEIGHT = 1      # Simple questions
-COMPLEX_WEIGHT = 5     # Complex questions
+DIRECT_WEIGHT = 1      # Direct questions
+INDIRECT_WEIGHT = 5    # Indirect questions
 
 # ============================================================================
 # Combined Sample Messages
@@ -78,8 +78,8 @@ COMPLEX_WEIGHT = 5     # Complex questions
 def get_sample_messages():
     """Get combined sample messages with weights applied"""
     return (
-        SIMPLE_QUESTIONS * SIMPLE_WEIGHT +
-        COMPLEX_QUESTIONS * COMPLEX_WEIGHT
+        DIRECT_QUESTIONS * DIRECT_WEIGHT +
+        INDIRECT_QUESTIONS * INDIRECT_WEIGHT
     )
 
 # ============================================================================
@@ -93,11 +93,11 @@ def get_question_category(message):
         message: The question text
 
     Returns:
-        str: Category name ("Simple", "Complex", or "Unknown")
+        str: Category name ("Direct", "Indirect", or "Unknown")
     """
-    if message in SIMPLE_QUESTIONS:
-        return "Simple"
-    elif message in COMPLEX_QUESTIONS:
-        return "Complex"
+    if message in DIRECT_QUESTIONS:
+        return "Direct"
+    elif message in INDIRECT_QUESTIONS:
+        return "Indirect"
     else:
         return "Unknown"

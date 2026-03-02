@@ -4,7 +4,7 @@ Generate an HTML report from Locust CSV results.
 
 Each report shows:
   - Summary statistics (min / avg / median / p95 / p99 / max response times)
-  - Per-category breakdown (Simple vs Complex)
+  - Per-category breakdown (Direct vs Indirect)
   - Full table of every request: question asked, answer received, e2e response time
 
 Usage:
