@@ -24,6 +24,29 @@ sys.path.insert(0, str(project_root))
 
 from config.test_config import REPORTS_DIR
 
+_ERROR_ANSWERS = [
+    "TAIA has encountered a connection error, please click message button on the right and we will contact you.",
+    "TAIA has encountered an error, please try again later. If you continue to experience this problem, please reach out to our support team via the message button for assistance. We appreciate your patience and apologize for any inconvenience.",
+    "I am unable to retrieve sufficient information at this time. For further guidance, please click the 'Email' button in the bottom right corner of the screen to arrange a call or a one-to-one advisory session. Our specialists can provide tailored insights based on your product and trade needs and help address any related queries or challenges.",
+]
+
+_ERROR_LABELS = {
+    _ERROR_ANSWERS[0]: "Connection Error",
+    _ERROR_ANSWERS[1]: "System Error",
+    _ERROR_ANSWERS[2]: "Insufficient Information",
+}
+
+
+def classify_error(answer: str) -> str:
+    """Return error label if the answer is blank or matches a known error, else empty string."""
+    if not answer or not answer.strip():
+        return "Empty Response"
+    stripped = answer.strip()
+    for msg, label in _ERROR_LABELS.items():
+        if stripped == msg:
+            return label
+    return ""
+
 
 def load_run_meta(csv_path: Path, test_type: str) -> dict:
     """Load run metadata (users, spawn_rate, host, run_time) if present."""
@@ -91,6 +114,19 @@ def generate_html(
 
     overall = compute_stats(all_times)
 
+    for r in rows:
+        r["error_type"] = classify_error(r.get("answer", ""))
+    content_errors = [r for r in rows if r["error_type"]]
+    total_requests = len(rows)
+    failed_requests = len(content_errors)
+    successful_requests = total_requests - failed_requests
+    error_rate = round((failed_requests / total_requests * 100), 1) if total_requests > 0 else 0.0
+    error_rate_color = "var(--red)" if error_rate > 5 else "var(--yellow)" if error_rate > 0 else "var(--green)"
+    error_breakdown = {}
+    for r in content_errors:
+        et = r["error_type"]
+        error_breakdown[et] = error_breakdown.get(et, 0) + 1
+
     categories = sorted(set(r.get("question_category", "Unknown") for r in success_rows))
     cat_stats = {}
     for cat in categories:
@@ -134,13 +170,37 @@ def generate_html(
                 <td>{s['max']}</td>
             </tr>"""
 
+    error_breakdown_rows = ""
+    for etype in sorted(error_breakdown):
+        count = error_breakdown[etype]
+        pct = round(count / total_requests * 100, 1) if total_requests > 0 else 0.0
+        error_breakdown_rows += f"""
+            <tr>
+                <td>{_esc(etype)}</td>
+                <td>{count}</td>
+                <td>{pct}%</td>
+            </tr>"""
+
+    error_table_html = ""
+    if error_breakdown_rows:
+        error_table_html = f"""
+<table>
+<thead><tr>
+  <th>Error Type</th><th>Count</th><th>% of Total</th>
+</tr></thead>
+<tbody>{error_breakdown_rows}
+</tbody>
+</table>"""
+
     detail_rows_html = ""
     for r in rows:
         rt = r["response_time_ms"]
         status = r.get("status", "")
-        status_cls = "success" if status == "Success" else "error"
+        error_type = r.get("error_type", "")
+        is_ok = status == "Success" and not error_type
+        status_cls = "success" if is_ok else "error"
         rt_cls = ""
-        if status == "Success":
+        if is_ok:
             if rt > 10000:
                 rt_cls = "rt-slow"
             elif rt > 5000:
@@ -149,6 +209,7 @@ def generate_html(
                 rt_cls = "rt-ok"
 
         answer_preview = _esc(r.get("answer", ""))[:300]
+        error_type_cell = f'<span class="error">{_esc(error_type)}</span>' if error_type else '—'
 
         detail_rows_html += f"""
             <tr>
@@ -158,6 +219,7 @@ def generate_html(
                 <td class="answer">{answer_preview}</td>
                 <td class="{rt_cls}">{round(rt, 1)}</td>
                 <td class="{status_cls}">{_esc(status)}</td>
+                <td>{error_type_cell}</td>
             </tr>"""
 
     return f"""<!DOCTYPE html>
@@ -244,11 +306,20 @@ def generate_html(
 </tbody>
 </table>
 
+<h2>Error Metrics</h2>
+<div class="cards">
+  <div class="card"><div class="value">{total_requests}</div><div class="label">Total Requests</div></div>
+  <div class="card"><div class="value" style="color: var(--green)">{successful_requests}</div><div class="label">Successful</div></div>
+  <div class="card"><div class="value" style="color: var(--red)">{failed_requests}</div><div class="label">Failed</div></div>
+  <div class="card"><div class="value" style="color: {error_rate_color}">{error_rate}%</div><div class="label">Error Rate</div></div>
+</div>
+{error_table_html}
+
 <h2>Request Details</h2>
 <table>
 <thead><tr>
   <th>Time</th><th>Category</th><th>Question</th><th>Answer</th>
-  <th>Response Time (ms)</th><th>Status</th>
+  <th>Response Time (ms)</th><th>Status</th><th>Error Type</th>
 </tr></thead>
 <tbody>{detail_rows_html}
 </tbody>

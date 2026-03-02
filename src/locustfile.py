@@ -49,6 +49,29 @@ from src.sample_questions import get_sample_messages, get_question_category
 
 SAMPLE_MESSAGES = get_sample_messages()
 
+_ERROR_ANSWERS = [
+    "TAIA has encountered a connection error, please click message button on the right and we will contact you.",
+    "TAIA has encountered an error, please try again later. If you continue to experience this problem, please reach out to our support team via the message button for assistance. We appreciate your patience and apologize for any inconvenience.",
+    "I am unable to retrieve sufficient information at this time. For further guidance, please click the 'Email' button in the bottom right corner of the screen to arrange a call or a one-to-one advisory session. Our specialists can provide tailored insights based on your product and trade needs and help address any related queries or challenges.",
+]
+
+_ERROR_LABELS = {
+    _ERROR_ANSWERS[0]: "Connection Error",
+    _ERROR_ANSWERS[1]: "System Error",
+    _ERROR_ANSWERS[2]: "Insufficient Information",
+}
+
+
+def _classify_error(answer: str) -> str:
+    """Return error label if the answer is blank or matches a known error, else empty string."""
+    if not answer or not answer.strip():
+        return "Empty Response"
+    stripped = answer.strip()
+    for msg, label in _ERROR_LABELS.items():
+        if stripped == msg:
+            return label
+    return ""
+
 # ---------------------------------------------------------------------------
 # CSV logging
 # ---------------------------------------------------------------------------
@@ -260,10 +283,16 @@ class ChatbotUser(HttpUser):
             answer_text = ""
 
             if resp.status_code in [200, 201]:
-                resp.success()
                 answer_text = _parse_sse_response(resp.text)
-                self._log(category, message, answer_text, response_time_ms,
-                          resp.status_code, "Success")
+                error_type = _classify_error(answer_text)
+                if error_type:
+                    resp.failure(f"Content error: {error_type}")
+                    self._log(category, message, answer_text, response_time_ms,
+                              resp.status_code, f"Error - {error_type}")
+                else:
+                    resp.success()
+                    self._log(category, message, answer_text, response_time_ms,
+                              resp.status_code, "Success")
             elif resp.status_code == 401:
                 resp.failure("401 Unauthorized – session cookie expired")
                 self.is_authenticated = False
