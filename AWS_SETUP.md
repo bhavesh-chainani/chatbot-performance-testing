@@ -44,7 +44,30 @@ CHATBOT_URL=https://cfoti.org
 SESSION_COOKIE=<paste-session-cookie-here>
 ```
 
-Cookie lasts ~24 hours; refresh if you get 401s.
+Cookie lasts ~24 hours; refresh if you get 401s. If the cookie expires or `.env` fails during a run, see [Update .env only](#update-env-only-when-session-expires-or-env-fails) below.
+
+---
+
+## Update .env only (when session expires or .env fails)
+
+When you update `.env` locally (e.g. new session cookie) and need to push it to the cluster **without** re-copying `src/`, `config/`, or reinstalling dependencies:
+
+1. **Get IPs** (if needed): `./aws_setup/get_ips_simple.sh` and set `MASTER_IP`, `WORKER_IP` (and any other worker IPs).
+
+2. **Upload .env to master:**
+   ```bash
+   scp -i ~/.ssh/locust-testing.pem .env ec2-user@$MASTER_IP:~/chatbot-performance-testing/
+   ```
+
+3. **Upload .env to each worker** (run once per worker IP):
+   ```bash
+   scp -i ~/.ssh/locust-testing.pem .env ec2-user@$WORKER_IP:~/chatbot-performance-testing/
+   ```
+
+4. **Restart Locust** so the new `.env` is loaded:
+   - On the master: stop the running Locust (Ctrl+C), then start again: `TEST_TYPE=load locust -f src/locustfile.py --master`.
+   - On each worker: stop the worker process (Ctrl+C or kill), then start again:  
+     `ssh -i ~/.ssh/locust-testing.pem ec2-user@$WORKER_IP "cd ~/chatbot-performance-testing && TEST_TYPE=load locust -f src/locustfile.py --worker --master-host=$MASTER_PRIVATE"`
 
 ---
 
@@ -185,6 +208,7 @@ aws cloudformation delete-stack --stack-name locust-cluster
 
 | Step            | What you do |
 |-----------------|-------------|
+| **Update .env only** | `scp -i ~/.ssh/locust-testing.pem .env ec2-user@$MASTER_IP:~/chatbot-performance-testing/` and same for each `$WORKER_IP`; then restart master and workers. |
 | 1 Deploy        | `./aws_setup/deploy_locust.sh` → key name `locust-testing` |
 | 2 IPs           | `./aws_setup/get_ips_simple.sh` → note master public, master private, worker IP(s) |
 | 3–4 Copy        | `scp -i ~/.ssh/locust-testing.pem ...` to master and each worker |
