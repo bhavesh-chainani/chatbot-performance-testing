@@ -57,7 +57,7 @@ if [ -z "$MASTER_PUBLIC" ] || [ "$MASTER_PUBLIC" == "None" ]; then
 fi
 
 echo "=========================================="
-echo "  Master + workers"
+echo "  Locust cluster (master + workers if any)"
 echo "=========================================="
 echo ""
 echo "Master Public IP:  $MASTER_PUBLIC  (SSH + web UI)"
@@ -71,22 +71,41 @@ echo ""
 echo "Copy project to master:"
 echo "  scp -i ~/.ssh/${KEY_PAIR}.pem -r src/ config/ .env requirements.txt ec2-user@$MASTER_PUBLIC:~/chatbot-performance-testing/"
 echo ""
-echo "On master:  TEST_TYPE=load locust -f src/locustfile.py --master"
-echo "On workers: TEST_TYPE=load locust -f src/locustfile.py --worker --master-host=$MASTER_PRIVATE"
+WORKER_COUNT=0
+while read -r name ip; do
+    if [ -n "$ip" ] && [ "$name" != "locust-master" ]; then
+        WORKER_COUNT=$((WORKER_COUNT + 1))
+    fi
+done < <(aws ec2 describe-instances \
+    --region "$AWS_REGION" \
+    --filters "Name=tag:aws:cloudformation:stack-name,Values=$STACK_NAME" "Name=instance-state-name,Values=running" \
+    --query 'Reservations[*].Instances[*].[Tags[?Key==`Name`].Value | [0], PublicIpAddress]' \
+    --output text 2>/dev/null)
+
+if [ "$WORKER_COUNT" -eq 0 ]; then
+  echo "On master (standalone):  TEST_TYPE=load locust -f src/locustfile.py   # no --master/--worker"
+else
+  echo "On master:  TEST_TYPE=load locust -f src/locustfile.py --master"
+  echo "On workers: TEST_TYPE=load locust -f src/locustfile.py --worker --master-host=$MASTER_PRIVATE"
+fi
 echo ""
 echo "Download reports (from local, in project dir):"
 echo "  scp -i ~/.ssh/${KEY_PAIR}.pem \"ec2-user@$MASTER_PUBLIC:~/chatbot-performance-testing/reports/*\" ./reports/"
 echo "=========================================="
 echo ""
-echo "Worker instances only (copy files + start worker):"
-aws ec2 describe-instances \
-    --region "$AWS_REGION" \
-    --filters "Name=tag:aws:cloudformation:stack-name,Values=$STACK_NAME" "Name=instance-state-name,Values=running" \
-    --query 'Reservations[*].Instances[*].[Tags[?Key==`Name`].Value | [0], PublicIpAddress]' \
-    --output text 2>/dev/null | while read -r name ip; do
-    if [ -n "$ip" ] && [ "$name" != "locust-master" ]; then
-        echo "  $name  $ip"
-        echo "    SSH:    ssh -i ~/.ssh/${KEY_PAIR}.pem ec2-user@$ip"
-        echo "    Worker: TEST_TYPE=load locust -f src/locustfile.py --worker --master-host=$MASTER_PRIVATE"
-    fi
-done
+echo "Worker instances (copy files + start worker):"
+if [ "$WORKER_COUNT" -eq 0 ]; then
+  echo "  (none – master-only deployment)"
+else
+  aws ec2 describe-instances \
+      --region "$AWS_REGION" \
+      --filters "Name=tag:aws:cloudformation:stack-name,Values=$STACK_NAME" "Name=instance-state-name,Values=running" \
+      --query 'Reservations[*].Instances[*].[Tags[?Key==`Name`].Value | [0], PublicIpAddress]' \
+      --output text 2>/dev/null | while read -r name ip; do
+      if [ -n "$ip" ] && [ "$name" != "locust-master" ]; then
+          echo "  $name  $ip"
+          echo "    SSH:    ssh -i ~/.ssh/${KEY_PAIR}.pem ec2-user@$ip"
+          echo "    Worker: TEST_TYPE=load locust -f src/locustfile.py --worker --master-host=$MASTER_PRIVATE"
+      fi
+  done
+fi

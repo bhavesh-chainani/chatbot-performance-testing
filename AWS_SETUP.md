@@ -15,9 +15,11 @@ Run everything from your **project directory** (where `src/`, `config/`, `.env`,
 | Endurance  | 500    | 2 hours  |
 | Breakpoint | to 1000| 30 min   |
 
-**Infrastructure:** 1 master + 2–5 workers. **Cost:** ~$5–$6 for all 4 tests in one go. See [docs/AWS_COSTS.md](docs/AWS_COSTS.md).
+**Infrastructure:** 1 master + **0–5 workers**. Use **0 workers** (master only) for smaller runs (e.g. ~100 users, 10 min); add workers for 500–1000 users. **Cost:** ~$5–$6 for all 4 tests with workers; master-only is ~\$0.02 per 10 min. See [docs/AWS_COSTS.md](docs/AWS_COSTS.md).
 
-**Multiple workers:** When you have more than one worker, every “worker” step (copy files, install deps, start worker, download reports) is run **once per worker**, using that worker’s IP. Master steps are always done once.
+**Master only (0 workers):** Deploy with "Number of workers" = **0**. On the master, run Locust in standalone mode (no `--master` or `--worker`). Good for 100 users, 10 min, 1/s spawn on one c5.large.
+
+**Multiple workers:** When you have 1+ workers, every “worker” step (copy files, install deps, start worker, download reports) is run **once per worker**, using that worker’s IP. Master steps are always done once.
 
 ---
 

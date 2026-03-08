@@ -19,7 +19,7 @@ from datetime import datetime
 from pathlib import Path
 
 from locust import task, between, events, LoadTestShape, HttpUser
-from locust.runners import WorkerRunner
+from locust.runners import WorkerRunner, Runner
 
 import sys
 project_root = Path(__file__).parent.parent
@@ -72,6 +72,22 @@ def _classify_error(answer: str) -> str:
             return label
     return ""
 
+
+# ---------------------------------------------------------------------------
+# Capture UI swarm params (LocalRunner does not persist spawn_rate from web UI)
+# ---------------------------------------------------------------------------
+_swarm_params = {"users": None, "spawn_rate": None}
+
+_original_runner_start = Runner.start
+
+def _capturing_start(self, user_count: int, spawn_rate: float, wait=False, user_classes=None):
+    _swarm_params["users"] = user_count
+    _swarm_params["spawn_rate"] = spawn_rate
+    return _original_runner_start(self, user_count, spawn_rate, wait, user_classes)
+
+Runner.start = _capturing_start
+
+
 # ---------------------------------------------------------------------------
 # CSV logging
 # ---------------------------------------------------------------------------
@@ -118,7 +134,7 @@ def on_test_start(environment, **kwargs):
         with open(RESPONSE_TIME_CSV, "w", newline="") as f:
             csv.writer(f).writerow([
                 "timestamp", "test_type", "question_category",
-                "question", "answer", "response_time_ms",
+                "question", "answer", "response_time_ms", "ttft_ms",
                 "status_code", "status",
             ])
 
@@ -132,6 +148,64 @@ def on_test_start(environment, **kwargs):
         f"=== Running {TEST_TYPE.upper()} test | "
         f"users={ACTIVE_USERS} | run_time={ACTIVE_RUN_TIME} ==="
     )
+
+
+def _format_run_time_for_meta(run_time) -> str:
+    """Convert run_time from runner (int/float seconds or str) to display string (e.g. 120 -> '2m')."""
+    if run_time is None:
+        return ACTIVE_RUN_TIME
+    if isinstance(run_time, str):
+        return run_time
+    sec = int(run_time)
+    if sec >= 3600:
+        h, r = divmod(sec, 3600)
+        if r == 0:
+            return f"{h}h"
+        m, s = divmod(r, 60)
+        if s == 0:
+            return f"{h}h{m}m" if m else f"{h}h"
+    if sec >= 60:
+        m, s = divmod(sec, 60)
+        if s == 0:
+            return f"{m}m"
+    return f"{sec}s"
+
+
+@events.test_stop.add_listener
+def on_test_stop(environment, **kwargs):
+    """Write run metadata at test end so the report shows the actual parameters used (UI or headless)."""
+    runner = getattr(environment, "runner", None)
+    if runner is None or isinstance(runner, WorkerRunner):
+        return
+    reports = Path(REPORTS_DIR)
+    reports.mkdir(parents=True, exist_ok=True)
+    # Prefer values captured from runner.start() (web UI passes these; LocalRunner does not persist spawn_rate)
+    users = _swarm_params.get("users")
+    if users is None:
+        users = getattr(runner, "target_user_count", None)
+    if users is None:
+        users = ACTIVE_USERS
+    spawn_rate = _swarm_params.get("spawn_rate")
+    if spawn_rate is None:
+        spawn_rate = getattr(runner, "spawn_rate", None)
+    if spawn_rate is None:
+        spawn_rate = ACTIVE_SPAWN_RATE
+    run_time = getattr(runner, "run_time", None)
+    if run_time is None:
+        opts = getattr(environment, "parsed_options", None)
+        run_time = getattr(opts, "run_time", None) if opts else None
+    run_time_str = _format_run_time_for_meta(run_time)
+    meta_path = reports / f"run_meta_{TEST_TYPE}.json"
+    try:
+        with open(meta_path, "w") as f:
+            json.dump({
+                "users": users,
+                "spawn_rate": spawn_rate,
+                "host": CHATBOT_URL,
+                "run_time": run_time_str,
+            }, f, indent=2)
+    except OSError:
+        pass
 
 
 # ---------------------------------------------------------------------------
@@ -272,42 +346,57 @@ class ChatbotUser(HttpUser):
         payload = {"message_content": message}
 
         start = time.time()
+        ttft_ms = None
         with self.client.post(
             f"{API_ENDPOINT_CHAT}?ticket_id={self.ticket_id}",
             json=payload,
             name=f"Chat [{category}]",
             catch_response=True,
             timeout=120,
+            stream=True,
         ) as resp:
+            lines = []
+            for line in resp.iter_lines():
+                if line is None:
+                    continue
+                try:
+                    decoded = line.decode("utf-8", errors="replace")
+                except Exception:
+                    decoded = str(line)
+                if ttft_ms is None and decoded.strip().startswith("data:"):
+                    ttft_ms = (time.time() - start) * 1000
+                lines.append(decoded)
             response_time_ms = (time.time() - start) * 1000
+            full_text = "\n".join(lines)
             answer_text = ""
 
             if resp.status_code in [200, 201]:
-                answer_text = _parse_sse_response(resp.text)
+                answer_text = _parse_sse_response(full_text)
                 error_type = _classify_error(answer_text)
                 if error_type:
                     resp.failure(f"Content error: {error_type}")
-                    self._log(category, message, answer_text, response_time_ms,
+                    self._log(category, message, answer_text, response_time_ms, ttft_ms,
                               resp.status_code, f"Error - {error_type}")
                 else:
                     resp.success()
-                    self._log(category, message, answer_text, response_time_ms,
+                    self._log(category, message, answer_text, response_time_ms, ttft_ms,
                               resp.status_code, "Success")
             elif resp.status_code == 401:
                 resp.failure("401 Unauthorized – session cookie expired")
                 self.is_authenticated = False
-                self._log(category, message, "", response_time_ms,
+                self._log(category, message, "", response_time_ms, ttft_ms,
                           resp.status_code, "401 Unauthorized")
             else:
                 resp.failure(f"Status {resp.status_code}")
-                self._log(category, message, "", response_time_ms,
+                self._log(category, message, "", response_time_ms, ttft_ms,
                           resp.status_code, f"Error {resp.status_code}")
 
     # -- logging --------------------------------------------------------------
-    def _log(self, category, question, answer, response_time_ms, status_code, status):
+    def _log(self, category, question, answer, response_time_ms, ttft_ms, status_code, status):
         try:
             if not RESPONSE_TIME_CSV:
                 return
+            ttft_val = round(ttft_ms, 2) if ttft_ms is not None else ""
             with open(RESPONSE_TIME_CSV, "a", newline="") as f:
                 csv.writer(f).writerow([
                     datetime.now().isoformat(),
@@ -316,6 +405,7 @@ class ChatbotUser(HttpUser):
                     question[:200],
                     answer[:500] if answer else "",
                     round(response_time_ms, 2),
+                    ttft_val,
                     status_code,
                     status,
                 ])

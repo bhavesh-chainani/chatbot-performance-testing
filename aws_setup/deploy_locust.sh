@@ -45,8 +45,8 @@ MASTER_TYPE=${MASTER_TYPE:-c5.large}
 read -p "Worker instance type [c5.xlarge]: " WORKER_TYPE
 WORKER_TYPE=${WORKER_TYPE:-c5.xlarge}
 
-read -p "Number of workers (2-5, use 5 for 1000 users) [5]: " WORKER_COUNT
-WORKER_COUNT=${WORKER_COUNT:-5}
+read -p "Number of workers (0 = master only, 1-5 = add workers; 0 for ~100 users, 5 for 1000) [0]: " WORKER_COUNT
+WORKER_COUNT=${WORKER_COUNT:-0}
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -80,7 +80,11 @@ if [ -z "$AMI_ID" ] || [ "$AMI_ID" == "None" ]; then
 fi
 
 echo "AMI: $AMI_ID"
-echo "Deploying: 1x $MASTER_TYPE master + ${WORKER_COUNT}x $WORKER_TYPE workers"
+if [ "$WORKER_COUNT" -eq 0 ]; then
+  echo "Deploying: 1x $MASTER_TYPE master only (no workers)"
+else
+  echo "Deploying: 1x $MASTER_TYPE master + ${WORKER_COUNT}x $WORKER_TYPE workers"
+fi
 echo ""
 
 sed "s/ami-0c55b159cbfafe1f0/$AMI_ID/g" "$SCRIPT_DIR/cloudformation/locust-cluster-full.yaml" > /tmp/locust-cluster-full.yaml
@@ -135,13 +139,17 @@ echo ""
 echo "1. Copy files to master:"
 echo "   scp -i ~/.ssh/$KEY_PAIR.pem -r src/ config/ .env requirements.txt ec2-user@$MASTER_IP:~/chatbot-performance-testing/"
 echo ""
-echo "2. SSH to master, install deps, start master:"
+echo "2. SSH to master, install deps, start Locust:"
 echo "   ssh -i ~/.ssh/$KEY_PAIR.pem ec2-user@$MASTER_IP"
 echo "   cd ~/chatbot-performance-testing && pip3 install -r requirements.txt"
-echo "   TEST_TYPE=load locust -f src/locustfile.py --master"
-echo ""
-echo "3. Copy files to each worker, start worker on each:"
-echo "   TEST_TYPE=load locust -f src/locustfile.py --worker --master-host=$MASTER_PRIVATE_IP"
+if [ "$WORKER_COUNT" -eq 0 ]; then
+  echo "   TEST_TYPE=load locust -f src/locustfile.py   # master only (no --master/--worker)"
+else
+  echo "   TEST_TYPE=load locust -f src/locustfile.py --master"
+  echo ""
+  echo "3. Copy files to each worker, start worker on each:"
+  echo "   TEST_TYPE=load locust -f src/locustfile.py --worker --master-host=$MASTER_PRIVATE_IP"
+fi
 echo ""
 echo "4. Open web UI: http://$MASTER_IP:8089"
 echo "=========================================="

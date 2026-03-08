@@ -1,9 +1,9 @@
-# Full-scale Locust cluster: 1 master + up to 5 workers
-# For 500-1000 concurrent users (load / stress / endurance / breakpoint)
+# Locust cluster: 1 master + 0–5 workers (0 = master only, good for ~100–200 users)
+# Scale: master only (0 workers) for small runs; add workers for 500–1000 users.
 AWSTemplateFormatVersion: '2010-09-09'
 Description: >
-  Locust cluster for full-scale chatbot tests.
-  Sizing: 500 users (2-3 workers), 750 (3-4 workers), 1000 (5 workers).
+  Locust cluster for chatbot load tests.
+  Master only (0 workers): ~100–200 users. With workers: 500 users (2-3), 750 (3-4), 1000 (5).
 
 Parameters:
   InstanceTypeMaster:
@@ -28,10 +28,10 @@ Parameters:
 
   WorkerCount:
     Type: Number
-    Default: 5
-    MinValue: 2
+    Default: 0
+    MinValue: 0
     MaxValue: 5
-    Description: "Workers: 2 for 500 users, 3-4 for 750, 5 for 1000"
+    Description: "Workers: 0 = master only (~100–200 users), 2 for 500, 3-4 for 750, 5 for 1000"
 
   KeyPairName:
     Type: AWS::EC2::KeyPair::KeyName
@@ -43,10 +43,10 @@ Parameters:
     Description: CIDR for web UI and SSH
 
 Conditions:
-  HasWorker1: !Or [!Equals [!Ref WorkerCount, 2], !Equals [!Ref WorkerCount, 3], !Equals [!Ref WorkerCount, 4], !Equals [!Ref WorkerCount, 5]]
-  HasWorker2: !Or [!Equals [!Ref WorkerCount, 3], !Equals [!Ref WorkerCount, 4], !Equals [!Ref WorkerCount, 5]]
-  HasWorker3: !Or [!Equals [!Ref WorkerCount, 4], !Equals [!Ref WorkerCount, 5]]
-  HasWorker4: !Equals [!Ref WorkerCount, 5]
+  HasWorker1: !Or [!Equals [!Ref WorkerCount, 1], !Equals [!Ref WorkerCount, 2], !Equals [!Ref WorkerCount, 3], !Equals [!Ref WorkerCount, 4], !Equals [!Ref WorkerCount, 5]]
+  HasWorker2: !Or [!Equals [!Ref WorkerCount, 2], !Equals [!Ref WorkerCount, 3], !Equals [!Ref WorkerCount, 4], !Equals [!Ref WorkerCount, 5]]
+  HasWorker3: !Or [!Equals [!Ref WorkerCount, 3], !Equals [!Ref WorkerCount, 4], !Equals [!Ref WorkerCount, 5]]
+  HasWorker4: !Or [!Equals [!Ref WorkerCount, 4], !Equals [!Ref WorkerCount, 5]]
   HasWorker5: !Equals [!Ref WorkerCount, 5]
 
 Resources:

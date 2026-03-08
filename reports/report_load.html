@@ -1,0 +1,1894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chatbot Performance Report – LOAD</title>
+<style>
+  :root {
+    --bg: #0f172a; --surface: #1e293b; --border: #334155;
+    --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8;
+    --green: #4ade80; --yellow: #fbbf24; --red: #f87171;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+    padding: 2rem; max-width: 1400px; margin: 0 auto;
+  }
+  h1 { color: var(--accent); font-size: 1.8rem; margin-bottom: .25rem; }
+  .subtitle { color: var(--muted); font-size: .9rem; margin-bottom: 2rem; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.2rem; text-align: center;
+  }
+  .card .value { font-size: 2rem; font-weight: 700; color: var(--accent); }
+  .card .label { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+
+  h2 { font-size: 1.2rem; margin: 2rem 0 1rem; color: var(--accent); }
+
+  table {
+    width: 100%; border-collapse: collapse; font-size: .85rem;
+    background: var(--surface); border-radius: 8px; overflow: hidden;
+  }
+  th {
+    background: #0f172a; color: var(--muted); text-transform: uppercase;
+    font-size: .75rem; letter-spacing: .05em; padding: .75rem 1rem; text-align: left;
+  }
+  td { padding: .6rem 1rem; border-top: 1px solid var(--border); }
+  tr:hover td { background: rgba(56, 189, 248, 0.04); }
+
+  .question { max-width: 320px; word-break: break-word; }
+  .answer { max-width: 380px; word-break: break-word; color: var(--muted); font-size: .8rem; }
+  .ts { white-space: nowrap; color: var(--muted); font-size: .8rem; }
+
+  .success { color: var(--green); font-weight: 600; }
+  .error   { color: var(--red); font-weight: 600; }
+  .rt-ok   { color: var(--green); font-weight: 600; }
+  .rt-warn { color: var(--yellow); font-weight: 600; }
+  .rt-slow { color: var(--red); font-weight: 600; }
+
+  .footer { margin-top: 3rem; text-align: center; color: var(--muted); font-size: .8rem; }
+
+  .params-table { max-width: 480px; margin-bottom: 2rem; }
+  .params-table td:first-child { color: var(--muted); font-size: .85rem; }
+  .params-table td:last-child { font-weight: 600; }
+</style>
+</head>
+<body>
+
+<h1>Chatbot Performance Report — LOAD Test</h1>
+<p class="subtitle">Generated 2026-03-08 17:43:48 &middot; 108 total requests &middot; 24 errors</p>
+
+<h2>Test Parameters</h2>
+<table class="params-table">
+<tbody>
+  <tr><td>Number of users (peak concurrency)</td><td>2</td></tr>
+  <tr><td>Spawn rate (users started/second)</td><td>1</td></tr>
+  <tr><td>Host</td><td>https://cfoti.org</td></tr>
+  <tr><td>Run time</td><td>3m</td></tr>
+</tbody>
+</table>
+
+
+<div class="cards">
+  <div class="card"><div class="value">84</div><div class="label">Successful Requests</div></div>
+  <div class="card"><div class="value">51282.5 ms</div><div class="label">Avg Response Time</div></div>
+  <div class="card"><div class="value">52405.9 ms</div><div class="label">Median (p50)</div></div>
+  <div class="card"><div class="value">82417.1 ms</div><div class="label">p95 Response Time</div></div>
+  <div class="card"><div class="value">108321.7 ms</div><div class="label">p99 Response Time</div></div>
+  <div class="card"><div class="value">108321.7 ms</div><div class="label">Max Response Time</div></div>
+</div>
+
+<div class="cards">
+  <div class="card"><div class="value">84</div><div class="label">TTFT Sample Count</div></div>
+  <div class="card"><div class="value">6489.4 ms</div><div class="label">Avg Time to First Token</div></div>
+  <div class="card"><div class="value">5116.2 ms</div><div class="label">Median TTFT (p50)</div></div>
+  <div class="card"><div class="value">14937.3 ms</div><div class="label">p95 TTFT</div></div>
+  <div class="card"><div class="value">38238.4 ms</div><div class="label">p99 TTFT</div></div>
+  <div class="card"><div class="value">38238.4 ms</div><div class="label">Max TTFT</div></div>
+</div>
+
+<h2>Response Time by Category</h2>
+<table>
+<thead><tr>
+  <th>Category</th><th>Count</th><th>Min (ms)</th><th>Avg (ms)</th>
+  <th>Median (ms)</th><th>p95 (ms)</th><th>p99 (ms)</th><th>Max (ms)</th>
+</tr></thead>
+<tbody>
+            <tr>
+                <td>Direct</td>
+                <td>29</td>
+                <td>16816.7</td>
+                <td>42958.0</td>
+                <td>47052.3</td>
+                <td>67582.5</td>
+                <td>69721.4</td>
+                <td>69721.4</td>
+            </tr>
+            <tr>
+                <td>Indirect</td>
+                <td>55</td>
+                <td>21730.7</td>
+                <td>55671.9</td>
+                <td>53072.1</td>
+                <td>84317.4</td>
+                <td>108321.7</td>
+                <td>108321.7</td>
+            </tr>
+</tbody>
+</table>
+
+<h2>Time to First Token by Category</h2>
+<table>
+<thead><tr>
+  <th>Category</th><th>Count</th><th>Min (ms)</th><th>Avg (ms)</th>
+  <th>Median (ms)</th><th>p95 (ms)</th><th>p99 (ms)</th><th>Max (ms)</th>
+</tr></thead>
+<tbody>
+            <tr>
+                <td>Direct</td>
+                <td>29</td>
+                <td>3136.2</td>
+                <td>6283.1</td>
+                <td>4959.3</td>
+                <td>9263.1</td>
+                <td>38238.4</td>
+                <td>38238.4</td>
+            </tr>
+            <tr>
+                <td>Indirect</td>
+                <td>55</td>
+                <td>3745.7</td>
+                <td>6598.2</td>
+                <td>5248.4</td>
+                <td>18280.0</td>
+                <td>18756.1</td>
+                <td>18756.1</td>
+            </tr>
+</tbody>
+</table>
+
+<h2>Error Metrics</h2>
+<div class="cards">
+  <div class="card"><div class="value">108</div><div class="label">Total Requests</div></div>
+  <div class="card"><div class="value" style="color: var(--green)">84</div><div class="label">Successful</div></div>
+  <div class="card"><div class="value" style="color: var(--red)">24</div><div class="label">Failed</div></div>
+  <div class="card"><div class="value" style="color: var(--red)">22.2%</div><div class="label">Error Rate</div></div>
+</div>
+
+<table>
+<thead><tr>
+  <th>Error Type</th><th>Count</th><th>% of Total</th>
+</tr></thead>
+<tbody>
+            <tr>
+                <td>Empty Response</td>
+                <td>24</td>
+                <td>22.2%</td>
+            </tr>
+</tbody>
+</table>
+
+<h2>Request Details</h2>
+<table>
+<thead><tr>
+  <th>Time</th><th>Category</th><th>Question</th><th>Answer</th>
+  <th>Response Time (ms)</th><th>TTFT (ms)</th><th>Status</th><th>Error Type</th>
+</tr></thead>
+<tbody>
+            <tr>
+                <td class="ts">2026-03-08T16:56:33</td>
+                <td>Indirect</td>
+                <td class="question">I import machinery parts from Japan to Singapore and would like to re-export to India. The HS code of the machinery parts are 8401.10. Am I eligible for any FTAs?</td>
+                <td class="answer"></td>
+                <td class="">5055.1</td>
+                <td>5055.0</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:56:37</td>
+                <td>Direct</td>
+                <td class="question">What is the validity period of back-to-back COs issued by Singapore Customs, and can validity be extended?</td>
+                <td class="answer">I encountered technical difficulties accessing both the knowledge base and glossary tools to retrieve information about the validity period of back-to-back Certificates of Origin (COs) issued by Singapore Customs.
+
+## What I attempted to do:
+
+- ✅ Called the current datetime tool to track response ti</td>
+                <td class="rt-slow">16816.7</td>
+                <td>3414.1</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:56:51</td>
+                <td>Indirect</td>
+                <td class="question">I import brooms with HS code 9603.10.20 from China to Singapore and would like to re-export to Malaysia. Am I eligible for any FTAs?</td>
+                <td class="answer"></td>
+                <td class="">14354.0</td>
+                <td>4278.6</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:57:02</td>
+                <td>Direct</td>
+                <td class="question">I want to export medicinal herbs (HS 1211.90) from Singapore to the EU. Which agreement applies?</td>
+                <td class="answer"># Export of Medicinal Herbs (HS 1211.90) from Singapore to the EU
+
+## Applicable Trade Agreement
+
+For exporting medicinal herbs classified under **HS Code 1211.90** from **Singapore** to the **European Union**, the applicable agreement is:
+
+### **EUSFTA (European Union-Singapore Free Trade Agreement</td>
+                <td class="rt-slow">40312.0</td>
+                <td>3649.1</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:57:05</td>
+                <td>Direct</td>
+                <td class="question">I am importing blowers under 125kW from China to Singapore. I don't know the HS code of my product. Could you provide some suggestions?</td>
+                <td class="answer"></td>
+                <td class="">10259.8</td>
+                <td>7950.8</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:57:07</td>
+                <td>Indirect</td>
+                <td class="question">Under which FTAs, if any, can India-origin goods use a back-to-back mechanism via Singapore?</td>
+                <td class="answer"># Back-to-Back PCO Eligibility for India-Origin Goods via Singapore
+
+## Current Analysis
+
+Based on the available system data, I have identified the following FTA framework involving both India and Singapore:
+
+### FTA Membership (Source: Mendel Tool - Country List Check)
+
+| FTA/Agreement | Status | M</td>
+                <td class="rt-slow">44655.8</td>
+                <td>4308.7</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:57:11</td>
+                <td>Direct</td>
+                <td class="question">How many FTAs has Singapore signed versus those currently in force, and where can I verify the latest status?</td>
+                <td class="answer">Based on the information retrieved from web sources, here is what I found regarding Singapore's FTA status:
+
+## Singapore's FTA Portfolio
+
+According to the search results from **Enterprise Singapore's official resources** (as of 2024):
+
+- **Total FTAs Signed**: 31 free trade agreements
+- **FTAs Curr</td>
+                <td class="rt-slow">46719.4</td>
+                <td>3702.3</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:57:14</td>
+                <td>Indirect</td>
+                <td class="question">Our company sources components from China, Thailand, and Malaysia and assembles electronic switches (HS 8536.50) in Singapore for export to Australia. Can we claim Singapore origin under AANZFTA, and </td>
+                <td class="answer">Based on the information retrieved from our system, I can provide you with the following analysis regarding claiming Singapore origin under AANZFTA for your electronic switches (HS 8536.50):
+
+---
+
+## Rules of Origin Under AANZFTA
+
+### Product Information
+- **HS Code:** 8536.50
+- **Description:** Oth</td>
+                <td class="rt-slow">50096.1</td>
+                <td>5419.7</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:57:18</td>
+                <td>Direct</td>
+                <td class="question">Where do I get help with FTA and Certificate of Origin queries in Singapore?</td>
+                <td class="answer"></td>
+                <td class="">5519.1</td>
+                <td>3536.5</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:57:20</td>
+                <td>Indirect</td>
+                <td class="question">We import wine (HS 2204) from Australia under the Singapore-Australia FTA and store it in a bonded warehouse. When we re-export to Japan, can we claim preference under RCEP or CPTPP, and what evidence</td>
+                <td class="answer"># Back-to-Back Preferential Certificate of Origin (B2B PCO) Analysis
+## Wine (HS 2204) from Australia → Singapore → Japan
+
+---
+
+### Your Scenario Summary
+- **Product:** Wine (HS Code 2204)
+- **Movement:** Australia → Singapore (bonded warehouse) → Japan
+- **Current FTA:** Singapore-Australia FTA (SA</td>
+                <td class="rt-slow">60200.8</td>
+                <td>4819.5</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:57:20</td>
+                <td>Indirect</td>
+                <td class="question">What are the steps and timelines to apply for a PCO under the Digital Economy Agreement between Singapore and Australia, and how does it differ from the standard goods FTA process?</td>
+                <td class="answer"></td>
+                <td class="">16148.5</td>
+                <td>5177.1</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:57:22</td>
+                <td>Indirect</td>
+                <td class="question">We import wine (HS 2204) from Australia under the Singapore-Australia FTA and store it in a bonded warehouse. When we re-export to Japan, can we claim preference under RCEP or CPTPP, and what evidence</td>
+                <td class="answer"># Back-to-Back Preferential Certificate of Origin (B2B PCO) Analysis
+
+## Your Scenario
+- **Product**: Wine (HS Code 2204)
+- **Movement**: Australia → Singapore (bonded warehouse) → Japan
+- **Processing in Singapore**: No processing (storage only in bonded warehouse)
+- **Current Import**: Under Singa</td>
+                <td class="rt-slow">56167.7</td>
+                <td>5015.8</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:57:28</td>
+                <td>Direct</td>
+                <td class="question">Which official sources provide documentation or certification showing that companies from certain countries are eligible to participate in Singapore government procurement under specific agreements?</td>
+                <td class="answer">I apologize, but I'm currently unable to retrieve information about official sources for Singapore government procurement documentation and certification due to technical connectivity issues with my knowledge base and glossary systems.
+
+## What I Was Attempting to Research
+
+Your question relates to </td>
+                <td class="rt-slow">18424.7</td>
+                <td>3687.4</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:57:28</td>
+                <td>Direct</td>
+                <td class="question">How long does it take to get a PCO from Singapore Customs for ATIGA export to Thailand?</td>
+                <td class="answer">### Processing Time for ATIGA PCO from Singapore Customs
+
+I attempted to retrieve the specific processing time information for obtaining a Preferential Certificate of Origin (PCO) from Singapore Customs for exports to Thailand under ATIGA (ASEAN Trade in Goods Agreement). However, I was unable to ac</td>
+                <td class="rt-slow">59566.8</td>
+                <td>38238.4</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:57:29</td>
+                <td>Indirect</td>
+                <td class="question">We plan to bring microprocessors (HS 8542.31) from Japan into Singapore for consolidation, then ship them to Indonesia. Can we claim preferential tariff treatment on the Indonesia leg?</td>
+                <td class="answer"># Back-to-Back Preferential Certificate of Origin (B2B PCO) Analysis
+
+## Your Trade Scenario
+
+**Product:** Microprocessors  
+**HS Code:** 854231  
+**Movement:** Japan → Singapore (consolidation) → Indonesia  
+**Processing in Singapore:** No (consolidation only)
+
+---
+
+## Tariff Analysis for Indonesia</td>
+                <td class="rt-slow">62924.2</td>
+                <td>3870.5</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:57:41</td>
+                <td>Direct</td>
+                <td class="question">I want to export medicinal herbs (HS 1211.90) from Singapore to the EU. Which agreement applies?</td>
+                <td class="answer"># Export of Medicinal Herbs (HS 1211.90) from Singapore to the European Union
+
+## Applicable Agreement
+
+**EUSFTA (European Union-Singapore Free Trade Agreement)** applies to your export of medicinal herbs from Singapore to the EU.
+
+**Source:** Mendel Tool (HS Code: 1211.90, Origin: Singapore, Destin</td>
+                <td class="rt-slow">60717.9</td>
+                <td>4065.7</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:57:49</td>
+                <td>Direct</td>
+                <td class="question">Where do I access certified lists or notices indicating country eligibility for Singapore public tenders under certain agreements?</td>
+                <td class="answer">I apologize, but I'm currently unable to retrieve information about official sources for Singapore government procurement documentation and certification due to technical connectivity issues with my knowledge base and glossary systems.
+
+## What I Was Attempting to Research
+
+Your question relates to </td>
+                <td class="rt-slow">19800.0</td>
+                <td>4838.9</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:57:51</td>
+                <td>Indirect</td>
+                <td class="question">For shipments from Singapore to Australia with goods sourced from Japan and Korea, what are the steps to claim AANZFTA or RCEP preferences?</td>
+                <td class="answer"># Analysis: Steps to Claim AANZFTA or RCEP Preferences for Japan/Korea → Singapore → Australia Shipments
+
+Based on the information retrieved, I can provide you with a preliminary analysis of your Back-to-Back PCO scenario:
+
+---
+
+## FTA Eligibility Assessment
+
+### For Goods Originating from **Japan**</td>
+                <td class="rt-slow">36251.3</td>
+                <td>5003.1</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:57:58</td>
+                <td>Indirect</td>
+                <td class="question">Under which FTAs, if any, can India-origin goods use a back-to-back mechanism via Singapore?</td>
+                <td class="answer">## Analysis: Back-to-Back PCO Eligibility for India-Origin Goods via Singapore
+
+---
+
+### Current Status of Your Enquiry
+
+Based on the B2B PCO (Back-to-Back Preferential Certificate of Origin) workflow, I have assessed your request but **cannot provide a complete answer** due to missing critical info</td>
+                <td class="rt-slow">41416.1</td>
+                <td>4623.0</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:58:11</td>
+                <td>Indirect</td>
+                <td class="question">Can we use exporter self-certification under the UK-Singapore FTA for our exports of pharmaceutical products (HS 3004), and what are the exact conditions and record-keeping requirements?</td>
+                <td class="answer"># Exporter Self-Certification under UK-Singapore FTA
+
+## Your Export Scenario
+
+**Product:** Pharmaceutical products  
+**HS Code:** 3004  
+**Export Route:** Singapore → United Kingdom  
+**FTA:** UK-Singapore Digital Economy Agreement (UK-Singapore FTA)
+
+---
+
+## ✅ YES - Self-Certification is Available</td>
+                <td class="rt-slow">36262.7</td>
+                <td>4790.7</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:58:13</td>
+                <td>Indirect</td>
+                <td class="question">Which Free Trade Agreements (FTAs) can I utilise when exporting compact disks (HS Code: 8523.41.10) from Singapore to Indonesia?</td>
+                <td class="answer"># Free Trade Agreements (FTAs) for Exporting Compact Disks from Singapore to Indonesia
+
+## Product Information
+- **HS Code:** 8523.41.10
+- **Product Description:** Optical media - Unrecorded (Compact Disks)
+- **Country of Origin:** Singapore
+- **Destination Country:** Indonesia
+
+---
+
+## Important No</td>
+                <td class="rt-slow">52759.0</td>
+                <td>3856.2</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:58:15</td>
+                <td>Indirect</td>
+                <td class="question">We import Korean cosmetics (HS 3304) under RCEP into Singapore and re-export to Japan with no further processing. Can we apply for a back-to-back RCEP certificate?</td>
+                <td class="answer"># Back-to-Back RCEP Certificate of Origin Eligibility Assessment
+
+## Your Trade Scenario
+
+**Product:** Korean cosmetics (HS Code 3304)  
+**Trade Route:** South Korea → Singapore → Japan  
+**Processing in Singapore:** No further processing  
+**FTA in Question:** RCEP (Regional Comprehensive Economic </td>
+                <td class="rt-slow">52814.4</td>
+                <td>6447.4</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:58:17</td>
+                <td>Indirect</td>
+                <td class="question">I would like to leverage the AKFTA FTA for my export of 1701.12.20 from Singapore to South Korea. What is a PCO and how do I apply for it?</td>
+                <td class="answer"># Preferential Certificate of Origin (PCO) for AKFTA Exports
+
+## Your Export Details
+- **Product**: HS Code 1701.12.20 (Beet sugar)
+- **Origin**: Singapore
+- **Destination**: South Korea
+- **Intended FTA**: AKFTA (ASEAN-Korea Free Trade Area)
+
+---
+
+## What is a Preferential Certificate of Origin (PC</td>
+                <td class="rt-slow">53072.1</td>
+                <td>4720.0</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:58:25</td>
+                <td>Indirect</td>
+                <td class="question">I want to import semiconductor integrated circuits from South Korea to Singapore and intend to re-export them to Vietnam. The HS code is 8542.31. Am I eligible for any FTAs?</td>
+                <td class="answer">## FTA Eligibility for Back-to-Back PCO: South Korea → Singapore → Vietnam
+
+---
+
+### Your Trade Scenario
+
+**Product**: Semiconductor integrated circuits  
+**HS Code**: 8542.31  
+**Origin Country**: South Korea  
+**Intermediate Country**: Singapore  
+**Final Destination**: Vietnam  
+**Movement**: Imp</td>
+                <td class="rt-slow">54623.1</td>
+                <td>3745.7</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:58:26</td>
+                <td>Direct</td>
+                <td class="question">Could you help me identify if my product with HS code 4415.10.01 is eligible for tariff concessions for export to Mexico from Singapore?</td>
+                <td class="answer"># Tariff Concession Eligibility Analysis
+## HS Code 4415.10.01 | Singapore → Mexico
+
+---
+
+## ✅ Executive Summary
+
+**Yes, your product is eligible for tariff concessions under the CPTPP (Comprehensive and Progressive Agreement for Trans-Pacific Partnership).**
+
+Your goods can benefit from a **prefere</td>
+                <td class="rt-slow">62291.4</td>
+                <td>6441.3</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:58:35</td>
+                <td>Indirect</td>
+                <td class="question">We export organic fertiliser (HS 3101) from Singapore to New Zealand. Under CPTPP, what are the rules of origin and any product-specific requirements we must meet?</td>
+                <td class="answer"># Export of Organic Fertiliser (HS 3101) from Singapore to New Zealand under CPTPP
+
+## Important Notice Regarding HS Code 3101
+
+**⚠️ System Limitation Identified:**
+
+The Mendel system indicates: **&quot;No information about duties and taxes for this HS code in our system.&quot;**
+
+This suggests that</td>
+                <td class="rt-slow">50520.3</td>
+                <td>4163.6</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:58:42</td>
+                <td>Direct</td>
+                <td class="question">Can we issue a back-to-back PCO when the import CO was issued under a different FTA than the export FTA?</td>
+                <td class="answer"># Back-to-Back PCO Across Different FTAs
+
+## Your Question
+
+**Can a back-to-back Preferential Certificate of Origin (B2B PCO) be issued when the import Certificate of Origin was issued under a different FTA than the export FTA?**
+
+---
+
+## Current Analysis Status
+
+⚠️ **System Connectivity Issues Enco</td>
+                <td class="rt-slow">28917.5</td>
+                <td>4869.3</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:58:47</td>
+                <td>Indirect</td>
+                <td class="question">We have an existing PCO but the importer says the HS code on the certificate does not match their customs declaration. How do we correct or reissue the certificate, and will it affect the validity per</td>
+                <td class="answer"># PCO Correction and Reissuance for HS Code Mismatch
+
+## Your Situation
+You have an existing Preferential Certificate of Origin (PCO) for exporting compact disks (HS Code: 8523.41.10) from Singapore to Indonesia, but the importer reports that the HS code on the certificate does not match their custo</td>
+                <td class="rt-slow">30778.8</td>
+                <td>4635.9</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:58:49</td>
+                <td>Indirect</td>
+                <td class="question">If I import products from South Korea into Singapore, store them in Singapore, and then export them to Vietnam. Is there any FTA I can use to obtain duty savings on import into Vietnam?</td>
+                <td class="answer"></td>
+                <td class="">30262.8</td>
+                <td>18969.4</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:58:50</td>
+                <td>Indirect</td>
+                <td class="question">We have a back-to-back PCO under RCEP for goods from Japan. The buyer in Indonesia wants to split the shipment into two consignments over two months. Is the original PCO still valid, and what do we ne</td>
+                <td class="answer">Split Shipment Under RCEP Back-to-Back PCO
+
+I understand you have **multiple questions** in your message. Let me address them systematically:
+
+---
+
+## Question 1: India-Origin Goods Using Back-to-Back Mechanism via Singapore
+
+**Unfortunately, I cannot provide a complete answer** to this question due</td>
+                <td class="rt-slow">48241.1</td>
+                <td>18756.1</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:58:55</td>
+                <td>Direct</td>
+                <td class="question">I am exporting 1001.19.00.25 from Singapore to the US. Are there any additional tariffs?</td>
+                <td class="answer"></td>
+                <td class="">25897.7</td>
+                <td>10858.2</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:58:59</td>
+                <td>Indirect</td>
+                <td class="question">We assemble vacuum cleaners (HS Code 8508.19.10) in Singapore from Chinese parts and export to Indonesia. Does simple assembly confer Singapore origin, or should we apply for a back-to-back PCO instea</td>
+                <td class="answer"></td>
+                <td class="">30222.9</td>
+                <td>9184.7</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:59:02</td>
+                <td>Direct</td>
+                <td class="question">How do I identify appropriate HS codes and market requirements for exporting headphones to the Philippines?</td>
+                <td class="answer">## Identifying Appropriate HS Codes and Market Requirements for Exporting Headphones to the Philippines
+
+Based on the comprehensive information retrieved from official trade databases, here is the guidance for exporting headphones from Singapore to the Philippines:
+
+---
+
+### **Part 1: HS Code Identi</td>
+                <td class="rt-slow">69721.4</td>
+                <td>5337.0</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:59:06</td>
+                <td>Indirect</td>
+                <td class="question">What are the steps and timelines to apply for a PCO under the Digital Economy Agreement between Singapore and Australia, and how does it differ from the standard goods FTA process?</td>
+                <td class="answer">**Preferential Certificates of Origin (PCOs) do not exist under Digital Economy Agreements**, including the Singapore-Australia DEA. DEAs are designed for digital trade facilitation, not physical goods tariff preferences.
+
+**For exporting physical goods from Singapore to Australia with preferential </td>
+                <td class="rt-slow">44439.7</td>
+                <td>14937.3</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:59:08</td>
+                <td>Direct</td>
+                <td class="question">Where do I get help with FTA and Certificate of Origin queries in Singapore?</td>
+                <td class="answer"></td>
+                <td class="">15016.4</td>
+                <td>10587.3</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:59:20</td>
+                <td>Direct</td>
+                <td class="question">What is the validity period of back-to-back COs issued by Singapore Customs, and can validity be extended?</td>
+                <td class="answer"># Back-to-Back Certificate of Origin (CO) Validity Period - Singapore Customs
+
+## Current Status of Information Retrieval
+
+I attempted to retrieve specific information about back-to-back Certificate of Origin validity periods from Singapore Customs through multiple sources:
+
+### ✅ Successfully Retri</td>
+                <td class="rt-slow">40119.6</td>
+                <td>5005.7</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:59:25</td>
+                <td>Indirect</td>
+                <td class="question">We import cotton fabric (HS 5208) from India into Singapore, dye and cut it here, then export garments to the EU. How do we determine origin under RCEP and EU-Singapore FTA, and what documentation do </td>
+                <td class="answer">Thank you for your detailed inquiry about determining origin and documentation requirements for your India → Singapore → EU trade scenario. Based on the information I've been able to verify, here is my analysis:
+
+---
+
+## Critical Finding: RCEP Does Not Apply to India-Singapore Trade
+
+**Important Cor</td>
+                <td class="rt-slow">90567.7</td>
+                <td>6156.2</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:59:39</td>
+                <td>Direct</td>
+                <td class="question">I am importing iron pipes with HS code 7303.00.00.30 from Malaysia to the US. What are the additional tariffs that apply?</td>
+                <td class="answer"></td>
+                <td class="">15266.8</td>
+                <td>10406.8</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:59:42</td>
+                <td>Indirect</td>
+                <td class="question">I import meat with HS code 0201.30.01 from Australia to Singapore and re-export to Japan. Am I eligible for preferential tariffs?</td>
+                <td class="answer"># Back-to-Back PCO Eligibility for Meat Exports from Australia via Singapore to Japan
+
+## Your Trade Scenario
+- **HS Code:** 0201.30.01 (Meat and edible meat offal)
+- **Country of Origin:** Australia
+- **Intermediate Country:** Singapore
+- **Final Destination:** Japan
+- **Movement of Goods:** Austra</td>
+                <td class="rt-slow">52107.9</td>
+                <td>5599.1</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:59:42</td>
+                <td>Indirect</td>
+                <td class="question">Our company sources components from China, Thailand, and Malaysia and assembles electronic switches (HS 8536.50) in Singapore for export to Australia. Can we claim Singapore origin under AANZFTA, and </td>
+                <td class="answer"># Claiming Singapore Origin under AANZFTA for Electronic Switches
+
+## Your Manufacturing Scenario
+
+**Product:** Electronic switches  
+**HS Code:** 8536.50  
+**Manufacturing Process:** Assembly in Singapore using components from China, Thailand, and Malaysia  
+**Export Destination:** Australia  
+**In</td>
+                <td class="rt-slow">55520.4</td>
+                <td>7349.3</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T16:59:49</td>
+                <td>Indirect</td>
+                <td class="question">We import cotton fabric (HS 5208) from India into Singapore, dye and cut it here, then export garments to the EU. How do we determine origin under RCEP and EU-Singapore FTA, and what documentation do </td>
+                <td class="answer">s
+
+**1. This is NOT a typical Back-to-Back PCO scenario**
+
+Your case involves **substantial transformation** in Singapore (converting fabric HS 5208 into garments, likely HS Chapter 61 or 62). This is fundamentally different from a standard B2B PCO scenario where goods remain in the same HS classifi</td>
+                <td class="rt-slow">44150.2</td>
+                <td>5341.4</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:00:05</td>
+                <td>Direct</td>
+                <td class="question">I have an energy product with HS code 2710.12.15.10 that is made in Canada and to be exported to the US. My goods do not meet the rules of origin under the USMCA. What is the tariff?</td>
+                <td class="answer"></td>
+                <td class="">11862.4</td>
+                <td>8500.9</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:00:08</td>
+                <td>Indirect</td>
+                <td class="question">I import brooms with HS code 9603.10.20 from China to Singapore and would like to re-export to Malaysia. Am I eligible for any FTAs?</td>
+                <td class="answer">## Back-to-Back PCO Eligibility: Brooms (HS 9603.10.20) from China → Singapore → Malaysia
+
+---
+
+### Your Trade Scenario
+
+**Product**: Brooms  
+**HS Code**: 9603.10.20  
+**Origin Country**: China  
+**Intermediate Country**: Singapore  
+**Final Destination**: Malaysia  
+**Movement**: Import to Singapo</td>
+                <td class="rt-slow">68379.5</td>
+                <td>4606.8</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:00:09</td>
+                <td>Indirect</td>
+                <td class="question">We import headphones (HS 8518.30.10) from China and sell to Vietnam. Can CPTPP preferences ever apply, and what proof would be required?</td>
+                <td class="answer"># CPTPP Preferences for Headphones (HS 8518.30.10) from China to Vietnam
+
+## Your Trade Scenario
+
+**Product:** Headphones (HS Code 8518.30.10)  
+**Trade Route:** China → Singapore (storage) → Vietnam  
+**Processing in Singapore:** Storage only (no further processing)  
+**FTA in Question:** CPTPP
+
+--</td>
+                <td class="rt-slow">76814.7</td>
+                <td>10200.4</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:00:24</td>
+                <td>Indirect</td>
+                <td class="question">We import fresh mangoes (HS 0804.50) from Indonesia into Singapore and plan to re-export them to the Philippines. Can we request a back-to-back PCO under ATIGA?</td>
+                <td class="answer"># Back-to-Back Preferential Certificate of Origin (B2B PCO) Analysis
+## Fresh Mangoes (HS 0804.50) | Indonesia → Singapore → Philippines
+
+---
+
+## ✅ Executive Summary
+
+Based on the available information, **Indonesia, Singapore, and Philippines are all members of ATIGA** (ASEAN Trade in Goods Agreemen</td>
+                <td class="rt-slow">82417.1</td>
+                <td>5896.6</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:00:29</td>
+                <td>Indirect</td>
+                <td class="question">I import brooms with HS code 9603.10.20 from China to Singapore and would like to re-export to Malaysia. Am I eligible for any FTAs?</td>
+                <td class="answer"></td>
+                <td class="">16305.0</td>
+                <td>10823.1</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:00:30</td>
+                <td>Indirect</td>
+                <td class="question">Under which FTAs, if any, can India-origin goods use a back-to-back mechanism via Singapore?</td>
+                <td class="answer"># Back-to-Back PCO Eligibility for India-Origin Goods via Singapore
+
+## Your Trade Scenario
+- **Country of Origin:** India
+- **Intermediate Country:** Singapore
+- **Final Destination:** **Not provided** ⚠️
+- **HS Code:** **Not provided** ⚠️
+- **Movement of Goods:** India → Singapore → (destination u</td>
+                <td class="rt-slow">44085.0</td>
+                <td>5248.4</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:00:32</td>
+                <td>Indirect</td>
+                <td class="question">We manufacture plastic containers (HS 3924) in Singapore using resin from Saudi Arabia and additives from Malaysia. How do we prove origin under ATIGA for export to Vietnam, and which FTA gives the be</td>
+                <td class="answer"># Preferential Certificate of Origin (PCO) for ATIGA Exports
+
+## Your Manufacturing Details
+- **Product**: Plastic containers (HS Code 3924)
+- **Manufacturing Location**: Singapore
+- **Raw Materials**: 
+  - Resin from Saudi Arabia
+  - Additives from Malaysia
+- **Destination**: Vietnam
+- **Intended F</td>
+                <td class="rt-slow">83783.2</td>
+                <td>5109.8</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:00:33</td>
+                <td>Indirect</td>
+                <td class="question">We export organic fertiliser (HS 3101) from Singapore to New Zealand. Under CPTPP, what are the rules of origin and any product-specific requirements we must meet?</td>
+                <td class="answer"># CPTPP Rules of Origin for Organic Fertiliser (HS 3101) - Singapore to New Zealand
+
+---
+
+## Your Export Details
+
+- **Product:** Organic fertiliser
+- **HS Code:** 3101
+- **Country of Origin:** Singapore
+- **Destination Country:** New Zealand
+- **FTA:** CPTPP (Comprehensive and Progressive Agreement </td>
+                <td class="rt-slow">80548.0</td>
+                <td>5438.9</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:00:36</td>
+                <td>Direct</td>
+                <td class="question">Can I use the UK-Singapore FTA for exporting machinery parts (HS 8483.40) to the United Kingdom?</td>
+                <td class="answer">## ✅ YES - You Can Use the UK-Singapore FTA
+
+**You can use the UK-Singapore Digital Economy Agreement (UK-Singapore FTA) to export machinery parts (HS 8483.40) to the United Kingdom with preferential tariff treatment.**
+
+---
+
+## Tariff Benefits
+
+### With UK-Singapore FTA (Preferential Treatment):
+
+|</td>
+                <td class="rt-slow">50391.9</td>
+                <td>4959.3</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:00:45</td>
+                <td>Indirect</td>
+                <td class="question">If we import under ASEAN-China FTA and re-export to Japan under RCEP with minimal repackaging in Singapore, can we use a back-to-back certificate, and what are the conditions and time limits?</td>
+                <td class="answer">Back-to-Back Certificate of Origin for ACFTA to RCEP Re-Export
+
+## Current Analysis Status
+
+I have begun analyzing your query regarding the use of back-to-back certificates of origin for goods imported from China to Singapore under ASEAN-China FTA (ACFTA) and re-exported to Japan under RCEP with min</td>
+                <td class="rt-slow">35206.5</td>
+                <td>6038.9</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:00:48</td>
+                <td>Indirect</td>
+                <td class="question">How do I qualify for preferential treatment under the ATIGA for my export of water pumps with HS code 8413.20.90 from Singapore to Indonesia?</td>
+                <td class="answer"># Qualifying for Preferential Treatment Under ATIGA for Water Pumps (HS 8413.20.90) from Singapore to Indonesia
+
+---
+
+## Trade Information Summary
+
+| Detail | Information |
+|--------|-------------|
+| **Product** | Water pumps |
+| **HS Code** | 8413.20.90 (Hand pumps, other than those of subheading 8</td>
+                <td class="rt-slow">66449.5</td>
+                <td>6978.7</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:00:49</td>
+                <td>Direct</td>
+                <td class="question">Which official sources provide documentation or certification showing that companies from certain countries are eligible to participate in Singapore government procurement under specific agreements?</td>
+                <td class="answer"></td>
+                <td class="">14115.2</td>
+                <td>10324.6</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:00:53</td>
+                <td>Indirect</td>
+                <td class="question">I import meat with HS code 0201.30.01 from Australia to Singapore and re-export to Japan. Am I eligible for preferential tariffs?</td>
+                <td class="answer"></td>
+                <td class="">17907.0</td>
+                <td>11502.6</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:01:17</td>
+                <td>Indirect</td>
+                <td class="question">We import headphones (HS 8518.30.10) from China and sell to Vietnam. Can CPTPP preferences ever apply, and what proof would be required?</td>
+                <td class="answer"># Analysis: CPTPP Preferences for Headphones (HS 8518.30.10) from China to Vietnam
+
+---
+
+## Direct Answer to Your Question
+
+**No, CPTPP preferences cannot apply to headphones originating from China** because China is **not a member** of CPTPP.
+
+However, **CPTPP preferences could potentially apply** </td>
+                <td class="rt-slow">108321.7</td>
+                <td>18620.4</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:18:04</td>
+                <td>Indirect</td>
+                <td class="question">If our PCO application is rejected by Singapore Customs due to insufficient supporting documents, what can we do to rectify and reapply, and how long does the appeal or correction process take?</td>
+                <td class="answer">I encountered technical difficulties accessing both the glossary and knowledge base systems to retrieve specific information about PCO (Preferential Certificate of Origin) application rejection procedures, rectification processes, and appeal timelines for Singapore Customs.
+
+## Current Analysis
+
+Bas</td>
+                <td class="rt-slow">21730.7</td>
+                <td>4542.7</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:18:04</td>
+                <td>Indirect</td>
+                <td class="question">We are considering moving some production from China to Singapore to benefit from FTAs. For electronics (HS 8517), what origin criteria apply under RCEP and CPTPP, and what percentage of value must be</td>
+                <td class="answer">I apologize, but I encountered technical difficulties while attempting to retrieve the specific Rules of Origin information for HS 8517 electronics under RCEP and CPTPP from our knowledge base. The knowledge base tool experienced connection errors during the search.
+
+## What I was able to confirm:
+
+</td>
+                <td class="rt-slow">23808.3</td>
+                <td>4784.9</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:18:07</td>
+                <td>Direct</td>
+                <td class="question">What is the validity period of a PCO issued under ATIGA?</td>
+                <td class="answer">I apologize, but I encountered technical difficulties while attempting to retrieve information about the validity period of a PCO (Preferential Certificate of Origin) issued under ATIGA (ASEAN Trade in Goods Agreement).
+
+## What I Attempted
+
+I tried to access the following resources to answer your q</td>
+                <td class="rt-slow">22996.0</td>
+                <td>4537.0</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:18:08</td>
+                <td>Indirect</td>
+                <td class="question">We consolidate shipments from multiple ASEAN countries in Singapore and then send them to Australia. Can we obtain a single certificate covering the whole consignment, or do we need separate origin do</td>
+                <td class="answer"></td>
+                <td class="">20806.8</td>
+                <td>4392.6</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:18:10</td>
+                <td>Indirect</td>
+                <td class="question">We manufacture plastic containers (HS 3924) in Singapore using resin from Saudi Arabia and additives from Malaysia. How do we prove origin under ATIGA for export to Vietnam, and which FTA gives the be</td>
+                <td class="answer"></td>
+                <td class="">23876.2</td>
+                <td>4872.5</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:18:14</td>
+                <td>Indirect</td>
+                <td class="question">For shipments from Singapore to Australia with goods sourced from Japan and Korea, what are the steps to claim AANZFTA or RCEP preferences?</td>
+                <td class="answer"></td>
+                <td class="">22347.5</td>
+                <td>6673.6</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:18:20</td>
+                <td>Direct</td>
+                <td class="question">What is the authoritative source for eligibility criteria and certifications for foreign suppliers in Singapore government procurement under specified agreements?</td>
+                <td class="answer">## Analysis of Your Question
+
+You are asking about the **authoritative source for eligibility criteria and certifications for foreign suppliers in Singapore government procurement under specified agreements**.
+
+## Current Status
+
+I attempted to retrieve information from our knowledge base and glossa</td>
+                <td class="rt-slow">29286.6</td>
+                <td>6512.2</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:18:25</td>
+                <td>Indirect</td>
+                <td class="question">We import wine (HS 2204) from Australia under the Singapore-Australia FTA and store it in a bonded warehouse. When we re-export to Japan, can we claim preference under RCEP or CPTPP, and what evidence</td>
+                <td class="answer"></td>
+                <td class="">19428.5</td>
+                <td>7118.4</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:18:31</td>
+                <td>Direct</td>
+                <td class="question">What is the difference between a Certificate of Origin and a Preferential Certificate of Origin?</td>
+                <td class="answer">## Difference Between Certificate of Origin (CO) and Preferential Certificate of Origin (PCO)
+
+I encountered technical difficulties accessing both the glossary and knowledge base systems that contain the authoritative definitions and detailed explanations of Certificate of Origin (CO) and Preferenti</td>
+                <td class="rt-slow">22795.5</td>
+                <td>5468.6</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:18:34</td>
+                <td>Indirect</td>
+                <td class="question">For shipments from Singapore to Australia with goods sourced from Japan and Korea, what are the steps to claim AANZFTA or RCEP preferences?</td>
+                <td class="answer"># Analysis of FTA Preferences for Shipments from Singapore to Australia (Goods Sourced from Japan and Korea)
+
+## Your Scenario
+- **Goods Origin**: Japan and South Korea
+- **Intermediate Country**: Singapore
+- **Final Destination**: Australia
+- **FTAs in Question**: AANZFTA and RCEP
+
+---
+
+## FTA Memb</td>
+                <td class="rt-slow">52703.8</td>
+                <td>6003.3</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:18:35</td>
+                <td>Indirect</td>
+                <td class="question">We have a back-to-back PCO under RCEP for goods from Japan. The buyer in Indonesia wants to split the shipment into two consignments over two months. Is the original PCO still valid, and what do we ne</td>
+                <td class="answer">### Your Enquiry: Back-to-Back PCO for Split Shipments under RCEP
+
+Thank you for your enquiry regarding splitting a shipment into two consignments under a Back-to-Back Preferential Certificate of Origin (PCO) under RCEP.
+
+**Your Scenario:**
+- **Country of Origin**: Japan
+- **Intermediate Country**: </td>
+                <td class="rt-slow">45868.7</td>
+                <td>5528.9</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:18:39</td>
+                <td>Indirect</td>
+                <td class="question">Our company sources components from China, Thailand, and Malaysia and assembles electronic switches (HS 8536.50) in Singapore for export to Australia. Can we claim Singapore origin under AANZFTA, and </td>
+                <td class="answer"># AANZFTA Origin Qualification for Electronic Switches (HS 8536.50)
+
+## Your Scenario
+- **Product**: Electronic switches (HS 8536.50)
+- **Components sourced from**: China, Thailand, and Malaysia
+- **Assembly location**: Singapore
+- **Final destination**: Australia
+- **FTA in question**: AANZFTA (ASE</td>
+                <td class="rt-slow">59570.1</td>
+                <td>5762.9</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:18:39</td>
+                <td>Indirect</td>
+                <td class="question">We export organic fertiliser (HS 3101) from Singapore to New Zealand. Under CPTPP, what are the rules of origin and any product-specific requirements we must meet?</td>
+                <td class="answer"># CPTPP Rules of Origin for Organic Fertiliser (HS 3101) - Singapore to New Zealand
+
+## Trade Information Summary
+
+**Product:** Organic Fertiliser  
+**HS Code:** 3101  
+**Country of Origin:** Singapore  
+**Country of Destination:** New Zealand  
+**FTA:** CPTPP (Comprehensive and Progressive Agreemen</td>
+                <td class="rt-slow">54388.5</td>
+                <td>4843.0</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:18:40</td>
+                <td>Indirect</td>
+                <td class="question">We import raw cocoa (HS 1801) from Ghana, process it into chocolate (HS 1806) in Singapore, and export to Japan. How do we prove substantial transformation and claim preference under RCEP?</td>
+                <td class="answer"></td>
+                <td class="">25671.2</td>
+                <td>9427.1</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:18:48</td>
+                <td>Indirect</td>
+                <td class="question">We import fresh mangoes (HS 0804.50) from Indonesia into Singapore and plan to re-export them to the Philippines. Can we request a back-to-back PCO under ATIGA?</td>
+                <td class="answer">### Back-to-Back PCO Eligibility Assessment for Fresh Mangoes under ATIGA
+
+---
+
+### Your Query Details
+
+- **Product**: Fresh mangoes
+- **HS Code**: 0804.50 (6-digit WCO format)
+- **Movement**: Indonesia → Singapore → Philippines
+- **Processing in Singapore**: No
+- **FTA in Question**: ATIGA (ASEAN T</td>
+                <td class="rt-slow">65463.5</td>
+                <td>5057.0</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:18:49</td>
+                <td>Direct</td>
+                <td class="question">I would like to export my product of HS 4819.60 from Singapore to India. What is the duty rate and what FTAs can I leverage?</td>
+                <td class="answer"># Export of HS Code 481960 from Singapore to India
+
+## Summary of Your Query
+- **HS Code:** 481960
+- **Country of Origin:** Singapore
+- **Country of Destination:** India
+- **Export Value:** Not provided (optional)
+
+---
+
+## Duty Rates
+
+Based on the official tariff data, the following duty rates apply</td>
+                <td class="rt-slow">55636.4</td>
+                <td>7291.6</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:18:54</td>
+                <td>Indirect</td>
+                <td class="question">For goods that qualify under both ATIGA and RCEP when exporting from Singapore to Thailand, how do we choose which FTA to use, and can we switch between them for different shipments of the same produc</td>
+                <td class="answer">## Analysis of Your Question
+
+You are asking about **choosing between ATIGA and RCEP** for exports from Singapore to Thailand, and whether you can **switch between these FTAs for different shipments** of the same product.
+
+## Current Status
+
+I attempted to retrieve information from our knowledge bas</td>
+                <td class="rt-slow">29629.1</td>
+                <td>3890.2</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:18:57</td>
+                <td>Indirect</td>
+                <td class="question">We plan to bring microprocessors (HS 8542.31) from Japan into Singapore for consolidation, then ship them to Indonesia. Can we claim preferential tariff treatment on the Indonesia leg?</td>
+                <td class="answer"># Back-to-Back Preferential Certificate of Origin (B2B PCO) Assessment
+
+## Your Enquiry Summary
+
+**Product:** Microprocessors  
+**HS Code:** 854231  
+**Movement:** Japan → Singapore (consolidation) → Indonesia  
+**Processing in Singapore:** No (consolidation only)
+
+---
+
+## Tariff Analysis for Indone</td>
+                <td class="rt-slow">69167.6</td>
+                <td>5229.9</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:18:58</td>
+                <td>Direct</td>
+                <td class="question">Are there any tariffs for the import of fresh apples with HS code 0808.10.00.45 into the US from Canada?</td>
+                <td class="answer">### Tariff Information for Fresh Apples (HS Code 0808.10.00.45) from Canada to United States
+
+Based on the official tariff data retrieved from the Mendel system for importing fresh apples with HS code **0808.10.00.45** from **Canada** to the **United States**:
+
+---
+
+## Customs Duties
+
+| Duty Type | </td>
+                <td class="rt-slow">47052.3</td>
+                <td>3136.2</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:19:01</td>
+                <td>Direct</td>
+                <td class="question">Where do I access certified lists or notices indicating country eligibility for Singapore public tenders under certain agreements?</td>
+                <td class="answer">Accessing Certified Lists for Singapore Public Tenders Country Eligibility
+
+I apologize, but I encountered technical difficulties accessing the knowledge base and glossary systems that contain information about Singapore's government procurement provisions under Free Trade Agreements (FTAs).
+
+---
+
+#</td>
+                <td class="rt-slow">22659.6</td>
+                <td>3854.4</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:19:08</td>
+                <td>Indirect</td>
+                <td class="question">We export organic fertiliser (HS 3101) from Singapore to New Zealand. Under CPTPP, what are the rules of origin and any product-specific requirements we must meet?</td>
+                <td class="answer"></td>
+                <td class="">23928.0</td>
+                <td>9602.3</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:19:12</td>
+                <td>Indirect</td>
+                <td class="question">What are the steps and timelines to apply for a PCO under the Digital Economy Agreement between Singapore and Australia, and how does it differ from the standard goods FTA process?</td>
+                <td class="answer"># PCO Application Under Singapore-Australia Digital Economy Agreement
+
+## Current Analysis
+
+I attempted to retrieve information about PCO (the acronym you mentioned) application processes under the Digital Economy Agreement between Singapore and Australia. Unfortunately, I encountered technical diff</td>
+                <td class="rt-slow">31048.6</td>
+                <td>9409.2</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:19:14</td>
+                <td>Indirect</td>
+                <td class="question">We manufacture plastic containers (HS 3924) in Singapore using resin from Saudi Arabia and additives from Malaysia. How do we prove origin under ATIGA for export to Vietnam, and which FTA gives the be</td>
+                <td class="answer">### Current Analysis: HS Code Specificity Required
+
+Thank you for your enquiry regarding plastic containers manufactured in Singapore for export to Vietnam under ATIGA.
+
+I have identified that **additional information is required** to provide you with a complete answer to both of your questions.
+
+--</td>
+                <td class="rt-slow">84317.4</td>
+                <td>5813.3</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:19:21</td>
+                <td>Indirect</td>
+                <td class="question">Under which FTAs, if any, can India-origin goods use a back-to-back mechanism via Singapore?</td>
+                <td class="answer"># Back-to-Back Certificate of Origin Mechanism for India-Origin Goods via Singapore
+
+## Current Analysis
+
+Based on the information retrieved, I can provide the following analysis regarding back-to-back mechanisms for India-origin goods via Singapore:
+
+### FTAs Between India and Singapore
+
+India and </td>
+                <td class="rt-slow">27937.8</td>
+                <td>4360.8</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:19:25</td>
+                <td>Indirect</td>
+                <td class="question">I import brooms with HS code 9603.10.20 from China to Singapore and would like to re-export to Malaysia. Am I eligible for any FTAs?</td>
+                <td class="answer"># FTA Eligibility Analysis for Re-exporting Brooms from China to Malaysia via Singapore
+
+## Your Trade Scenario
+
+**Product:** Brooms  
+**HS Code:** 9603.10.20  
+**Movement:** China → Singapore → Malaysia  
+**Query:** FTA eligibility for re-export
+
+---
+
+## Summary: Yes, You Are Eligible for FTAs
+
+Bas</td>
+                <td class="rt-slow">73325.4</td>
+                <td>8941.8</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:19:28</td>
+                <td>Indirect</td>
+                <td class="question">If we import under ASEAN-China FTA and re-export to Japan under RCEP with minimal repackaging in Singapore, can we use a back-to-back certificate, and what are the conditions and time limits?</td>
+                <td class="answer"># Back-to-Back PCO Eligibility Analysis: China → Singapore → Japan under RCEP
+
+Thank you for your enquiry regarding Back-to-Back Preferential Certificate of Origin (B2B PCO) for goods imported from China under ASEAN-China FTA and re-exported to Japan under RCEP with minimal repackaging in Singapore.</td>
+                <td class="rt-slow">70401.4</td>
+                <td>18280.0</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:19:32</td>
+                <td>Direct</td>
+                <td class="question">We are a manufacturing company looking to export plastic bottles to customers in other countries. Can you please advise the steps and processes we have to take?</td>
+                <td class="answer"># General Export Procedures for Manufacturing Companies Exporting Plastic Bottles
+
+Based on the information retrieved from web sources (as the knowledge base is currently unavailable), here are the steps and processes for exporting plastic bottles from Singapore to other countries:
+
+---
+
+## Step-by-</td>
+                <td class="rt-slow">54507.7</td>
+                <td>9263.1</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:19:39</td>
+                <td>Indirect</td>
+                <td class="question">I import brooms with HS code 9603.10.20 from China to Singapore and would like to re-export to Malaysia. Am I eligible for any FTAs?</td>
+                <td class="answer"># Back-to-Back PCO Eligibility Assessment for Brooms (HS 9603.10.20)
+
+## Trade Scenario Summary
+
+**Product:** Brooms  
+**HS Code:** 9603.10.20  
+**Movement:** China → Singapore → Malaysia  
+**Query:** FTA eligibility for re-export scenario
+
+---
+
+## FTA Eligibility Analysis
+
+### ✅ Step 1: Countries i</td>
+                <td class="rt-slow">57145.4</td>
+                <td>4577.9</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:19:39</td>
+                <td>Indirect</td>
+                <td class="question">Can we use exporter self-certification under the UK-Singapore FTA for our exports of pharmaceutical products (HS 3004), and what are the exact conditions and record-keeping requirements?</td>
+                <td class="answer"></td>
+                <td class="">20837.1</td>
+                <td>6673.6</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:19:40</td>
+                <td>Indirect</td>
+                <td class="question">Our company sources components from China, Thailand, and Malaysia and assembles electronic switches (HS 8536.50) in Singapore for export to Australia. Can we claim Singapore origin under AANZFTA, and </td>
+                <td class="answer">AANZFTA Origin Eligibility for Electronic Switches (HS 8536.50)
+
+---
+
+## **Your Query**
+
+**Product:** Electronic switches (HS 8536.50)  
+**Manufacturing:** Assembly in Singapore using components from China, Thailand, and Malaysia  
+**Export Destination:** Australia  
+**FTA:** AANZFTA (ASEAN-Australi</td>
+                <td class="rt-slow">71925.2</td>
+                <td>12590.7</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:19:41</td>
+                <td>Direct</td>
+                <td class="question">Could you help me identify if my product with HS code 4415.10.01 is eligible for tariff concessions for export to Mexico from Singapore?</td>
+                <td class="answer">## Tariff Concession Eligibility for HS Code 4415.10.01 (Singapore to Mexico)
+
+**Yes, your product is eligible for tariff concessions** when exporting from Singapore to Mexico under applicable Free Trade Agreements (FTAs).
+
+---
+
+### Product and Trade Route Information
+
+| Detail | Information |
+|----</td>
+                <td class="rt-slow">66927.7</td>
+                <td>5053.5</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:19:44</td>
+                <td>Indirect</td>
+                <td class="question">We import cotton fabric (HS 5208) from India into Singapore, dye and cut it here, then export garments to the EU. How do we determine origin under RCEP and EU-Singapore FTA, and what documentation do </td>
+                <td class="answer">## Analysis of Your Question
+
+You are asking about a **complex multi-leg trade scenario** involving:
+
+1. **First leg**: Import cotton fabric (HS 5208) from India → Singapore
+2. **Processing in Singapore**: Dyeing and cutting the fabric
+3. **Second leg**: Export garments (likely HS Chapter 61 or 62) </td>
+                <td class="rt-slow">46847.0</td>
+                <td>6410.9</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:20:02</td>
+                <td>Direct</td>
+                <td class="question">What FTAs can I use to export coffee (HS 0901.21) from Singapore to Chile?</td>
+                <td class="answer"># Free Trade Agreements for Exporting Coffee (HS 0901.21) from Singapore to Chile
+
+## Input Information Used:
+- **HS Code:** 0901.21
+- **Country of Origin:** Singapore
+- **Country of Destination:** Chile
+- **Product:** Coffee (not decaffeinated)
+
+---
+
+## Applicable Free Trade Agreements
+
+Based on th</td>
+                <td class="rt-slow">49905.4</td>
+                <td>3890.9</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:20:04</td>
+                <td>Indirect</td>
+                <td class="question">We plan to bring microprocessors (HS 8542.31) from Japan into Singapore for consolidation, then ship them to Indonesia. Can we claim preferential tariff treatment on the Indonesia leg?</td>
+                <td class="answer">## Preferential Tariff Treatment Assessment for Microprocessors (Japan → Singapore → Indonesia)
+
+---
+
+### Your Query Details
+
+- **Product**: Microprocessors
+- **HS Code**: 8542.31 (6-digit WCO format)
+- **Movement**: Japan → Singapore (consolidation) → Indonesia
+- **Processing in Singapore**: No (co</td>
+                <td class="rt-slow">72317.9</td>
+                <td>8458.1</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:20:04</td>
+                <td>Indirect</td>
+                <td class="question">We import cotton fabric (HS 5208) from India into Singapore, dye and cut it here, then export garments to the EU. How do we determine origin under RCEP and EU-Singapore FTA, and what documentation do </td>
+                <td class="answer"></td>
+                <td class="">48991.2</td>
+                <td>23497.7</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:20:10</td>
+                <td>Indirect</td>
+                <td class="question">We import wine (HS 2204) from Australia under the Singapore-Australia FTA and store it in a bonded warehouse. When we re-export to Japan, can we claim preference under RCEP or CPTPP, and what evidence</td>
+                <td class="answer"># Back-to-Back Preferential Certificate of Origin (B2B PCO) Assessment
+
+## Your Enquiry Summary
+
+**Product:** Wine  
+**HS Code:** 2204  
+**Movement:** Australia → Singapore (bonded warehouse storage) → Japan  
+**Processing in Singapore:** No (storage only in bonded warehouse)  
+**FTAs Enquired:** RC</td>
+                <td class="rt-slow">68202.7</td>
+                <td>4849.2</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:20:11</td>
+                <td>Indirect</td>
+                <td class="question">We plan to bring microprocessors (HS 8542.31) from Japan into Singapore for consolidation, then ship them to Indonesia. Can we claim preferential tariff treatment on the Indonesia leg?</td>
+                <td class="answer"># Back-to-Back Preferential Certificate of Origin (B2B PCO) Analysis
+
+## Your Scenario
+
+**Product:** Microprocessors (HS Code 8542.31)  
+**Movement:** Japan → Singapore (consolidation) → Indonesia  
+**Question:** Can you claim preferential tariff treatment on the Indonesia leg?
+
+---
+
+## Key Finding:</td>
+                <td class="rt-slow">68427.2</td>
+                <td>5944.2</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:20:11</td>
+                <td>Direct</td>
+                <td class="question">I would like to export beet sugar with HS code 1701.12 from Singapore to either Laos or New Zealand. What FTAs can I leverage?</td>
+                <td class="answer">## Export of Beet Sugar (HS Code 1701.12) from Singapore
+
+Thank you for your enquiry regarding the export of beet sugar with HS code **1701.12** from **Singapore** to **Laos** and **New Zealand**.
+
+---
+
+## 1️⃣ Export to Laos
+
+### Applicable Free Trade Agreements
+
+Based on the official tariff data re</td>
+                <td class="rt-slow">67582.5</td>
+                <td>6651.3</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:20:11</td>
+                <td>Indirect</td>
+                <td class="question">For machinery (HS 8479) assembled in Singapore from US and German parts, what are the rules of origin under the EU-Singapore FTA and UK-Singapore FTA, and how do we calculate and document RVC?</td>
+                <td class="answer"># Rules of Origin for Machinery (HS 8479) under EU-Singapore FTA and UK-Singapore FTA
+
+## Your Trade Scenario
+
+**Product:** Machinery and mechanical appliances having individual functions, not specified or included elsewhere  
+**HS Code:** 8479  
+**Assembly Location:** Singapore  
+**Parts Origin:** </td>
+                <td class="rt-slow">42364.1</td>
+                <td>7697.0</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:20:17</td>
+                <td>Direct</td>
+                <td class="question">I am exporting t-shirts with HS code 6109.10.00.14 from Colombia to the US. What tariffs apply?</td>
+                <td class="answer"># Export of T-Shirts (HS Code 6109.10.00.14) from Colombia to the United States
+
+## Summary of Your Query
+- **HS Code:** 6109.10.00.14
+- **Product:** T-shirts
+- **Country of Origin:** Colombia
+- **Country of Destination:** United States
+- **Export Value:** Not provided (optional)
+
+---
+
+## Tariff Inf</td>
+                <td class="rt-slow">53248.8</td>
+                <td>4555.6</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:20:18</td>
+                <td>Indirect</td>
+                <td class="question">For goods that qualify under both ATIGA and RCEP when exporting from Singapore to Thailand, how do we choose which FTA to use, and can we switch between them for different shipments of the same produc</td>
+                <td class="answer"># Choosing Between ATIGA and RCEP for Exports from Singapore to Thailand
+
+## Your Scenario
+- **Export Origin**: Singapore
+- **Destination**: Thailand
+- **Goods**: Qualify under both ATIGA and RCEP
+- **Question**: How to choose which FTA to use and whether you can switch between them
+
+---
+
+## FTA Mem</td>
+                <td class="rt-slow">42802.5</td>
+                <td>4764.3</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:20:25</td>
+                <td>Indirect</td>
+                <td class="question">I want to import semiconductor integrated circuits from South Korea to Singapore and intend to re-export them to Vietnam. The HS code is 8542.31. Am I eligible for any FTAs?</td>
+                <td class="answer"></td>
+                <td class="">17528.9</td>
+                <td>8808.8</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:20:27</td>
+                <td>Direct</td>
+                <td class="question">What tariff will my aluminium rods with HS code 7604.29.10.10 be subject to if it was manufactured in Russia and exported to the US?</td>
+                <td class="answer"># Tariff Analysis: Aluminium Rods from Russia to United States
+
+## Product Information
+
+| Field | Details |
+|-------|---------|
+| **HS Code** | 7604.29.10.10 |
+| **Product Description** | Aluminium rods |
+| **Country of Origin** | Russia |
+| **Country of Destination** | United States |
+| **HS Code F</td>
+                <td class="rt-slow">55937.0</td>
+                <td>5278.2</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:20:32</td>
+                <td>Indirect</td>
+                <td class="question">If our PCO application is rejected by Singapore Customs due to insufficient supporting documents, what can we do to rectify and reapply, and how long does the appeal or correction process take?</td>
+                <td class="answer"># PCO Application Rejection: Rectification and Reapplication Process
+
+---
+
+## **Your Situation**
+
+**Issue:** PCO application rejected by Singapore Customs due to insufficient supporting documents  
+**Product:** Electronic switches (HS 8536.50) assembled in Singapore  
+**Export Destination:** Austral</td>
+                <td class="rt-slow">48742.6</td>
+                <td>4615.3</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:20:39</td>
+                <td>Direct</td>
+                <td class="question">What is Singapore Customs' approach to border controls against counterfeit goods?</td>
+                <td class="answer"># Singapore Customs' Approach to Border Controls Against Counterfeit Goods
+
+## System Limitation Encountered
+
+I attempted to retrieve information about Singapore Customs' approach to border controls against counterfeit goods from the available knowledge base and glossary systems. Unfortunately, both</td>
+                <td class="rt-slow">24218.6</td>
+                <td>5384.9</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:20:39</td>
+                <td>Direct</td>
+                <td class="question">I am exporting essential oils with HS code 3301.29.51.03 from France to the US. What tariffs apply?</td>
+                <td class="answer"># Tariff Information for HS Code 3301.29.51.03 (Essential Oils) - France to United States
+
+## Product and Trade Route Information
+
+| Detail | Information |
+|--------|-------------|
+| **HS Code** | 3301.29.51.03 |
+| **Product Description** | Essential oils (Chapter 33 - Essential oils and resinoids; </td>
+                <td class="rt-slow">52836.0</td>
+                <td>4617.0</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:36:41</td>
+                <td>Direct</td>
+                <td class="question">Are there any tariffs for the import of fresh apples with HS code 0808.10.00.45 into the US from Canada?</td>
+                <td class="answer"># Tariff Information for Fresh Apples (HS Code 0808.10.00.45) from Canada to United States
+
+## Query Details
+- **HS Code:** 0808.10.00.45
+- **Product:** Fresh apples
+- **Country of Origin:** Canada
+- **Country of Destination:** United States
+- **HS Code Format:** 10 digits (HTS format - standard for</td>
+                <td class="rt-slow">47926.2</td>
+                <td>4628.1</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:36:58</td>
+                <td>Indirect</td>
+                <td class="question">We import raw cocoa (HS 1801) from Ghana, process it into chocolate (HS 1806) in Singapore, and export to Japan. How do we prove substantial transformation and claim preference under RCEP?</td>
+                <td class="answer"># RCEP Origin Eligibility Assessment: Chocolate Exports from Singapore to Japan
+
+## Your Trade Scenario
+
+**Product Flow:**
+- Import: Raw cocoa (HS 1801) from Ghana
+- Processing: Transform into chocolate (HS 1806) in Singapore  
+- Export: Chocolate (HS 1806) from Singapore to Japan
+
+---
+
+## Critical </td>
+                <td class="rt-slow">63333.2</td>
+                <td>5004.8</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:37:18</td>
+                <td>Indirect</td>
+                <td class="question">We have an existing PCO but the importer says the HS code on the certificate does not match their customs declaration. How do we correct or reissue the certificate, and will it affect the validity per</td>
+                <td class="answer"># PCO Certificate Correction and Reissuance Guidance
+
+## Current Situation Analysis
+
+You have an existing **PCO (Preferential Certificate of Origin)** where the HS code listed on the certificate does not match the HS code on the importer's customs declaration. You need guidance on:
+
+1. How to correc</td>
+                <td class="rt-slow">32062.4</td>
+                <td>5122.7</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:37:22</td>
+                <td>Direct</td>
+                <td class="question">I am exporting salmon with HS code 0303.11 from Norway to the US. What tariffs apply?</td>
+                <td class="answer"></td>
+                <td class="">21673.5</td>
+                <td>6773.2</td>
+                <td class="error">Error - Empty Response</td>
+                <td><span class="error">Empty Response</span></td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:37:52</td>
+                <td>Direct</td>
+                <td class="question">How long does it take to get a PCO from Singapore Customs for ATIGA export to Thailand?</td>
+                <td class="answer"># PCO Processing Time for ATIGA Exports from Singapore to Thailand
+
+## Current Analysis
+
+I attempted to retrieve information about the processing time for obtaining a Preferential Certificate of Origin (PCO) from Singapore Customs for ATIGA (ASEAN Trade in Goods Agreement) exports to Thailand. Unfor</td>
+                <td class="rt-slow">26939.8</td>
+                <td>5643.9</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:38:26</td>
+                <td>Direct</td>
+                <td class="question">I would like to export my product of HS 4819.60 from Singapore to India. What is the duty rate and what FTAs can I leverage?</td>
+                <td class="answer">Thank you for your inquiries! I notice you've now asked **multiple separate trade questions**:
+
+### Summary of Your Requests:
+
+| # | Topic | Status | Details |
+|---|-------|--------|---------|
+| 1 | **RCEP Chocolate Export** | ✅ **Answered** | Ghana cocoa → Singapore chocolate → Japan&lt;br&gt;Subst</td>
+                <td class="rt-slow">31525.3</td>
+                <td>8233.9</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+            <tr>
+                <td class="ts">2026-03-08T17:38:35</td>
+                <td>Indirect</td>
+                <td class="question">Our company sources components from China, Thailand, and Malaysia and assembles electronic switches (HS 8536.50) in Singapore for export to Australia. Can we claim Singapore origin under AANZFTA, and </td>
+                <td class="answer"># AANZFTA Origin Eligibility and Requirements for Electronic Switches (HS 8536.50)
+
+## Your Trade Scenario
+
+- **Product:** Electronic switches
+- **HS Code:** 8536.50
+- **Assembly Location:** Singapore
+- **Component Sources:** China, Thailand, Malaysia
+- **Destination:** Australia
+- **FTA in Question</td>
+                <td class="rt-slow">74846.8</td>
+                <td>8721.0</td>
+                <td class="success">Success</td>
+                <td>—</td>
+            </tr>
+</tbody>
+</table>
+
+<div class="footer">Chatbot Performance Testing &middot; load test</div>
+</body>
+</html>
