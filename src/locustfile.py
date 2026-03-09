@@ -73,6 +73,23 @@ def _classify_error(answer: str) -> str:
     return ""
 
 
+def _is_feedback_event(decoded_line: str) -> bool:
+    """Return True if the SSE data line is the first user-visible feedback.
+
+    Skips metadata (ticket_id) so that TTFF reflects when the user first
+    sees any response from the chatbot (e.g. "Analysing your question...").
+    """
+    try:
+        raw = decoded_line.strip()[5:].strip()
+        if not raw:
+            return False
+        evt = json.loads(raw)
+        return evt.get("type") != "ticket_id"
+    except (json.JSONDecodeError, TypeError, IndexError):
+        pass
+    return False
+
+
 # ---------------------------------------------------------------------------
 # Capture UI swarm params (LocalRunner does not persist spawn_rate from web UI)
 # ---------------------------------------------------------------------------
@@ -134,7 +151,7 @@ def on_test_start(environment, **kwargs):
         with open(RESPONSE_TIME_CSV, "w", newline="") as f:
             csv.writer(f).writerow([
                 "timestamp", "test_type", "question_category",
-                "question", "answer", "response_time_ms", "ttft_ms",
+                "question", "answer", "response_time_ms", "ttff_ms",
                 "status_code", "status",
             ])
 
@@ -346,7 +363,7 @@ class ChatbotUser(HttpUser):
         payload = {"message_content": message}
 
         start = time.time()
-        ttft_ms = None
+        ttff_ms = None
         with self.client.post(
             f"{API_ENDPOINT_CHAT}?ticket_id={self.ticket_id}",
             json=payload,
@@ -363,8 +380,9 @@ class ChatbotUser(HttpUser):
                     decoded = line.decode("utf-8", errors="replace")
                 except Exception:
                     decoded = str(line)
-                if ttft_ms is None and decoded.strip().startswith("data:"):
-                    ttft_ms = (time.time() - start) * 1000
+                if ttff_ms is None and decoded.strip().startswith("data:"):
+                    if _is_feedback_event(decoded):
+                        ttff_ms = (time.time() - start) * 1000
                 lines.append(decoded)
             response_time_ms = (time.time() - start) * 1000
             full_text = "\n".join(lines)
@@ -375,28 +393,28 @@ class ChatbotUser(HttpUser):
                 error_type = _classify_error(answer_text)
                 if error_type:
                     resp.failure(f"Content error: {error_type}")
-                    self._log(category, message, answer_text, response_time_ms, ttft_ms,
+                    self._log(category, message, answer_text, response_time_ms, ttff_ms,
                               resp.status_code, f"Error - {error_type}")
                 else:
                     resp.success()
-                    self._log(category, message, answer_text, response_time_ms, ttft_ms,
+                    self._log(category, message, answer_text, response_time_ms, ttff_ms,
                               resp.status_code, "Success")
             elif resp.status_code == 401:
                 resp.failure("401 Unauthorized – session cookie expired")
                 self.is_authenticated = False
-                self._log(category, message, "", response_time_ms, ttft_ms,
+                self._log(category, message, "", response_time_ms, ttff_ms,
                           resp.status_code, "401 Unauthorized")
             else:
                 resp.failure(f"Status {resp.status_code}")
-                self._log(category, message, "", response_time_ms, ttft_ms,
+                self._log(category, message, "", response_time_ms, ttff_ms,
                           resp.status_code, f"Error {resp.status_code}")
 
     # -- logging --------------------------------------------------------------
-    def _log(self, category, question, answer, response_time_ms, ttft_ms, status_code, status):
+    def _log(self, category, question, answer, response_time_ms, ttff_ms, status_code, status):
         try:
             if not RESPONSE_TIME_CSV:
                 return
-            ttft_val = round(ttft_ms, 2) if ttft_ms is not None else ""
+            ttff_val = round(ttff_ms, 2) if ttff_ms is not None else ""
             with open(RESPONSE_TIME_CSV, "a", newline="") as f:
                 csv.writer(f).writerow([
                     datetime.now().isoformat(),
@@ -405,7 +423,7 @@ class ChatbotUser(HttpUser):
                     question[:200],
                     answer[:500] if answer else "",
                     round(response_time_ms, 2),
-                    ttft_val,
+                    ttff_val,
                     status_code,
                     status,
                 ])
@@ -434,7 +452,7 @@ def _parse_sse_response(text: str) -> str:
             if evt.get("type") == "message":
                 msg = evt.get("data", {})
                 if isinstance(msg, dict):
-                    for key in ("content", "message", "text", "response"):
+                    for key in ("message_content", "content", "message", "text", "response"):
                         if key in msg and isinstance(msg[key], str):
                             return msg[key]
                 elif isinstance(msg, str):

@@ -1,6 +1,6 @@
 {
-  "users": 2,
-  "spawn_rate": 1,
+  "users": 1,
+  "spawn_rate": 25,
   "host": "https://cfoti.org",
   "run_time": "3m"
 }

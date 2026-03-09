@@ -4,9 +4,9 @@ Generate an HTML report from Locust CSV results.
 
 Each report shows:
   - Summary statistics (min / avg / median / p95 / p99 / max response times)
-  - Time to first token (TTFT): same stats (min / avg / median / p95 / p99 / max) when available
-  - Per-category breakdown for both response time and TTFT (Direct vs Indirect)
-  - Full table of every request: question, answer, e2e response time, TTFT
+  - Time to first feedback (TTFF): same stats (min / avg / median / p95 / p99 / max) when available
+  - Per-category breakdown for both response time and TTFF (Direct vs Indirect)
+  - Full table of every request: question, answer, e2e response time, TTFF
 
 Usage:
   python src/generate_report.py                       # all CSV files in reports/
@@ -71,10 +71,10 @@ def load_csv(csv_path: Path) -> list[dict]:
             except (ValueError, KeyError):
                 row["response_time_ms"] = 0.0
             try:
-                raw_ttft = row.get("ttft_ms", "")
-                row["ttft_ms"] = float(raw_ttft) if raw_ttft != "" else None
+                raw_ttff = row.get("ttff_ms", row.get("ttft_ms", ""))
+                row["ttff_ms"] = float(raw_ttff) if raw_ttff != "" else None
             except (ValueError, TypeError):
-                row["ttft_ms"] = None
+                row["ttff_ms"] = None
             rows.append(row)
     return rows
 
@@ -117,10 +117,10 @@ def generate_html(
     success_rows = [r for r in rows if r.get("status") == "Success"]
     error_rows = [r for r in rows if r.get("status") != "Success"]
     all_times = [r["response_time_ms"] for r in success_rows]
-    all_ttft = [r["ttft_ms"] for r in success_rows if r.get("ttft_ms") is not None]
+    all_ttff = [r["ttff_ms"] for r in success_rows if r.get("ttff_ms") is not None]
 
     overall = compute_stats(all_times)
-    overall_ttft = compute_stats(all_ttft) if all_ttft else compute_stats([])
+    overall_ttff = compute_stats(all_ttff) if all_ttff else compute_stats([])
 
     for r in rows:
         r["error_type"] = classify_error(r.get("answer", ""))
@@ -137,23 +137,22 @@ def generate_html(
 
     categories = sorted(set(r.get("question_category", "Unknown") for r in success_rows))
     cat_stats = {}
-    cat_ttft_stats = {}
+    cat_ttff_stats = {}
     for cat in categories:
         cat_rows = [r for r in success_rows if r.get("question_category") == cat]
         cat_times = [r["response_time_ms"] for r in cat_rows]
-        cat_ttft = [r["ttft_ms"] for r in cat_rows if r.get("ttft_ms") is not None]
+        cat_ttff = [r["ttff_ms"] for r in cat_rows if r.get("ttff_ms") is not None]
         cat_stats[cat] = compute_stats(cat_times)
-        cat_ttft_stats[cat] = compute_stats(cat_ttft) if cat_ttft else compute_stats([])
+        cat_ttff_stats[cat] = compute_stats(cat_ttff) if cat_ttff else compute_stats([])
 
     generated_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # TTFT card display: show "—" when no TTFT data (e.g. old CSVs)
-    ttft_count = overall_ttft["count"]
-    ttft_avg = f"{overall_ttft['avg']} ms" if ttft_count else "—"
-    ttft_median = f"{overall_ttft['median']} ms" if ttft_count else "—"
-    ttft_p95 = f"{overall_ttft['p95']} ms" if ttft_count else "—"
-    ttft_p99 = f"{overall_ttft['p99']} ms" if ttft_count else "—"
-    ttft_max = f"{overall_ttft['max']} ms" if ttft_count else "—"
+    ttff_count = overall_ttff["count"]
+    ttff_avg = f"{overall_ttff['avg']} ms" if ttff_count else "—"
+    ttff_median = f"{overall_ttff['median']} ms" if ttff_count else "—"
+    ttff_p95 = f"{overall_ttff['p95']} ms" if ttff_count else "—"
+    ttff_p99 = f"{overall_ttff['p99']} ms" if ttff_count else "—"
+    ttff_max = f"{overall_ttff['max']} ms" if ttff_count else "—"
 
     # Test run parameters (if available)
     params_html = ""
@@ -190,10 +189,10 @@ def generate_html(
                 <td>{s['max']}</td>
             </tr>"""
 
-    cat_ttft_rows_html = ""
+    cat_ttff_rows_html = ""
     for cat in categories:
-        st = cat_ttft_stats[cat]
-        cat_ttft_rows_html += f"""
+        st = cat_ttff_stats[cat]
+        cat_ttff_rows_html += f"""
             <tr>
                 <td>{_esc(cat)}</td>
                 <td>{st['count']}</td>
@@ -245,7 +244,7 @@ def generate_html(
 
         answer_preview = _esc(r.get("answer", ""))[:300]
         error_type_cell = f'<span class="error">{_esc(error_type)}</span>' if error_type else '—'
-        ttft_val = round(r["ttft_ms"], 1) if r.get("ttft_ms") is not None else "—"
+        ttff_val = round(r["ttff_ms"], 1) if r.get("ttff_ms") is not None else "—"
 
         detail_rows_html += f"""
             <tr>
@@ -253,8 +252,8 @@ def generate_html(
                 <td>{_esc(r.get('question_category', ''))}</td>
                 <td class="question">{_esc(r.get('question', ''))}</td>
                 <td class="answer">{answer_preview}</td>
+                <td>{ttff_val}</td>
                 <td class="{rt_cls}">{round(rt, 1)}</td>
-                <td>{ttft_val}</td>
                 <td class="{status_cls}">{_esc(status)}</td>
                 <td>{error_type_cell}</td>
             </tr>"""
@@ -324,6 +323,17 @@ def generate_html(
 <p class="subtitle">Generated {generated_at} &middot; {len(rows)} total requests &middot; {len(error_rows)} errors</p>
 {params_html}
 
+<h2>Time to First Feedback (TTFF)</h2>
+<div class="cards">
+  <div class="card"><div class="value">{overall_ttff['count']}</div><div class="label">Sample Count</div></div>
+  <div class="card"><div class="value">{ttff_avg}</div><div class="label">Avg TTFF</div></div>
+  <div class="card"><div class="value">{ttff_median}</div><div class="label">Median (p50)</div></div>
+  <div class="card"><div class="value">{ttff_p95}</div><div class="label">p95 TTFF</div></div>
+  <div class="card"><div class="value">{ttff_p99}</div><div class="label">p99 TTFF</div></div>
+  <div class="card"><div class="value">{ttff_max}</div><div class="label">Max TTFF</div></div>
+</div>
+
+<h2>End-to-End Response Time</h2>
 <div class="cards">
   <div class="card"><div class="value">{overall['count']}</div><div class="label">Successful Requests</div></div>
   <div class="card"><div class="value">{overall['avg']} ms</div><div class="label">Avg Response Time</div></div>
@@ -333,32 +343,23 @@ def generate_html(
   <div class="card"><div class="value">{overall['max']} ms</div><div class="label">Max Response Time</div></div>
 </div>
 
-<div class="cards">
-  <div class="card"><div class="value">{overall_ttft['count']}</div><div class="label">TTFT Sample Count</div></div>
-  <div class="card"><div class="value">{ttft_avg}</div><div class="label">Avg Time to First Token</div></div>
-  <div class="card"><div class="value">{ttft_median}</div><div class="label">Median TTFT (p50)</div></div>
-  <div class="card"><div class="value">{ttft_p95}</div><div class="label">p95 TTFT</div></div>
-  <div class="card"><div class="value">{ttft_p99}</div><div class="label">p99 TTFT</div></div>
-  <div class="card"><div class="value">{ttft_max}</div><div class="label">Max TTFT</div></div>
-</div>
+<h2>TTFF by Category</h2>
+<table>
+<thead><tr>
+  <th>Category</th><th>Count</th><th>Min (ms)</th><th>Avg (ms)</th>
+  <th>Median (ms)</th><th>p95 (ms)</th><th>p99 (ms)</th><th>Max (ms)</th>
+</tr></thead>
+<tbody>{cat_ttff_rows_html}
+</tbody>
+</table>
 
-<h2>Response Time by Category</h2>
+<h2>End-to-End Response Time by Category</h2>
 <table>
 <thead><tr>
   <th>Category</th><th>Count</th><th>Min (ms)</th><th>Avg (ms)</th>
   <th>Median (ms)</th><th>p95 (ms)</th><th>p99 (ms)</th><th>Max (ms)</th>
 </tr></thead>
 <tbody>{cat_rows_html}
-</tbody>
-</table>
-
-<h2>Time to First Token by Category</h2>
-<table>
-<thead><tr>
-  <th>Category</th><th>Count</th><th>Min (ms)</th><th>Avg (ms)</th>
-  <th>Median (ms)</th><th>p95 (ms)</th><th>p99 (ms)</th><th>Max (ms)</th>
-</tr></thead>
-<tbody>{cat_ttft_rows_html}
 </tbody>
 </table>
 
@@ -375,7 +376,7 @@ def generate_html(
 <table>
 <thead><tr>
   <th>Time</th><th>Category</th><th>Question</th><th>Answer</th>
-  <th>Response Time (ms)</th><th>TTFT (ms)</th><th>Status</th><th>Error Type</th>
+  <th>TTFF (ms)</th><th>Response Time (ms)</th><th>Status</th><th>Error Type</th>
 </tr></thead>
 <tbody>{detail_rows_html}
 </tbody>
