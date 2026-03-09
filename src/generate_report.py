@@ -315,6 +315,13 @@ def generate_html(
   .params-table {{ max-width: 480px; margin-bottom: 2rem; }}
   .params-table td:first-child {{ color: var(--muted); font-size: .85rem; }}
   .params-table td:last-child {{ font-weight: 600; }}
+
+  .metric-definitions {{ margin-bottom: 2rem; }}
+  .metric-definitions table {{ max-width: 800px; }}
+  .metric-definitions td {{ vertical-align: top; line-height: 1.5; }}
+  .metric-definitions td:first-child {{ white-space: nowrap; width: 180px; }}
+  .muted-small {{ color: var(--muted); font-size: .75rem; }}
+  .metric-note {{ color: var(--muted); font-size: .8rem; font-style: italic; margin-top: .75rem; }}
 </style>
 </head>
 <body>
@@ -322,6 +329,28 @@ def generate_html(
 <h1>Chatbot Performance Report — {_esc(test_type.upper())} Test</h1>
 <p class="subtitle">Generated {generated_at} &middot; {len(rows)} total requests &middot; {len(error_rows)} errors</p>
 {params_html}
+
+<h2>Metric Definitions</h2>
+<div class="metric-definitions">
+  <table>
+  <thead><tr><th>Metric</th><th>Definition</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><strong>TTFF</strong><br><span class="muted-small">Time to First Feedback</span></td>
+      <td>Time from request until the backend acknowledges the query and returns the first
+      progress event (e.g. &ldquo;Analysing your question&hellip;&rdquo;). Measures backend responsiveness.</td>
+    </tr>
+    <tr>
+      <td><strong>E2E Response Time</strong><br><span class="muted-small">End-to-End</span></td>
+      <td>Time from request until the backend delivers the complete final answer. Because the
+      full response is sent as a single event (not streamed token-by-token), this also represents
+      the time to first token of the actual answer. Measures total backend processing time.</td>
+    </tr>
+  </tbody>
+  </table>
+  <p class="metric-note">Both metrics are measured at the network layer (server-side delivery). Frontend rendering
+  time is excluded as it varies by client device, browser, and network conditions.</p>
+</div>
 
 <h2>Time to First Feedback (TTFF)</h2>
 <div class="cards">
