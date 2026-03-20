@@ -23,8 +23,6 @@ Config defaults are set for full-scale AWS (500–1000 users).
 CHATBOT_URL=https://your-chatbot-url.com
 LOGIN_EMAIL=your-email@example.com
 LOGIN_PASSWORD=your-password
-API_ENDPOINT_LOGIN=/api/auth/login
-API_ENDPOINT_SEND=/api/chat
 ```
 
 ### 2. Install & Run Locally
