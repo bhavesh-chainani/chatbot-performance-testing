@@ -18,6 +18,8 @@ import time
 from datetime import datetime
 from pathlib import Path
 
+import requests
+
 from locust import task, between, events, LoadTestShape, HttpUser
 from locust.runners import WorkerRunner, Runner
 
@@ -43,6 +45,7 @@ from config.test_config import (
     BREAKPOINT_RAMP_USERS_PER_STEP,
     BREAKPOINT_STEP_DURATION,
     REPORTS_DIR,
+    CHAT_TIMEOUT_SECONDS,
 )
 
 from src.sample_questions import get_sample_messages, get_question_category
@@ -364,50 +367,63 @@ class ChatbotUser(HttpUser):
 
         start = time.time()
         ttff_ms = None
-        with self.client.post(
-            f"{API_ENDPOINT_CHAT}?ticket_id={self.ticket_id}",
-            json=payload,
-            name=f"Chat [{category}]",
-            catch_response=True,
-            timeout=120,
-            stream=True,
-        ) as resp:
-            lines = []
-            for line in resp.iter_lines():
-                if line is None:
-                    continue
+        try:
+            with self.client.post(
+                f"{API_ENDPOINT_CHAT}?ticket_id={self.ticket_id}",
+                json=payload,
+                name=f"Chat [{category}]",
+                catch_response=True,
+                timeout=CHAT_TIMEOUT_SECONDS,
+                stream=True,
+            ) as resp:
+                lines = []
                 try:
-                    decoded = line.decode("utf-8", errors="replace")
-                except Exception:
-                    decoded = str(line)
-                if ttff_ms is None and decoded.strip().startswith("data:"):
-                    if _is_feedback_event(decoded):
-                        ttff_ms = (time.time() - start) * 1000
-                lines.append(decoded)
-            response_time_ms = (time.time() - start) * 1000
-            full_text = "\n".join(lines)
-            answer_text = ""
+                    for line in resp.iter_lines():
+                        if line is None:
+                            continue
+                        try:
+                            decoded = line.decode("utf-8", errors="replace")
+                        except Exception:
+                            decoded = str(line)
+                        if ttff_ms is None and decoded.strip().startswith("data:"):
+                            if _is_feedback_event(decoded):
+                                ttff_ms = (time.time() - start) * 1000
+                        lines.append(decoded)
+                except (ConnectionError, requests.exceptions.ConnectionError) as e:
+                    response_time_ms = (time.time() - start) * 1000
+                    resp.failure(f"Connection lost: {e}")
+                    self._log(category, message, "", response_time_ms, ttff_ms,
+                              resp.status_code, "Connection Error")
+                    return
 
-            if resp.status_code in [200, 201]:
-                answer_text = _parse_sse_response(full_text)
-                error_type = _classify_error(answer_text)
-                if error_type:
-                    resp.failure(f"Content error: {error_type}")
-                    self._log(category, message, answer_text, response_time_ms, ttff_ms,
-                              resp.status_code, f"Error - {error_type}")
+                response_time_ms = (time.time() - start) * 1000
+                full_text = "\n".join(lines)
+                answer_text = ""
+
+                if resp.status_code in [200, 201]:
+                    answer_text = _parse_sse_response(full_text)
+                    error_type = _classify_error(answer_text)
+                    if error_type:
+                        resp.failure(f"Content error: {error_type}")
+                        self._log(category, message, answer_text, response_time_ms, ttff_ms,
+                                  resp.status_code, f"Error - {error_type}")
+                    else:
+                        resp.success()
+                        self._log(category, message, answer_text, response_time_ms, ttff_ms,
+                                  resp.status_code, "Success")
+                elif resp.status_code == 401:
+                    resp.failure("401 Unauthorized – session cookie expired")
+                    self.is_authenticated = False
+                    self._log(category, message, "", response_time_ms, ttff_ms,
+                              resp.status_code, "401 Unauthorized")
                 else:
-                    resp.success()
-                    self._log(category, message, answer_text, response_time_ms, ttff_ms,
-                              resp.status_code, "Success")
-            elif resp.status_code == 401:
-                resp.failure("401 Unauthorized – session cookie expired")
-                self.is_authenticated = False
-                self._log(category, message, "", response_time_ms, ttff_ms,
-                          resp.status_code, "401 Unauthorized")
-            else:
-                resp.failure(f"Status {resp.status_code}")
-                self._log(category, message, "", response_time_ms, ttff_ms,
-                          resp.status_code, f"Error {resp.status_code}")
+                    resp.failure(f"Status {resp.status_code}")
+                    self._log(category, message, "", response_time_ms, ttff_ms,
+                              resp.status_code, f"Error {resp.status_code}")
+        except (ConnectionError, requests.exceptions.ConnectionError) as e:
+            response_time_ms = (time.time() - start) * 1000
+            self._log(category, message, "", response_time_ms, ttff_ms,
+                      0, "Connection Error")
 
     # -- logging --------------------------------------------------------------
     def _log(self, category, question, answer, response_time_ms, ttff_ms, status_code, status):
