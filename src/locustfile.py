@@ -113,7 +113,7 @@ def on_test_start(environment, **kwargs):
     # before Runner.start applied swarm parameters.
 
     if not RESPONSE_TIME_CSV.exists() or RESPONSE_TIME_CSV.stat().st_size == 0:
-        with open(RESPONSE_TIME_CSV, "w", newline="") as f:
+        with open(RESPONSE_TIME_CSV, "w", newline="", encoding="utf-8") as f:
             csv.writer(f).writerow([
                 "timestamp", "test_type", "question_category",
                 "question", "answer", "response_time_ms", "ttff_ms",
@@ -153,6 +153,19 @@ def _format_run_time_for_meta(run_time) -> str:
     return f"{sec}s"
 
 
+def _cli_user_count(opts) -> int | None:
+    if opts is None:
+        return None
+    for name in ("num_users", "users", "user_count"):
+        v = getattr(opts, name, None)
+        if v is not None:
+            try:
+                return int(v)
+            except (TypeError, ValueError):
+                continue
+    return None
+
+
 @events.test_stop.add_listener
 def on_test_stop(environment, **kwargs):
     """Write run metadata at test end so the report shows the actual parameters used (UI or headless)."""
@@ -161,21 +174,33 @@ def on_test_stop(environment, **kwargs):
         return
     reports = Path(REPORTS_DIR)
     reports.mkdir(parents=True, exist_ok=True)
-    # Prefer values captured from runner.start() (web UI passes these; LocalRunner does not persist spawn_rate)
+    opts = getattr(environment, "parsed_options", None)
+
+    # Prefer runner.start capture (web UI); headless often needs parsed_options for -u / -r.
     users = _swarm_params.get("users")
     if users is None:
         users = getattr(runner, "target_user_count", None)
     if users is None:
+        users = _cli_user_count(opts)
+    if users is None:
         users = ACTIVE_USERS
+
     spawn_rate = _swarm_params.get("spawn_rate")
     if spawn_rate is None:
         spawn_rate = getattr(runner, "spawn_rate", None)
+    if spawn_rate is None and opts is not None:
+        sr = getattr(opts, "spawn_rate", None)
+        if sr is not None:
+            try:
+                spawn_rate = float(sr)
+            except (TypeError, ValueError):
+                spawn_rate = None
     if spawn_rate is None:
         spawn_rate = ACTIVE_SPAWN_RATE
+
     run_time = getattr(runner, "run_time", None)
-    if run_time is None:
-        opts = getattr(environment, "parsed_options", None)
-        run_time = getattr(opts, "run_time", None) if opts else None
+    if run_time is None and opts is not None:
+        run_time = getattr(opts, "run_time", None)
     run_time_str = _format_run_time_for_meta(run_time)
     meta_path = reports / f"run_meta_{TEST_TYPE}.json"
     try:
@@ -393,7 +418,7 @@ class ChatbotUser(HttpUser):
             if not RESPONSE_TIME_CSV:
                 return
             ttff_val = round(ttff_ms, 2) if ttff_ms is not None else ""
-            with open(RESPONSE_TIME_CSV, "a", newline="") as f:
+            with open(RESPONSE_TIME_CSV, "a", newline="", encoding="utf-8") as f:
                 csv.writer(f).writerow([
                     datetime.now().isoformat(),
                     TEST_TYPE,

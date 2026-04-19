@@ -72,6 +72,8 @@ After it finishes, send the client at least:
 
 Locust also writes `reports/client_run_stats.csv` (final stats table) and `reports/client_run_failures.csv` if there were failures.
 
+**Column-by-column guide for clients:** [docs/CLIENT_LOCUST_STATS_HISTORY.md](docs/CLIENT_LOCUST_STATS_HISTORY.md) (explains **Total Median / Average / Min / Max** response time and the rest).
+
 ---
 
 ## 4. Other files this project writes
@@ -86,6 +88,8 @@ Locust also writes `reports/client_run_stats.csv` (final stats table) and `repor
 ## 5. Project layout
 
 ```
+├── docs/
+│   └── CLIENT_LOCUST_STATS_HISTORY.md  # Client-facing: Locust *_stats_history.csv columns
 ├── .env                 # You create this (see .env.example); not committed
 ├── config/
 │   ├── test_config.yaml # URL, API paths, default users/duration per TEST_TYPE
@@ -101,17 +105,6 @@ Locust also writes `reports/client_run_stats.csv` (final stats table) and `repor
 
 ---
 
-## 6. `*_stats_history.csv` columns (short)
+## 6. `*_stats_history.csv` columns
 
-Rows are **Locust HTTP statistics** snapshots over time (not your custom chat CSV). Typical columns:
-
-- **Timestamp** — Unix time when the row was written.
-- **User Count** — simulated users at that moment.
-- **Name** — request label or **Aggregated** for all requests.
-- **Requests/s**, **Failures/s** — throughput in Locust’s rolling window for that row.
-- **50% … 100%** — response time percentiles in **milliseconds**.
-- **Total Request Count**, **Total Failure Count** — cumulative since test start (for that row’s scope).
-- **Total Median/Average/Min/Max Response Time** — aggregate stats in **ms**.
-- **Total Average Content Size** — average HTTP response body size in **bytes**.
-
-Exact behavior is defined by your Locust version; see [Locust CSV stats](https://docs.locust.io/en/stable/retrieving-stats.html).
+See **[docs/CLIENT_LOCUST_STATS_HISTORY.md](docs/CLIENT_LOCUST_STATS_HISTORY.md)** for a full client-facing glossary (**Total Median / Average / Min / Max** response time, percentiles, counters, and how **`Aggregated`** behaves).
