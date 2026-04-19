@@ -46,8 +46,6 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# AWS
-.aws/
 *.pem
 
 # Logs

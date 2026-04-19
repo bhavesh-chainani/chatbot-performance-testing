@@ -1,9 +1,4 @@
-"""
-Test Configuration
-Loads from test_config.yaml with environment variable overrides
-
-Set TEST_TYPE env var to select a profile: load, stress, endurance, breakpoint
-"""
+"""Load `test_config.yaml` with optional env overrides. Set `TEST_TYPE` for load|stress|endurance|breakpoint."""
 import os
 import yaml
 from pathlib import Path
@@ -54,32 +49,29 @@ API_ENDPOINT_CHAT = _get_config('chatbot.api_endpoints.chat', '/api/chat/stream'
 API_ENDPOINT_TICKETS = _get_config('chatbot.api_endpoints.tickets', '/api/tickets')
 API_ENDPOINT_USERME = _get_config('chatbot.api_endpoints.userme', '/api/user/me')
 
-# ---- SSO Authentication ----
-LOGIN_EMAIL = os.getenv('LOGIN_EMAIL', '')
-LOGIN_PASSWORD = os.getenv('LOGIN_PASSWORD', '')
-SSO_LOGIN_URL = _get_config('chatbot.sso.login_url', '', 'SSO_LOGIN_URL')
+# Session cookie from browser after you log in (see README)
 SESSION_COOKIE = os.getenv('SESSION_COOKIE', '')
 
 # ---- Active Test Type ----
 TEST_TYPE = os.getenv('TEST_TYPE', 'load').lower()
 
-# ---- Test Profiles (full-scale AWS defaults; override via env or YAML) ----
-LOAD_TEST_USERS = _get_config('load_test.users', 500)
-LOAD_TEST_SPAWN_RATE = _get_config('load_test.spawn_rate', 25)
-LOAD_TEST_RUN_TIME = _get_config('load_test.run_time', '20m')
+# ---- Test profiles (defaults from YAML; override with env e.g. LOAD_TEST_USERS) ----
+LOAD_TEST_USERS = _get_config('load_test.users', 50)
+LOAD_TEST_SPAWN_RATE = _get_config('load_test.spawn_rate', 5)
+LOAD_TEST_RUN_TIME = _get_config('load_test.run_time', '10m')
 
-STRESS_TEST_USERS = _get_config('stress_test.users', 750)
-STRESS_TEST_SPAWN_RATE = _get_config('stress_test.spawn_rate', 38)
-STRESS_TEST_RUN_TIME = _get_config('stress_test.run_time', '20m')
+STRESS_TEST_USERS = _get_config('stress_test.users', 100)
+STRESS_TEST_SPAWN_RATE = _get_config('stress_test.spawn_rate', 10)
+STRESS_TEST_RUN_TIME = _get_config('stress_test.run_time', '10m')
 
-ENDURANCE_TEST_USERS = _get_config('endurance_test.users', 500)
-ENDURANCE_TEST_SPAWN_RATE = _get_config('endurance_test.spawn_rate', 25)
-ENDURANCE_TEST_RUN_TIME = _get_config('endurance_test.run_time', '2h')
+ENDURANCE_TEST_USERS = _get_config('endurance_test.users', 50)
+ENDURANCE_TEST_SPAWN_RATE = _get_config('endurance_test.spawn_rate', 5)
+ENDURANCE_TEST_RUN_TIME = _get_config('endurance_test.run_time', '30m')
 
-BREAKPOINT_MAX_USERS = _get_config('breakpoint_test.max_users', 1000)
-BREAKPOINT_RAMP_USERS_PER_STEP = _get_config('breakpoint_test.ramp_users_per_step', 50)
-BREAKPOINT_STEP_DURATION = _get_config('breakpoint_test.step_duration_seconds', 120)
-BREAKPOINT_RUN_TIME = _get_config('breakpoint_test.run_time', '30m')
+BREAKPOINT_MAX_USERS = _get_config('breakpoint_test.max_users', 200)
+BREAKPOINT_RAMP_USERS_PER_STEP = _get_config('breakpoint_test.ramp_users_per_step', 20)
+BREAKPOINT_STEP_DURATION = _get_config('breakpoint_test.step_duration_seconds', 60)
+BREAKPOINT_RUN_TIME = _get_config('breakpoint_test.run_time', '20m')
 
 _PROFILES = {
     'load': {

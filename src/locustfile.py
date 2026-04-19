@@ -1,15 +1,4 @@
-"""
-Locust performance testing for chatbot
-Auth: Pre-authenticated session cookie (SSO handled externally)
-Chat: POST /api/chat/stream?ticket_id=X  (Server-Sent Events)
-Metric: End-to-End Response Time
-
-Usage:
-  TEST_TYPE=load       locust -f src/locustfile.py
-  TEST_TYPE=stress     locust -f src/locustfile.py
-  TEST_TYPE=endurance  locust -f src/locustfile.py
-  TEST_TYPE=breakpoint locust -f src/locustfile.py
-"""
+"""Chatbot load test: session cookie auth, SSE chat. Set TEST_TYPE=load|stress|endurance|breakpoint. See README."""
 import csv
 import json
 import math
@@ -32,8 +21,6 @@ from config.test_config import (
     API_ENDPOINT_CHAT,
     API_ENDPOINT_TICKETS,
     API_ENDPOINT_USERME,
-    LOGIN_EMAIL,
-    LOGIN_PASSWORD,
     SESSION_COOKIE,
     WAIT_TIME_MIN,
     WAIT_TIME_MAX,

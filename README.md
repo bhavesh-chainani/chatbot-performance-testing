@@ -1,105 +1,117 @@
-# Chatbot Performance Testing
+# Chatbot load testing (Locust)
 
-End-to-end performance testing for chatbot APIs using [Locust](https://locust.io/) on AWS EC2.
+Load-test the chatbot **locally** with [Locust](https://locust.io/). Authentication uses a **session cookie** you copy from your browser after logging in.
 
-Simulates real users logging in, sending questions, and receiving answers — then measures response time across 4 test types.
+---
 
-## Test Types
+## 1. One-time setup
 
-Config defaults are set for full-scale AWS (500–1000 users).
+1. **Python 3.10+** installed.
 
-| Test | Users (full-scale) | Duration | Purpose |
-|------|-------------------|----------|---------|
-| **Load** | 500 | 20 min | Baseline under expected traffic |
-| **Stress** | 750 | 20 min | Beyond normal capacity |
-| **Endurance** | 500 | 2 hours | Sustained load (2h keeps within 70M token budget) |
-| **Breakpoint** | ramp to 1000 | 30 min | Find the breaking point |
+2. **Install dependencies** (from this project folder):
 
-## Quick Start
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### 1. Configure `.env`
+3. **Environment file**
 
-```env
-CHATBOT_URL=https://your-chatbot-url.com
-LOGIN_EMAIL=your-email@example.com
-LOGIN_PASSWORD=your-password
-```
+   - Copy `.env.example` to `.env`.
+   - Log into the chatbot site in your browser (same host as in `config/test_config.yaml`, default `https://cfoti.org`).
+   - Open DevTools → **Application** (Chrome) or **Storage** (Firefox) → **Cookies** → select the site → copy the **`session`** cookie value.
+   - Put it in `.env` as:
 
-### 2. Install & Run Locally
+     ```env
+     SESSION_COOKIE=paste-the-value-here
+     ```
 
-```bash
-pip install -r requirements.txt
-```
+   Optional: set `CHATBOT_URL` in `.env` if the base URL differs from the YAML default.
 
-Pick a test type (`load`, `stress`, `endurance`, or `breakpoint`) by setting the `TEST_TYPE` environment variable, then run Locust.
+---
 
-**macOS / Linux (Bash, zsh, Git Bash on Windows)**
+## 2. Run a test (web UI — recommended)
 
-```bash
-TEST_TYPE=load locust -f src/locustfile.py
-```
+Pick a test profile with `TEST_TYPE` (`load`, `stress`, `endurance`, or `breakpoint`). Defaults for users, spawn rate, and duration are in `config/test_config.yaml` (you can still override in the Locust UI).
 
-**Windows (PowerShell)**
+**PowerShell**
 
 ```powershell
-$env:TEST_TYPE = "load"; locust -f src/locustfile.py
+$env:TEST_TYPE = "load"
+python -m locust -f src/locustfile.py
 ```
 
-**Windows (Command Prompt)**
-
-```cmd
-set TEST_TYPE=load && locust -f src/locustfile.py
-```
-
-Open `http://localhost:8089`, enter 10 users / spawn rate 2, and click Start.
-
-### 3. Run on AWS
+**macOS / Linux / Git Bash**
 
 ```bash
-./aws_setup/deploy_locust.sh
+TEST_TYPE=load python -m locust -f src/locustfile.py
 ```
 
-Deploys 1 master + 5 workers (full-scale). See **[AWS_SETUP.md](AWS_SETUP.md)** for step-by-step instructions.
+Open **http://localhost:8089**, set **users** and **spawn rate**, start the test.
 
-### 4. Generate Report
+---
 
-After a test finishes:
+## 3. What to hand off (client-style deliverables)
 
-```bash
-python src/generate_report.py
+Locust gives you two standard artifacts:
+
+| Deliverable | What it is | How to get it |
+|-------------|------------|----------------|
+| **HTML report** | Locust’s report: request stats, response times, failures (charts work best from the UI). | In the UI: **Download** tab → **Download Report**. Or run headless with `--html` (see script below). |
+| **`*_stats_history.csv`** | Time series of aggregated HTTP stats (same idea as a “stats history” export): RPS, percentiles, cumulative counts, etc. | Run with a `--csv` prefix (see script below). Example: `reports/client_run_stats_history.csv`. |
+
+**Headless one-liner** (writes HTML + CSVs into `reports/`):
+
+```powershell
+.\scripts\client_locust_exports.ps1 -Users 1 -SpawnRate 1 -RunTime "3m" -Prefix "reports/client_run"
 ```
 
-Generates `reports/report_<test_type>.html` — shows every question asked, the chatbot's answer, and e2e response time with summary statistics.
+After it finishes, send the client at least:
 
-## Project Structure
+- `reports/client_run.html`
+- `reports/client_run_stats_history.csv`
+
+Locust also writes `reports/client_run_stats.csv` (final stats table) and `reports/client_run_failures.csv` if there were failures.
+
+---
+
+## 4. Other files this project writes
+
+| File | Meaning |
+|------|--------|
+| `reports/response_times_<TEST_TYPE>.csv` | One row per **chat** completed by Locust: question, answer snippet, end-to-end time in **ms**, TTFF, status. **Not** the same as Locust’s `*_stats_history.csv` (that one is **HTTP-level** stats from Locust). |
+| `reports/run_meta_<TEST_TYPE>.json` | Written when the test **ends**: users, spawn rate, host, run time (from the swarm you actually ran). |
+
+---
+
+## 5. Project layout
 
 ```
-.
-├── src/
-│   ├── locustfile.py          # Locust test — login, send messages, record responses
-│   ├── sample_questions.py    # Simple & Complex question pools + weights
-│   └── generate_report.py     # HTML report generator
+├── .env                 # You create this (see .env.example); not committed
 ├── config/
-│   ├── test_config.yaml       # All 4 test profiles
-│   └── test_config.py         # Loads config, selects active profile via TEST_TYPE
-├── aws_setup/
-│   ├── cloudformation/
-│   │   └── locust-cluster-full.yaml  # Master + workers
-│   ├── deploy_locust.sh         # Deploy full-scale cluster
-│   └── get_ips_simple.sh        # Get master + worker IPs
-├── .env                         # Your credentials (not committed)
-├── requirements.txt
-├── AWS_SETUP.md                 # AWS setup walkthrough
-└── README.md
+│   ├── test_config.yaml # URL, API paths, default users/duration per TEST_TYPE
+│   └── test_config.py   # Loads YAML + env
+├── src/
+│   ├── locustfile.py    # Locust user: auth, ticket, chat stream
+│   └── sample_questions.py
+├── scripts/
+│   ├── client_locust_exports.ps1
+│   └── client_locust_exports.sh
+└── requirements.txt
 ```
 
-## Key Metric
+---
 
-**End-to-End Response Time** — measured from the moment the chat message is sent to the moment the full response is received. Tracked per request in CSV, aggregated in the HTML report as min / avg / median / p95 / p99 / max.
+## 6. `*_stats_history.csv` columns (short)
 
-## Reports
+Rows are **Locust HTTP statistics** snapshots over time (not your custom chat CSV). Typical columns:
 
-Each test run produces:
+- **Timestamp** — Unix time when the row was written.
+- **User Count** — simulated users at that moment.
+- **Name** — request label or **Aggregated** for all requests.
+- **Requests/s**, **Failures/s** — throughput in Locust’s rolling window for that row.
+- **50% … 100%** — response time percentiles in **milliseconds**.
+- **Total Request Count**, **Total Failure Count** — cumulative since test start (for that row’s scope).
+- **Total Median/Average/Min/Max Response Time** — aggregate stats in **ms**.
+- **Total Average Content Size** — average HTTP response body size in **bytes**.
 
-- `reports/response_times_<test_type>.csv` — raw data (timestamp, question, answer, response time, status)
-- `reports/report_<test_type>.html` — visual report with summary cards, category breakdown, and full request table
+Exact behavior is defined by your Locust version; see [Locust CSV stats](https://docs.locust.io/en/stable/retrieving-stats.html).

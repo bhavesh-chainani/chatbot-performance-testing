@@ -1,41 +1,30 @@
-# Chatbot API Configuration
+# Base URL and API paths (override with CHATBOT_URL etc. in .env if needed)
 chatbot:
   url: "https://cfoti.org"
   api_endpoints:
     chat: "/api/chat/stream"
     tickets: "/api/tickets"
     userme: "/api/user/me"
-  sso:
-    login_url: "https://member-uat.sbf.org.sg/sbfportal/services/Account.Login.Service.ss?n=2&c=6422571_SB2"
 
-# =============================================================================
-# Test Profiles (full-scale AWS defaults)
-# Select which test to run via TEST_TYPE env var (load, stress, endurance, breakpoint)
-# Primary metric: End-to-End Response Time
-# Override via env if needed: e.g. LOAD_TEST_USERS=10 LOAD_TEST_RUN_TIME=5m
-# =============================================================================
-
-# Load Test - baseline performance under expected load (500 users, 20 min)
+# Defaults used when you start Locust without overriding in the web UI.
+# Override via env, e.g. LOAD_TEST_USERS=50 LOAD_TEST_RUN_TIME=10m
 load_test:
-  users: 500
-  spawn_rate: 25
-  run_time: "20m"
+  users: 50
+  spawn_rate: 5
+  run_time: "10m"
 
-# Stress Test - performance beyond normal capacity (750 users, 20 min)
 stress_test:
-  users: 750
-  spawn_rate: 38
-  run_time: "20m"
+  users: 100
+  spawn_rate: 10
+  run_time: "10m"
 
-# Endurance Test - sustained load (500 users). 2h keeps total token use under 70M with Load+Stress+Breakpoint.
 endurance_test:
-  users: 500
-  spawn_rate: 25
-  run_time: "2h"
-
-# Breakpoint Test - ramp up until failure (cap 1000 users, 30 min)
-breakpoint_test:
-  max_users: 1000
-  ramp_users_per_step: 50
-  step_duration_seconds: 120
+  users: 50
+  spawn_rate: 5
   run_time: "30m"
+
+breakpoint_test:
+  max_users: 200
+  ramp_users_per_step: 20
+  step_duration_seconds: 60
+  run_time: "20m"
