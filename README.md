@@ -29,9 +29,26 @@ LOGIN_PASSWORD=your-password
 
 ```bash
 pip install -r requirements.txt
+```
 
-# Pick a test type:
+Pick a test type (`load`, `stress`, `endurance`, or `breakpoint`) by setting the `TEST_TYPE` environment variable, then run Locust.
+
+**macOS / Linux (Bash, zsh, Git Bash on Windows)**
+
+```bash
 TEST_TYPE=load locust -f src/locustfile.py
+```
+
+**Windows (PowerShell)**
+
+```powershell
+$env:TEST_TYPE = "load"; locust -f src/locustfile.py
+```
+
+**Windows (Command Prompt)**
+
+```cmd
+set TEST_TYPE=load && locust -f src/locustfile.py
 ```
 
 Open `http://localhost:8089`, enter 10 users / spawn rate 2, and click Start.

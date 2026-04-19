@@ -95,6 +95,161 @@ def compute_stats(times: list[float]) -> dict:
     }
 
 
+def _percentile_value(sorted_vals: list[float], percentile: float):
+    """Return percentile from sorted values using nearest-rank style index."""
+    if not sorted_vals:
+        return "N/A"
+    if len(sorted_vals) == 1:
+        return round(sorted_vals[0], 1)
+    idx = int(len(sorted_vals) * percentile)
+    if idx >= len(sorted_vals):
+        idx = len(sorted_vals) - 1
+    return round(sorted_vals[idx], 1)
+
+
+def _parse_timestamp_seconds(ts: str) -> int | None:
+    """Parse ISO timestamp to epoch seconds."""
+    if not ts:
+        return None
+    try:
+        dt = datetime.fromisoformat(ts)
+        return int(dt.timestamp())
+    except ValueError:
+        return None
+
+
+def generate_stats_history_csv(
+    rows: list[dict],
+    csv_path: Path,
+    run_meta: dict | None = None,
+) -> Path | None:
+    """
+    Generate stats history CSV from chat request-level rows (response_times_*.csv).
+
+    This reflects one row per completed chat in the CSV, not Locust's per-HTTP
+    request table. Compare to Locust HTML only for the same layer (chat vs HTTP).
+
+    Output filename:
+      reports/<test_type>_stats_history.csv
+    """
+    run_meta = run_meta or {}
+    user_count = run_meta.get("users")
+    try:
+        user_count = int(user_count) if user_count is not None else 0
+    except (TypeError, ValueError):
+        user_count = 0
+    parsed_rows = []
+    for r in rows:
+        ts = _parse_timestamp_seconds(r.get("timestamp", ""))
+        if ts is None:
+            continue
+        parsed_rows.append((ts, r))
+    if not parsed_rows:
+        return None
+
+    parsed_rows.sort(key=lambda x: x[0])
+    start_ts = parsed_rows[0][0]
+    end_ts = parsed_rows[-1][0]
+
+    test_type = rows[0].get("test_type", csv_path.stem.replace("response_times_", ""))
+    out_path = csv_path.with_name(f"{test_type}_stats_history.csv")
+
+    header = [
+        "Timestamp", "User Count", "Type", "Name", "Requests/s", "Failures/s",
+        "50%", "66%", "75%", "80%", "90%", "95%", "98%", "99%", "99.9%", "99.99%", "100%",
+        "Total Request Count", "Total Failure Count", "Total Median Response Time",
+        "Total Average Response Time", "Total Min Response Time", "Total Max Response Time",
+        "Total Average Answer Size (bytes)",
+    ]
+
+    per_second = {}
+    for ts, r in parsed_rows:
+        per_second.setdefault(ts, []).append(r)
+
+    cumulative_count = 0
+    cumulative_failures = 0
+    cumulative_times = []
+    cumulative_content_sizes = []
+
+    with open(out_path, "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(header)
+
+        for sec in range(start_ts, end_ts + 1):
+            bucket = per_second.get(sec, [])
+            reqs_this_sec = len(bucket)
+            fails_this_sec = sum(1 for r in bucket if r.get("status") != "Success")
+
+            cumulative_count += reqs_this_sec
+            cumulative_failures += fails_this_sec
+
+            for r in bucket:
+                try:
+                    rt = float(r.get("response_time_ms", 0.0))
+                except (TypeError, ValueError):
+                    rt = 0.0
+                cumulative_times.append(rt)
+                answer = r.get("answer", "") or ""
+                cumulative_content_sizes.append(len(answer.encode("utf-8")))
+
+            sorted_times = sorted(cumulative_times)
+
+            percentile_cols = [
+                _percentile_value(sorted_times, 0.50),
+                _percentile_value(sorted_times, 0.66),
+                _percentile_value(sorted_times, 0.75),
+                _percentile_value(sorted_times, 0.80),
+                _percentile_value(sorted_times, 0.90),
+                _percentile_value(sorted_times, 0.95),
+                _percentile_value(sorted_times, 0.98),
+                _percentile_value(sorted_times, 0.99),
+                _percentile_value(sorted_times, 0.999),
+                _percentile_value(sorted_times, 0.9999),
+                _percentile_value(sorted_times, 1.0),
+            ]
+
+            if sorted_times:
+                total_median = round(statistics.median(sorted_times), 1)
+                total_avg = round(statistics.mean(sorted_times), 1)
+                total_min = round(sorted_times[0], 1)
+                total_max = round(sorted_times[-1], 1)
+            else:
+                total_median = 0
+                total_avg = 0.0
+                total_min = 0
+                total_max = 0
+
+            avg_answer_size = (
+                round(statistics.mean(cumulative_content_sizes), 6)
+                if cumulative_content_sizes
+                else 0
+            )
+
+            elapsed_sec = sec - start_ts + 1
+            # Cumulative average RPS / failures per second (aligned with Locust headline throughput)
+            avg_rps = cumulative_count / elapsed_sec if elapsed_sec else 0.0
+            avg_failures_per_s = cumulative_failures / elapsed_sec if elapsed_sec else 0.0
+
+            writer.writerow([
+                sec,
+                user_count,
+                "",
+                "Aggregated",
+                f"{avg_rps:.6f}",
+                f"{avg_failures_per_s:.6f}",
+                *percentile_cols,
+                cumulative_count,
+                cumulative_failures,
+                total_median,
+                total_avg,
+                total_min,
+                total_max,
+                avg_answer_size,
+            ])
+
+    return out_path
+
+
 def _esc(text: str) -> str:
     """HTML-escape a string."""
     return (
@@ -448,7 +603,14 @@ def main():
 
         out_path = csv_path.with_name(f"report_{test_type}.html")
         out_path.write_text(html)
-        print(f"Report generated: {out_path}  ({len(rows)} requests)")
+        stats_history_path = generate_stats_history_csv(rows, csv_path, run_meta=run_meta)
+        if stats_history_path:
+            print(
+                f"Report generated: {out_path}  ({len(rows)} requests)\n"
+                f"Stats history CSV generated: {stats_history_path}"
+            )
+        else:
+            print(f"Report generated: {out_path}  ({len(rows)} requests)")
 
 
 if __name__ == "__main__":

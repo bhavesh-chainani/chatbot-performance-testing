@@ -1,0 +1,15 @@
+timestamp,test_type,question_category,question,answer,response_time_ms,ttff_ms,status_code,status
+2026-04-19T20:48:45.367633,load,Indirect,"We have a back-to-back PCO under RCEP for goods from Japan. The buyer in Indonesia wants to split the shipment into two consignments over two months. Is the original PCO still valid, and what do we ne","# Back-to-Back PCO Under RCEP: Split Shipment Guidance
+
+## Your Scenario
+- **Original Country of Origin:** Japan
+- **Intermediate Country:** Singapore
+- **Final Destination:** Indonesia
+- **FTA:** RCEP
+- **Situation:** Splitting shipment into two consignments over two months
+
+---
+
+## Answer: Yes, the Original PCO Can Be Used for Split Shipments
+
+Under RCEP, **splitting shipments is explicitly permitted** for back-to-back Preferential Certificates of Origin. The original PCO from Japan remains va",101878.08,3497.57,200,Success

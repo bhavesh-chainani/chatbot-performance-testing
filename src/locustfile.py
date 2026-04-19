@@ -121,34 +121,9 @@ def on_test_start(environment, **kwargs):
     reports.mkdir(parents=True, exist_ok=True)
     RESPONSE_TIME_CSV = reports / f"response_times_{TEST_TYPE}.csv"
 
-    # Use actual run params from Locust runner when available (UI/headless), else config
-    runner = getattr(environment, "runner", None)
-    users = getattr(runner, "target_user_count", None) if runner is not None else None
-    if users is None or users == 0:
-        users = ACTIVE_USERS
-    spawn_rate = getattr(runner, "spawn_rate", None) if runner is not None else None
-    if spawn_rate is None or spawn_rate == 0:
-        spawn_rate = ACTIVE_SPAWN_RATE
-    run_time = getattr(runner, "run_time", None) if runner is not None else None
-    if run_time is None:
-        opts = getattr(environment, "parsed_options", None)
-        run_time = getattr(opts, "run_time", None) if opts else None
-    if run_time is None:
-        run_time = ACTIVE_RUN_TIME
-    if isinstance(run_time, (int, float)):
-        run_time = f"{int(run_time)}s" if run_time else ACTIVE_RUN_TIME
-    host = CHATBOT_URL
-
-    # Write run metadata only on master (or standalone). Workers don't get UI params and would write config defaults.
-    meta_path = reports / f"run_meta_{TEST_TYPE}.json"
-    if not isinstance(runner, WorkerRunner):
-        with open(meta_path, "w") as f:
-            json.dump({
-                "users": users,
-                "spawn_rate": spawn_rate,
-                "host": host,
-                "run_time": run_time,
-            }, f, indent=2)
+    # Run metadata is written in on_test_stop only, so users/spawn_rate reflect the
+    # actual swarm (UI or CLI). Writing at test start often captured 0/default users
+    # before Runner.start applied swarm parameters.
 
     if not RESPONSE_TIME_CSV.exists() or RESPONSE_TIME_CSV.stat().st_size == 0:
         with open(RESPONSE_TIME_CSV, "w", newline="") as f:
