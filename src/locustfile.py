@@ -100,6 +100,28 @@ Runner.start = _capturing_start
 # ---------------------------------------------------------------------------
 RESPONSE_TIME_CSV = None
 
+_RESPONSE_TIMES_USER_COL = "concurrent_users"
+
+
+def _archive_response_times_csv_if_legacy(path: Path) -> None:
+    """If an existing per-chat CSV predates concurrent_users, rename it so we do not mis-append rows."""
+    if not path.exists() or path.stat().st_size == 0:
+        return
+    try:
+        with open(path, "r", encoding="utf-8", errors="replace") as f:
+            header = f.readline()
+    except OSError:
+        return
+    if _RESPONSE_TIMES_USER_COL in header:
+        return
+    stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    legacy = path.with_name(f"{path.stem}.legacy-{stamp}{path.suffix}")
+    try:
+        path.rename(legacy)
+        print(f"Previous response_times CSV (older columns) archived as: {legacy.name}")
+    except OSError:
+        pass
+
 
 @events.test_start.add_listener
 def on_test_start(environment, **kwargs):
@@ -112,10 +134,12 @@ def on_test_start(environment, **kwargs):
     # actual swarm (UI or CLI). Writing at test start often captured 0/default users
     # before Runner.start applied swarm parameters.
 
+    _archive_response_times_csv_if_legacy(RESPONSE_TIME_CSV)
+
     if not RESPONSE_TIME_CSV.exists() or RESPONSE_TIME_CSV.stat().st_size == 0:
         with open(RESPONSE_TIME_CSV, "w", newline="", encoding="utf-8") as f:
             csv.writer(f).writerow([
-                "timestamp", "test_type", "question_category",
+                "timestamp", _RESPONSE_TIMES_USER_COL, "test_type", "question_category",
                 "question", "answer", "response_time_ms", "ttff_ms",
                 "status_code", "status",
             ])
@@ -413,6 +437,17 @@ class ChatbotUser(HttpUser):
                       0, "Connection Error")
 
     # -- logging --------------------------------------------------------------
+    def _current_concurrent_users(self):
+        """Locust runner count of users currently spawned (same moment as log row)."""
+        env = getattr(self, "environment", None)
+        runner = getattr(env, "runner", None) if env else None
+        if runner is None:
+            return ""
+        try:
+            return int(runner.user_count)
+        except (TypeError, ValueError):
+            return ""
+
     def _log(self, category, question, answer, response_time_ms, ttff_ms, status_code, status):
         try:
             if not RESPONSE_TIME_CSV:
@@ -421,6 +456,7 @@ class ChatbotUser(HttpUser):
             with open(RESPONSE_TIME_CSV, "a", newline="", encoding="utf-8") as f:
                 csv.writer(f).writerow([
                     datetime.now().isoformat(),
+                    self._current_concurrent_users(),
                     TEST_TYPE,
                     category,
                     question[:200],
