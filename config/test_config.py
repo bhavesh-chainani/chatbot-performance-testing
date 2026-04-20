@@ -109,4 +109,4 @@ WAIT_TIME_MAX = _get_config('user_behavior.wait_time.max', 5.0, 'WAIT_TIME_MAX')
 REPORTS_DIR = _get_config('reporting.reports_dir', 'reports', 'REPORTS_DIR')
 
 # ---- Request Timeouts ----
-CHAT_TIMEOUT_SECONDS = _get_config('chatbot.request_timeout_seconds', 240, 'CHAT_TIMEOUT_SECONDS')
+CHAT_TIMEOUT_SECONDS = _get_config('chatbot.request_timeout_seconds', 300, 'CHAT_TIMEOUT_SECONDS')
