@@ -1,0 +1,949 @@
+timestamp,concurrent_users,test_type,question_category,question,answer,response_time_ms,ttff_ms,status_code,status
+2026-04-27T17:36:18.186133,15,load,Direct,What tariff will my aluminium rods with HS code 7604.29.10.10 be subject to if it was manufactured in Russia and exported to the US?,"### Tariff Information for Aluminium Rods (HS Code 7604.29.10.10)
+**Trade Route:** Russia → United States
+
+---
+
+### **Applicable Duties:**
+
+#### 1. **Standard MFN (Most Favoured Nation) Duty**
+- **Rate:** 5% of FOB value
+- **Applies to:** All countries under WTO MFN treatment
+
+#### 2. **Additional Customs Duty (ACD) on Russian Aluminium**
+- **Rate:** **200% of FOB value**
+- **Specific Condition:** This additional duty applies to:
+  - Aluminum articles that are the product of Russia, **OR**
+  - W",47502.69,5069.13,200,Success
+2026-04-27T17:36:40.035998,15,load,Indirect,We import Korean cosmetics (HS 3304) under RCEP into Singapore and re-export to Japan with no further processing. Can we apply for a back-to-back RCEP certificate?,"## Can You Apply for a Back-to-Back RCEP Certificate?
+
+**Yes, you can apply for a back-to-back RCEP certificate** for your scenario of importing Korean cosmetics (HS 3304) into Singapore and re-exporting to Japan with no further processing.
+
+### Eligibility Confirmation
+
+Your situation meets the requirements for a back-to-back certificate under RCEP because:
+
+1. **All three countries are RCEP members**: South Korea, Singapore, and Japan are all parties to the Regional Comprehensive Economic Part",82423.64,3859.72,200,Success
+2026-04-27T17:36:44.674528,15,load,Indirect,"Under which FTAs, if any, can India-origin goods use a back-to-back mechanism via Singapore?","Based on the information retrieved from the CFOTI Knowledge Base, India-origin goods can use a back-to-back mechanism via Singapore under the following FTA:
+
+## **ASEAN-India Free Trade Area (AIFTA)**
+
+### Key Information:
+
+**AIFTA explicitly supports back-to-back Certificate of Origin (CO) provisions.** According to the Operational Certification Procedures documented in the AIFTA agreement:
+
+- **Back-to-Back CO Provision**: In cases of Back-to-Back CO, in accordance with the Operational Certifi",86117.19,3009.07,200,Success
+2026-04-27T17:36:49.149900,15,load,Indirect,"If we import under ASEAN-China FTA and re-export to Japan under RCEP with minimal repackaging in Singapore, can we use a back-to-back certificate, and what are the conditions and time limits?","Thank you for your enquiry about Back-to-Back Preferential Certificate of Origin (B2B PCO) eligibility under RCEP.
+
+To properly assess your eligibility for a Back-to-Back PCO and provide you with the specific conditions and time limits, I need the following information:
+
+### **Required Information:**
+
+1. **HS Code** (Required): Please provide the specific HS code for your product. This is essential to determine tariff rates, FTA eligibility, and Rules of Origin requirements.
+   - If you're unsur",27460.67,5238.04,200,Success
+2026-04-27T17:36:51.750463,15,load,Indirect,We import Korean cosmetics (HS 3304) under RCEP into Singapore and re-export to Japan with no further processing. Can we apply for a back-to-back RCEP certificate?,"**Yes, you can apply for a back-to-back RCEP certificate** for your scenario of importing Korean cosmetics (HS 3304) into Singapore and re-exporting to Japan with no further processing.
+
+---
+
+### Legal Basis
+
+Under **RCEP Article 3.19 (Back-to-Back Proof of Origin)**, an intermediate Party (Singapore) may issue a back-to-back Proof of Origin provided that the following conditions are met:
+
+| Requirement | Your Scenario | Status |
+|------------|---------------|---------|
+| Valid original Proof of",91249.01,3859.4,200,Success
+2026-04-27T17:36:52.337889,15,load,Direct,Where do I access certified lists or notices indicating country eligibility for Singapore public tenders under certain agreements?,"Based on the information retrieved from the CFOTI Knowledge Base, I can provide you with guidance on where to access information about country eligibility for Singapore public tenders under trade agreements.
+
+## Official Publication Channels for Singapore Government Procurement
+
+Singapore publishes government procurement information through the following officially designated channels:
+
+### 1. **GeBIZ (Government Electronic Business Portal)**
+- **Website**: http://www.gebiz.gov.sg
+- **Purpose**:",82662.05,2968.49,200,Success
+2026-04-27T17:36:53.551365,15,load,Direct,"In what ways do digital trade provisions in relevant agreements create sector-specific opportunities and advantages, and how do they improve market access and cross-border dealings?","I am unable to retrieve sufficient information regarding this subject matter. For further guidance, please click on the 'Email' button on the bottom right corner of the screen to arrange for a call or a one-to-one advisory session. Our specialists can offer tailored insights based on your product and trade needs, and help you address any related queries or challenges.",6005.06,6004.91,200,Success
+2026-04-27T17:37:01.409665,15,load,Direct,I would like to know more about the import duties for export from Singapore to US. HS code for my product is 9404.21.00.10. Estimated export value for each mattress is $150.,"# Import Duties for Mattresses from Singapore to United States
+
+## Product Information
+- **HS Code:** 9404.21.00.10 (Mattresses of cellular rubber or plastics, whether or not covered)
+- **Country of Origin:** Singapore
+- **Country of Destination:** United States
+- **Estimated Export Value:** $150 per mattress
+- **HS Code Format:** 10-digit HTS format (appropriate for US imports)
+
+---
+
+## Import Duties and Taxes
+
+### 1. Customs Duties
+
+| Duty Type | Rate | Conditions | Notes |
+|-----------|------",101905.46,3011.46,200,Success
+2026-04-27T17:37:02.975636,15,load,Direct,How do I check if my product qualifies for zero tariff under RCEP?,"To check if your product qualifies for zero tariff under RCEP, you need to follow a systematic verification process. Here's a comprehensive guide based on RCEP Rules of Origin requirements:
+
+### **Step 1: Gather Essential Information**
+
+Before you can determine eligibility, you need the following information:
+
+1. **HS Code** (at least 6-digit level) - This identifies your product classification
+2. **Country of Origin** - Where your product is manufactured/produced
+3. **Country of Destination** -",97415.07,4533.72,200,Success
+2026-04-27T17:37:06.274954,15,load,Indirect,"We export organic fertiliser (HS 3101) from Singapore to New Zealand. Under CPTPP, what are the rules of origin and any product-specific requirements we must meet?","# CPTPP Rules of Origin for Organic Fertiliser (HS 3101)
+**Export from Singapore to New Zealand**
+
+---
+
+## Product-Specific Rule of Origin
+
+For organic fertiliser classified under **HS heading 31.01**, the CPTPP product-specific rule of origin requires:
+
+**""A change to a good of heading 31.01 from any other heading.""**
+
+This is a **Change in Tariff Classification (CTC)** rule, meaning your organic fertiliser will qualify as originating under CPTPP if all non-originating materials used in its pro",103681.97,4318.93,200,Success
+2026-04-27T17:37:08.579829,15,load,Direct,What documents do I need to apply for a Preferential Certificate of Origin under RCEP for export to China?,"I notice you've asked multiple questions at once. To provide you with the most accurate and comprehensive assistance, I can only address one question at a time. 
+
+Looking at your queries, I see you've asked about:
+1. Digital trade provisions in relevant agreements and their sector-specific opportunities
+2. Documents needed to apply for a Preferential Certificate of Origin under RCEP for export to China (repeated multiple times)
+
+**Could you please confirm which question you would like me to prio",12252.82,5056.11,200,Success
+2026-04-27T17:37:11.642602,15,load,Indirect,I want to import semiconductor integrated circuits from South Korea to Singapore and intend to re-export them to Vietnam. The HS code is 8542.31. Am I eligible for any FTAs?,"# FTA Eligibility for Semiconductor Integrated Circuits (HS 8542.31)  
+**South Korea → Singapore → Vietnam**
+
+---
+
+## ✅ Yes, You Are Eligible for FTAs
+
+Based on the official tariff data, **all three countries (South Korea, Singapore, and Vietnam) are parties to the same Free Trade Agreements**, making you eligible to utilize FTA benefits for this trade route.
+
+### **Applicable FTAs:**
+
+| FTA | Full Name | Member Status |
+|-----|-----------|---------------|
+| **AKFTA** | ASEAN-Korea Free Trade Ar",104075.36,9040.57,200,Success
+2026-04-27T17:37:14.008211,15,load,Direct,"In what ways do digital trade provisions in relevant agreements create sector-specific opportunities and advantages, and how do they improve market access and cross-border dealings?","Thank you for your enquiry. I notice you've asked **two separate questions** that require different types of analysis:
+
+1. **Back-to-Back Certificate eligibility** for ASEAN-China FTA → Singapore → RCEP Japan route
+2. **Digital trade provisions** in relevant agreements and their sector-specific opportunities
+
+As your trade assistant, I can only address **one question at a time** to provide you with thorough, accurate guidance. 
+
+---
+
+### **Let me first address your Back-to-Back Certificate quest",21639.9,3519.57,200,Success
+2026-04-27T17:37:18.591832,15,load,Indirect,"We plan to bring microprocessors (HS 8542.31) from Japan into Singapore for consolidation, then ship them to Indonesia. Can we claim preferential tariff treatment on the Indonesia leg?","# Back-to-Back Preferential Certificate of Origin (B2B PCO) Eligibility Assessment
+
+## Your Scenario
+- **Product:** Microprocessors (HS 8542.31)
+- **Movement:** Japan → Singapore (consolidation) → Indonesia
+- **Processing in Singapore:** No processing, consolidation only
+
+---
+
+## Key Finding: Zero Tariff Under MFN
+
+Based on the tariff information retrieved from **Mendel** for HS 8542.31 from Japan to Indonesia:
+
+| Tariff Scheme | Duty Rate | Conditions |
+|---------------|-----------|------------",115077.15,4633.52,200,Success
+2026-04-27T17:37:21.810577,15,load,Direct,I am importing blowers under 125kW from China to Singapore. I don't know the HS code of my product. Could you provide some suggestions?,"Thank you for your enquiries. I notice you've asked about **two different scenarios** at once:
+
+1. **Back-to-back RCEP certificate** for Korean cosmetics (HS 3304) to Japan
+2. **HS code suggestions** for blowers under 125kW from China to Singapore
+
+To provide you with accurate and comprehensive guidance, **I can only address one request at a time**. This ensures I give you the detailed, regulation-compliant information you need without mixing up different products, countries, or processes.
+
+---
+",27605.93,10071.67,200,Success
+2026-04-27T17:37:27.348966,15,load,Indirect,Can we ship goods directly from China to Indonesia with a Singapore invoice and still claim ACFTA preference?,"Thank you for your questions! I notice you've asked about **two separate trade scenarios**:
+
+1. ✅ **RCEP back-to-back certificate** for Korean cosmetics (HS 3304) from Korea → Singapore → Japan (already answered above)
+
+2. ❓ **ACFTA preference** for goods shipped directly from China → Indonesia with a Singapore invoice
+
+To provide you with the most accurate and thorough guidance, **I can only address one question at a time**. 
+
+Since I've already provided a comprehensive answer to your first que",44658.07,10064.27,200,Success
+2026-04-27T17:37:31.640902,15,load,Indirect,"We are considering moving some production from China to Singapore to benefit from FTAs. For electronics (HS 8517), what origin criteria apply under RCEP and CPTPP, and what percentage of value must be","Thank you for your inquiry about moving electronics production from China to Singapore to benefit from FTAs.
+
+To provide you with accurate information about the origin criteria under **RCEP** and **CPTPP** for HS code 8517 (electronics), I need one additional piece of information:
+
+## Missing Required Information:
+
+**🎯 Destination Country:** Which country/market are you planning to export these electronics to?
+
+This is essential because:
+- RCEP and CPTPP have different member countries
+- The spe",27273.64,9142.09,200,Success
+2026-04-27T17:37:45.833782,15,load,Indirect,"We are considering moving some production from China to Singapore to benefit from FTAs. For electronics (HS 8517), what origin criteria apply under RCEP and CPTPP, and what percentage of value must be","Thank you for providing more details. I can see you're asking **three separate questions** that require different analyses:
+
+1. **Back-to-Back Certificate eligibility** for ASEAN-China FTA → Singapore → RCEP Japan route
+2. **Digital trade provisions** in relevant agreements (from your first message)
+3. **Origin criteria and value-added requirements** for moving electronics production from China to Singapore under RCEP and CPTPP
+
+As your trade assistant, I need to address **one question at a time",27504.41,6245.88,200,Success
+2026-04-27T17:37:54.601612,15,load,Indirect,"We consolidate shipments from multiple ASEAN countries in Singapore and then send them to Australia. Can we obtain a single certificate covering the whole consignment, or do we need separate origin do","Thank you for your questions. I notice you've asked **two separate trade scenarios**, and I'd like to address them clearly:
+
+---
+
+## ✅ Question 1: CPTPP Rules of Origin for HS 3101 (Singapore → New Zealand)
+
+**This has been answered in my previous response above.** I've provided:
+- Product-specific rule of origin (CTC requirement)
+- Special process rules for Chapter 31 fertilisers
+- De minimis provisions
+- Summary of compliance options
+
+---
+
+## ⚠️ Question 2: Consolidation from Multiple ASEAN Co",44818.13,12027.01,200,Success
+2026-04-27T17:38:03.965665,15,load,Indirect,"Our company sources components from China, Thailand, and Malaysia and assembles electronic switches (HS 8536.50) in Singapore for export to Australia. Can we claim Singapore origin under AANZFTA, and ","# Singapore Origin Claim under AANZFTA for Electronic Switches (HS 8536.50)
+
+## Eligibility Assessment
+
+**Yes, your company can potentially claim Singapore origin under AANZFTA**, provided the assembled electronic switches meet one of the following Rules of Origin criteria:
+
+### Rules of Origin for HS 8536.50 under AANZFTA
+
+According to **Mendel** (for Singapore to Australia, HS Code 853650):
+
+Your product must satisfy **one** of the following:
+
+1. **Regional Value Content (RVC) of not less than",159444.15,10124.22,200,Success
+2026-04-27T17:38:04.427200,15,load,Indirect,I would like to leverage the AKFTA FTA for my export of 1701.12.20 from Singapore to South Korea. What is a PCO and how do I apply for it?,"# What is a PCO (Preferential Certificate of Origin)?
+
+A **Preferential Certificate of Origin (PCO)** is an official document issued by the competent authority of an exporting country to certify that goods being exported qualify as ""originating"" under a specific Free Trade Agreement (FTA). The PCO enables the importer in the destination country to claim preferential tariff treatment (reduced or zero customs duties) under that FTA.
+
+For AKFTA (ASEAN-Korea Free Trade Area), the PCO is called **For",162905.64,4476.87,200,Success
+2026-04-27T17:38:13.302254,15,load,Indirect,Can we ship goods directly from China to Indonesia with a Singapore invoice and still claim ACFTA preference?,"Thank you for your questions. I can see you're asking about two different topics:
+
+1. **Singapore public tender country eligibility** - I've already provided information on this in my previous response (GeBIZ portal and FTA annexes)
+2. **Shipping goods China → Indonesia with Singapore invoice under ACFTA** - This is your primary question
+
+Let me focus on your ACFTA preference question, as it requires detailed analysis.
+
+---
+
+## Your Question: Direct Shipment with Singapore Invoice under ACFTA
+
+Y",77486.9,10123.79,200,Success
+2026-04-27T17:38:15.090819,15,load,Indirect,We import fresh mangoes (HS 0804.50) from Indonesia into Singapore and plan to re-export them to the Philippines. Can we request a back-to-back PCO under ATIGA?,"# Back-to-Back Preferential Certificate of Origin (B2B PCO) Eligibility Assessment
+
+## Your Request
+You are importing **fresh mangoes (HS 0804.50)** from **Indonesia** into **Singapore** and plan to re-export them to the **Philippines**, and wish to know if you can request a back-to-back PCO under ATIGA.
+
+---
+
+## Summary of Findings
+
+### ✅ Step 1: FTA Membership Verification - **CONFIRMED**
+
+All three countries (Indonesia, Singapore, Philippines) are confirmed parties to **ATIGA (ASEAN Trade in ",166367.81,7028.59,200,Success
+2026-04-27T17:38:30.522724,15,load,Indirect,"For shipments from Singapore to Australia with goods sourced from Japan and Korea, what are the steps to claim AANZFTA or RCEP preferences?","# Claiming AANZFTA or RCEP Preferences for Singapore to Australia Shipments
+
+Thank you for your inquiry about claiming FTA preferences for goods sourced from Japan and Korea, re-exported from Singapore to Australia.
+
+To provide you with accurate guidance on the steps to claim **AANZFTA** or **RCEP** preferences and determine your eligibility for Back-to-Back Preferential Certificate of Origin (B2B PCO), I need the following information:
+
+---
+
+## ⚠️ Missing Required Information:
+
+### **1. HS Code",56558.39,24502.7,200,Success
+2026-04-27T17:38:30.526122,15,load,Indirect,"If our PCO application is rejected by Singapore Customs due to insufficient supporting documents, what can we do to rectify and reapply, and how long does the appeal or correction process take?","# PCO Application Rejection: Rectification and Reapplication Process
+
+Based on the information available in the CFOTI Knowledge Base, here is guidance on what to do if your PCO application is rejected by Singapore Customs due to insufficient supporting documents:
+
+---
+
+## What to Do When Your Application is Rejected
+
+### 1. **Fresh Submission Required**
+
+If your PCO application is rejected due to insufficient supporting documents, you will need to submit a **fresh application** with complete doc",178800.8,8301.64,200,Success
+2026-04-27T17:38:31.816736,15,load,Indirect,"We have an existing PCO but the importer says the HS code on the certificate does not match their customs declaration. How do we correct or reissue the certificate, and will it affect the validity per","**
+
+### **Part 1: How to Correct or Reissue a Preferential Certificate of Origin (PCO) with HS Code Mismatch**
+
+When your importer reports that the HS code on your existing PCO does not match their customs declaration, you have **two options** for correction according to Singapore Customs procedures:
+
+#### **Option 1: Issue a New Certificate and Invalidate the Original**
+
+According to **RCEP Article 3.17(5)**, when a Certificate of Origin contains incorrect information, the issuing body of the e",79631.26,3820.09,200,Success
+2026-04-27T17:38:34.033021,15,load,Direct,I am exporting 3305.20 from Japan to the US. Are there any additional tariffs?,"Thank you for your inquiry. I notice you've asked about **two different export scenarios**:
+
+1. **HS 1701.12.20** (refined sugar) from **Singapore to South Korea** under **AKFTA** - PCO application process
+2. **HS 3305.20** from **Japan to the United States** - Additional tariffs inquiry
+
+To provide you with the most accurate and detailed guidance, **I can only address one trade scenario at a time**.
+
+---
+
+### Regarding Your First Question (AKFTA PCO):
+
+The comprehensive answer about what a PCO ",24858.46,7794.69,200,Success
+2026-04-27T17:38:44.885823,15,load,Indirect,"Our goods qualify under both RCEP and ATIGA for export to Thailand. Which agreement should we use for the PCO, and does it affect how we complete the origin declaration?","Based on the information retrieved from the CFOTI Knowledge Base, when your goods qualify under both RCEP and ATIGA for export to Thailand, here's what you need to know about choosing between the agreements and how it affects your origin declaration:
+
+## Key Considerations for Choosing Between RCEP and ATIGA
+
+### 1. **Tariff Rates Comparison**
+The first consideration should be comparing the preferential tariff rates under each agreement for your specific product (HS code) when importing into Tha",198298.35,9124.34,200,Success
+2026-04-27T17:38:46.032198,15,load,Direct,I am exporting T-Shirt with HS code 6109.10.10 from Singapore to Thailand. What FTAs would be beneficial for my export?,"Thank you for your questions. I notice you've asked about **two different scenarios** at once:
+
+1. **Fresh mangoes (HS 0804.50)** - Indonesia → Singapore → Philippines under ATIGA (Back-to-Back PCO eligibility)
+2. **T-Shirts (HS 6109.10.10)** - Singapore → Thailand (FTA benefits)
+
+---
+
+## 🔄 One Question at a Time, Please
+
+To provide you with the most accurate and comprehensive guidance, **I can only address one request at a time**. This ensures I can:
+
+- ✅ Conduct thorough research and verificat",26890.28,10076.47,200,Success
+2026-04-27T17:38:54.946749,15,load,Indirect,Which Free Trade Agreements (FTAs) can I utilise when exporting compact disks (HS Code: 8523.41.10) from Singapore to Indonesia?,"# Free Trade Agreements (FTAs) for Exporting Compact Disks (HS 8523.41.10) from Singapore to Indonesia
+
+---
+
+## Important Notice: No Tariff Savings Available
+
+**The customs duty for HS Code 8523.41.10 (compact disks - unrecorded) from Singapore to Indonesia is already FREE (0%) under the Most Favoured Nation (MFN) rate.**
+
+This means **you do not need to claim preferential treatment under any FTA** for tariff savings, as the duty is already zero even without an FTA certificate.
+
+**Source:** *Men",88150.51,21229.11,200,Success
+2026-04-27T17:38:58.887257,15,load,Direct,I am importing ceramic tiles (HS 6908.90) from Vietnam to Singapore. What tariff applies under ATIGA?,"# Tariff Information for Ceramic Tiles (HS 6908.90) from Vietnam to Singapore under ATIGA
+
+---
+
+## **Current Analysis:**
+
+Based on the information retrieved from the Mendel system, I need to inform you of the following:
+
+### **Tariff Data Availability:**
+
+The system **could not retrieve tariff/classification information** for HS code **6908.90** for imports from Vietnam to Singapore. This may indicate that:
+
+1. The HS code provided may be incomplete for Singapore's system (Singapore commonly use",69203.5,4146.0,200,Success
+2026-04-27T17:38:58.889627,15,load,Indirect,"We export organic fertiliser (HS 3101) from Singapore to New Zealand. Under CPTPP, what are the rules of origin and any product-specific requirements we must meet?","I appreciate your inquiries, but I notice you've provided **multiple different export scenarios** in your message:
+
+1. **HS 3305.20** from **Japan to the United States** - Additional tariffs inquiry
+2. **HS 3101** (organic fertiliser) from **Singapore to New Zealand** under **CPTPP** - Rules of Origin and product-specific requirements
+
+To provide you with accurate and comprehensive guidance, **I can only address one trade scenario at a time**. Handling multiple scenarios simultaneously may lead ",21372.67,9388.14,200,Success
+2026-04-27T17:39:01.186443,15,load,Indirect,"We are considering moving some production from China to Singapore to benefit from FTAs. For electronics (HS 8517), what origin criteria apply under RCEP and CPTPP, and what percentage of value must be","I appreciate you providing multiple questions, but to ensure I give you the most accurate and comprehensive assistance, I can only address **one question at a time**. 
+
+Looking at your queries, you've asked about:
+
+1. **Digital trade provisions** in relevant agreements and sector-specific opportunities
+2. **Correcting/reissuing a PCO** with HS code mismatch
+3. **Production relocation from China to Singapore** - origin criteria for electronics (HS 8517) under RCEP and CPTPP (mentioned multiple ti",26160.28,10145.59,200,Success
+2026-04-27T17:39:02.265828,15,load,Direct,What is the tariff rate for exporting printed books (HS 4901.99) from Singapore to Vietnam under ATIGA?,"### Tariff Rate Information for HS 4901.99 (Printed Books) from Singapore to Vietnam under ATIGA
+
+I was unable to retrieve the tariff rate information for your inquiry. Here's what I found:
+
+---
+
+## System Limitation
+
+**The system could not retrieve tariff/classification information for HS code 4901.99 for exports from Singapore to Vietnam.**
+
+According to Mendel (the authoritative tariff database):
+> ""No information about duties and taxes for this HS code in our system. Please check the HS code",92870.15,4328.67,200,Success
+2026-04-27T17:39:03.494149,15,load,Indirect,"Can we use exporter self-certification under the UK-Singapore FTA for our exports of pharmaceutical products (HS 3004), and what are the exact conditions and record-keeping requirements?","Thank you for your inquiry about exporter self-certification under the UK-Singapore FTA for pharmaceutical products (HS 3004).
+
+To provide you with accurate information about self-certification eligibility, conditions, and record-keeping requirements, I need to clarify the trade direction:
+
+## Required Information
+
+**Please confirm:**
+
+1. **Country of Origin:** Are you exporting FROM Singapore or FROM the United Kingdom?
+
+2. **Country of Destination:** Are you exporting TO the United Kingdom or ",29729.43,10047.59,200,Success
+2026-04-27T17:39:18.466456,15,load,Indirect,"We plan to bring microprocessors (HS 8542.31) from Japan into Singapore for consolidation, then ship them to Indonesia. Can we claim preferential tariff treatment on the Indonesia leg?","Thank you for your questions. I notice you've asked about **two different scenarios** at once:
+
+1. **Fresh mangoes (HS 0804.50)** - Indonesia → Singapore → Philippines under ATIGA (Back-to-Back PCO eligibility)
+2. **Microprocessors (HS 8542.31)** - Japan → Singapore → Indonesia (Preferential tariff treatment)
+
+---
+
+## 🔄 One Question at a Time, Please
+
+To provide you with the most accurate and comprehensive guidance, **I can only address one request at a time**. This ensures I can:
+
+- ✅ Conduct t",27948.12,10063.06,200,Success
+2026-04-27T17:39:18.469046,15,load,Indirect,"Our goods qualify under both RCEP and ATIGA for export to Thailand. Which agreement should we use for the PCO, and does it affect how we complete the origin declaration?","# Choosing Between RCEP and ATIGA for Exports to Thailand
+
+## Your Scenario
+- **Origin:** Singapore
+- **Destination:** Thailand
+- **Situation:** Goods qualify under both RCEP and ATIGA
+- **Question:** Which FTA to use and how it affects origin declaration completion
+
+---
+
+## Key Finding: Both FTAs Are Available
+
+Based on the FTA membership verification from **Mendel**, Singapore and Thailand are parties to **10 common FTA groups**, including:
+
+1. **ATIGA** (ASEAN Trade in Goods Agreement)
+2. **R",115733.89,2864.93,200,Success
+2026-04-27T17:39:31.263642,15,load,Indirect,"Under which FTAs, if any, can India-origin goods use a back-to-back mechanism via Singapore?","I appreciate your detailed questions, but to provide you with the most accurate and comprehensive assistance, **I can only address one question at a time**. 
+
+Looking at your queries, you've asked about:
+
+1. **Digital trade provisions** in relevant agreements and sector-specific opportunities
+2. **Correcting/reissuing a PCO** with HS code mismatch and validity period impact
+3. **India-origin goods using back-to-back mechanism via Singapore** (mentioned multiple times)
+
+Since you've emphasized th",25488.38,10060.38,200,Success
+2026-04-27T17:39:31.265643,15,load,Indirect,I import brooms with HS code 9603.10.20 from China to Singapore and would like to re-export to Malaysia. Am I eligible for any FTAs?,"# Back-to-Back PCO Eligibility Assessment for Brooms (HS 9603.10.20) from China to Malaysia via Singapore
+
+---
+
+## **Your Trade Scenario**
+
+- **Product:** Brooms
+- **HS Code:** 9603.10.20
+- **Movement:** China → Singapore → Malaysia
+- **Query:** FTA eligibility for Back-to-Back Preferential Certificate of Origin (B2B PCO)
+
+---
+
+## **Summary: Yes, You Are Eligible for FTAs**
+
+Based on the information retrieved, **you are eligible to apply for Back-to-Back PCO** under the following FTAs where Chin",146147.48,10070.44,200,Success
+2026-04-27T17:39:34.508490,15,load,Direct,What is the authoritative source for eligibility criteria and certifications for foreign suppliers in Singapore government procurement under specified agreements?,"I am unable to retrieve sufficient information regarding this subject matter. For further guidance, please click on the 'Email' button on the bottom right corner of the screen to arrange for a call or a one-to-one advisory session. Our specialists can offer tailored insights based on your product and trade needs, and help you address any related queries or challenges.",12858.34,12853.32,200,Success
+2026-04-27T17:39:45.507191,15,load,Indirect,"We have a back-to-back PCO under RCEP for goods from Japan. The buyer in Indonesia wants to split the shipment into two consignments over two months. Is the original PCO still valid, and what do we ne","Thank you for your questions. I can see you've asked about **four different scenarios** at once:
+
+1. **Microprocessors (HS 8542.31)** - Japan → Singapore → Indonesia (Preferential tariff treatment eligibility)
+2. **Fresh mangoes (HS 0804.50)** - Indonesia → Singapore → Philippines (Back-to-Back PCO under ATIGA)
+3. **RCEP Back-to-Back PCO** - Japan → Singapore → Indonesia (Split shipment validity)
+4. **T-Shirts (HS 6109.10.10)** - Singapore → Thailand (FTA benefits) - from your earlier question
+
+",24085.26,4396.38,200,Success
+2026-04-27T17:39:49.505558,15,load,Indirect,"If our PCO application is rejected by Singapore Customs due to insufficient supporting documents, what can we do to rectify and reapply, and how long does the appeal or correction process take?","## Rectification and Reapplication Process for Rejected PCO Applications
+
+If your Preferential Certificate of Origin (PCO) application is rejected by Singapore Customs due to insufficient supporting documents, here is the process to rectify and reapply:
+
+---
+
+## 1. Understanding Common Reasons for Rejection
+
+According to **CFOTI Knowledge Base** (Navigating Challenges in Manufacturing Cost Statements and Export Procedures), the most common reasons for MCS/PCO rejection include:
+
+### **Common Pit",102252.39,6941.19,200,Success
+2026-04-27T17:39:58.519593,15,load,Direct,"Which agreements used by Singapore allow exporter self-certification, and what are the eligibility conditions?","# Singapore FTAs with Exporter Self-Certification
+
+Based on the information retrieved from the CFOTI Knowledge Base, here is a comprehensive overview of Singapore's Free Trade Agreements that allow exporter self-certification and their eligibility conditions:
+
+---
+
+## FTAs Under Self-Certification Regime
+
+Singapore has **13 FTAs** that adopt a self-certification regime, where the certification of a good's origin is declared by a specific entity (exporter, producer, or importer) rather than requi",119479.81,3015.98,200,Success
+2026-04-27T17:40:02.223354,15,load,Indirect,"We ship from Singapore to multiple ASEAN countries (Indonesia, Philippines, Vietnam) under ATIGA. Do we need one PCO per destination or one for the whole order, and what are the declaration requiremen","ATIGA PCO Requirements for Multiple Destinations
+
+Based on the information retrieved from the CFOTI Knowledge Base, I can provide you with guidance on your ATIGA Form D requirements when shipping from Singapore to multiple ASEAN countries.
+
+## Answer to Your Question: One PCO Per Destination Required
+
+**You need separate PCO (Form D) for each destination country.** You cannot use one certificate for the whole order going to multiple destinations.
+
+### Key Requirements from ATIGA Operational Cert",104667.65,5388.61,200,Success
+2026-04-27T17:40:13.403897,15,load,Indirect,I would like to leverage the AKFTA FTA for my export of 1701.12.20 from Singapore to South Korea. What is a PCO and how do I apply for it?,"# Preferential Certificate of Origin (PCO) for AKFTA  
+**Exporting HS 1701.12.20 from Singapore to South Korea**
+
+---
+
+## 📋 What is a PCO?
+
+A **Preferential Certificate of Origin (PCO)** is an official document issued by the designated government authority (Singapore Customs for Singapore exporters) that certifies the country of origin of goods being exported. It serves as proof that your goods qualify as ""originating goods"" under a specific Free Trade Agreement (FTA), allowing your buyer in the",178411.02,10095.45,200,Success
+2026-04-27T17:40:13.407260,15,load,Indirect,Can we ship goods directly from China to Indonesia with a Singapore invoice and still claim ACFTA preference?,"I notice you've asked two separate questions. Let me address your second question about shipping goods from China to Indonesia with a Singapore invoice under ACFTA.
+
+---
+
+# Can You Ship Goods Directly from China to Indonesia with a Singapore Invoice and Still Claim ACFTA Preference?
+
+## Short Answer: **Yes, this is possible under ACFTA's Third Country Invoicing (TCI) provisions.**
+
+---
+
+## Third Country Invoicing Under ACFTA
+
+According to **ACFTA Rule 23** (Revised Operational Certification Proc",84252.54,2795.81,200,Success
+2026-04-27T17:40:17.095957,15,load,Indirect,"What is the PCO application process for the export of my product with HS code 3924.90.90 from Singapore to Vietnam with an estimated export value of 5,000 SGD under the ATIGA FTA?","Thank you for your questions. I can see you've now asked about **six different scenarios**:
+
+1. **Microprocessors (HS 8542.31)** - Japan → Singapore → Indonesia (Preferential tariff treatment)
+2. **Fresh mangoes (HS 0804.50)** - Indonesia → Singapore → Philippines (Back-to-Back PCO under ATIGA)
+3. **RCEP Back-to-Back PCO Split Shipment** - Japan → Indonesia (Validity for two consignments over two months)
+4. **T-Shirts (HS 6109.10.10)** - Singapore → Thailand (FTA benefits)
+5. **Household article",28631.42,5235.06,200,Success
+2026-04-27T17:40:24.863599,15,load,Indirect,"For shipments from Singapore to Australia with goods sourced from Japan and Korea, what are the steps to claim AANZFTA or RCEP preferences?","Thank you for your question. To provide you with accurate guidance on claiming AANZFTA or RCEP preferences, I need some clarification:
+
+1. **What specific goods are you exporting?** (Please provide the HS code or product description)
+2. **Are the goods processed, transformed, or repacked in Singapore?** Or are they shipped directly from Japan/Korea through Singapore to Australia without any processing?
+3. **What is the origin of the goods?** (Are they wholly produced in Japan/Korea, or are they ",7949.24,7938.87,200,Success
+2026-04-27T17:40:32.583468,15,load,Direct,"My company exports an energy resource with HS code 2710.12.18.05 from Mexico to the US, will there be additional tariffs?","I am unable to retrieve sufficient information regarding this subject matter. For further guidance, please click on the 'Email' button on the bottom right corner of the screen to arrange for a call or a one-to-one advisory session. Our specialists can offer tailored insights based on your product and trade needs, and help you address any related queries or challenges.",15984.9,10060.24,200,Success
+2026-04-27T17:40:40.098547,15,load,Indirect,I would like to leverage the AKFTA FTA for my export of 1701.12.20 from Singapore to South Korea. What is a PCO and how do I apply for it?,"## What is a PCO and How to Apply for It Under AKFTA
+
+### Important Notice: Your Goods Already Qualify for Zero Tariff
+
+Based on the tariff information retrieved for **HS Code 1701.12.20** (exporting from Singapore to South Korea), **the AKFTA preferential tariff rate is already FREE (0%)**.
+
+**This means:**
+- ✅ You don't need a PCO for tariff savings, as the customs duty is already zero under AKFTA
+- ⚠️ However, **Value Added Tax (VAT) of 10%** of the duty-paid value will still apply in South K",93327.17,5436.27,200,Success
+2026-04-27T17:40:46.410942,15,load,Indirect,I would like to leverage the AKFTA FTA for my export of 1701.12.20 from Singapore to South Korea. What is a PCO and how do I apply for it?,"# Preferential Certificate of Origin (PCO) for AKFTA Export
+
+Thank you for your enquiry about exporting **HS Code 1701.12.20 (Beet Sugar)** from **Singapore to South Korea** under **AKFTA**.
+
+---
+
+## What is a Preferential Certificate of Origin (PCO)?
+
+A **Preferential Certificate of Origin (PCO)** is an official document that certifies that goods being exported qualify as ""originating"" under a specific Free Trade Agreement (FTA). This certificate allows the importer in the destination country t",108388.42,2527.01,200,Success
+2026-04-27T17:40:49.803289,15,load,Direct,"My company exports an energy resource with HS code 2710.12.18.05 from Mexico to the US, will there be additional tariffs?","I am unable to retrieve sufficient information regarding this subject matter. For further guidance, please click on the 'Email' button on the bottom right corner of the screen to arrange for a call or a one-to-one advisory session. Our specialists can offer tailored insights based on your product and trade needs, and help you address any related queries or challenges.",22667.11,10057.29,200,Success
+2026-04-27T17:40:50.738295,15,load,Indirect,"If we import under ASEAN-China FTA and re-export to Japan under RCEP with minimal repackaging in Singapore, can we use a back-to-back certificate, and what are the conditions and time limits?","# Back-to-Back Certificate of Origin: China → Singapore → Japan
+
+Thank you for your inquiry about using a back-to-back certificate for re-exporting goods from Singapore to Japan under RCEP.
+
+Based on your scenario (importing from China under ASEAN-China FTA and re-exporting to Japan under RCEP with minimal repackaging), I must highlight a **critical issue** with your proposed approach.
+
+---
+
+## ⚠️ Critical Issue: FTA Mismatch
+
+**You cannot use an ASEAN-China FTA certificate to issue a RCEP back-",137375.05,5554.46,200,Success
+2026-04-27T17:40:53.202677,15,load,Indirect,"For goods that qualify under both ATIGA and RCEP when exporting from Singapore to Thailand, how do we choose which FTA to use, and can we switch between them for different shipments of the same produc","## Choosing Between ATIGA and RCEP for Singapore to Thailand Exports
+
+When your goods qualify under **both ATIGA (ASEAN Trade in Goods Agreement)** and **RCEP (Regional Comprehensive Economic Partnership)** for exports from Singapore to Thailand, you have the **flexibility to choose which FTA to use** for each shipment.
+
+### Confirmed FTA Availability
+
+Singapore and Thailand are members of **10 common FTA groups**, including:
+- **ATIGA** (ASEAN Trade in Goods Agreement)
+- **RCEP** (Regional Comp",109523.18,3148.59,200,Success
+2026-04-27T17:40:57.755998,15,load,Indirect,"We received a request from Indonesian customs to verify our ATIGA PCO. What is the process for Singapore exporters, what documents must we provide, and what is the typical timeline?","Thank you for your questions. I can see you've now asked about **seven different scenarios** across multiple messages:
+
+1. **RCEP Back-to-Back PCO Split Shipment** - Japan → Singapore → Indonesia (Validity for two consignments over two months) - **MISSING HS CODE**
+2. **Household articles PCO Application (HS 3924.90.90)** - Singapore → Vietnam under ATIGA (5,000 SGD export value)
+3. **ATIGA PCO Verification Request** - Indonesian customs verification process for Singapore exporters - **NEW**
+4. ",35877.7,7836.39,200,Success
+2026-04-27T17:41:02.792071,15,load,Direct,What is SBF's role in trade documentation and FTA support for Singapore businesses?,"Based on the information retrieved from the CFOTI Knowledge Base, here is what I can confirm about SBF's role in trade documentation and FTA support for Singapore businesses:
+
+## Singapore's Authorized Bodies for Certificate of Origin Issuance
+
+According to **CFOTI Knowledge Base** (US Tariffs - Frequently Asked Questions), there are **five authorized organizations** in Singapore that issue **Ordinary (Non-Preferential) Certificates of Origin (OCO)**:
+
+1. **Singapore Chinese Chamber of Commerce ",69427.77,10060.27,200,Success
+2026-04-27T17:41:03.310579,15,load,Indirect,"What is the PCO application process for the export of my product with HS code 3924.90.90 from Singapore to Vietnam with an estimated export value of 5,000 SGD under the ATIGA FTA?","PCO Application Process for HS 3924.90.90 (Singapore → Vietnam under ATIGA)**
+
+---
+
+## **1. Tariff and Tax Information**
+
+### **Applicable Rates for Your Export:**
+
+| Rate Type | Rate | Notes |
+|-----------|------|-------|
+| **ATIGA Preferential Rate** | **FREE (0%)** | You qualify for duty-free treatment under ATIGA |
+| MFN Rate (without ATIGA) | 22% | Standard rate without preferential treatment |
+| **VAT in Vietnam** | **8%** of duty-paid value | This is a Vietnamese domestic tax, not a custo",120658.7,10056.12,200,Success
+2026-04-27T17:41:08.238773,15,load,Direct,What FTAs can I use to export coffee (HS 0901.21) from Singapore to Chile?,"**
+
+# **Available FTAs for Exporting Coffee (HS 0901.21) from Singapore to Chile**
+
+Based on the information retrieved from Mendel, **three Free Trade Agreements (FTAs)** are available for exporting coffee (HS code 0901.21) from Singapore to Chile:
+
+---
+
+## **1. CPTPP (Comprehensive and Progressive Agreement for Trans-Pacific Partnership)**
+
+### **Origin Requirements:**
+
+**Product-Specific Rule (PSR) for HS 0901.21 to 0901.90:**
+
+A change to a good of subheading 0901.21 through 0901.90 from any ",92884.77,9719.1,200,Success
+2026-04-27T17:41:08.240436,15,load,Direct,We are a manufacturing company looking to export plastic bottles to customers in other countries. Can you please advise the steps and processes we have to take?,"Thank you for your question. To provide you with accurate guidance on the export processes and steps for plastic bottles, I need some clarification:
+
+1. **Which country are you exporting FROM?** (e.g., Singapore, Vietnam, Thailand, etc.)
+2. **Which country(ies) are you exporting TO?** (destination market)
+3. **Do you want to claim FTA (Free Trade Agreement) preferences?** (e.g., RCEP, ASEAN FTAs, bilateral FTAs)
+4. **What is the HS code for your plastic bottles?** (typically HS 3923.30 for plast",15661.41,15654.42,200,Success
+2026-04-27T17:41:12.446635,15,load,Indirect,"We import headphones (HS 8518.30.10) from China and sell to Vietnam. Can CPTPP preferences ever apply, and what proof would be required?","# CPTPP Preferences for Headphones (HS 8518.30.10) from China to Vietnam
+
+## Direct Answer: CPTPP Preferences CANNOT Apply
+
+**CPTPP preferential tariff treatment cannot be used for headphones originating from China and exported to Vietnam via Singapore.**
+
+### Why CPTPP Cannot Apply
+
+**Critical Requirement:** For CPTPP preferences to apply in a back-to-back scenario, **all three countries** (country of origin, intermediate country, and final destination) must be CPTPP members.
+
+**Membership Stat",124724.58,10109.35,200,Success
+2026-04-27T17:41:27.577848,15,load,Indirect,Can we ship goods directly from China to Indonesia with a Singapore invoice and still claim ACFTA preference?,"# Third Country Invoicing Under ACFTA: China → Indonesia with Singapore Invoice
+
+## Your Scenario
+- **Origin:** China
+- **Destination:** Indonesia  
+- **Physical movement:** Direct shipment China → Indonesia (no transit through Singapore)
+- **Invoice:** Issued from Singapore (third country)
+- **Question:** Can you claim ACFTA preferential tariff treatment?
+
+---
+
+## ✅ YES - Third Country Invoicing is Allowed Under ACFTA
+
+According to **ACFTA Rule 23** (Source: CFOTI Knowledge Base - ACFTA Revised",110723.48,8221.05,200,Success
+2026-04-27T17:41:50.441887,15,load,Indirect,"What are the steps and timelines to apply for a PCO under the Digital Economy Agreement between Singapore and Australia, and how does it differ from the standard goods FTA process?","# Important Clarification: Digital Economy Agreement vs. Goods Trade FTA
+
+Thank you for your question. I need to clarify an important distinction:
+
+**The Digital Economy Agreement (DEA) between Singapore and Australia does NOT cover traditional goods trade or Certificates of Origin.**
+
+## What is the Singapore-Australia Digital Economy Agreement (SADEA)?
+
+The **Singapore-Australia Digital Economy Agreement (SADEA)**, signed in 2020, focuses on:
+- Digital trade facilitation
+- Electronic invoicing",104278.02,2833.58,200,Success
+2026-04-27T17:42:09.557483,15,load,Direct,I export wooden furniture (HS 9403.60) from Singapore to Australia. What is the duty rate under the relevant FTA?,"Duty Rates for Wooden Furniture (HS 9403.60) from Singapore to Australia
+
+Based on my analysis of the available information, I can provide you with the following findings regarding your export of wooden furniture (HS 9403.60) from Singapore to Australia:
+
+## Available FTAs Between Singapore and Australia
+
+Singapore and Australia are members of **four Free Trade Agreements**:
+
+1. **Singapore-Australia Free Trade Agreement (SAFTA/SGAUFTA)**
+2. **ASEAN-Australia-New Zealand Free Trade Agreement (AA",91960.86,5870.7,200,Success
+2026-04-27T17:42:13.763846,15,load,Indirect,"Under which FTAs, if any, can India-origin goods use a back-to-back mechanism via Singapore?","# Back-to-Back Mechanism for India-Origin Goods via Singapore
+
+Based on the information retrieved from the CFOTI Knowledge Base, here is a comprehensive analysis of which FTAs allow India-origin goods to use a back-to-back mechanism via Singapore:
+
+---
+
+## FTAs Between India and Singapore
+
+India and Singapore are parties to **two FTA groups**:
+1. **India-Singapore Comprehensive Economic Cooperation Agreement (CECA)** - Bilateral FTA
+2. **ASEAN-India Free Trade Area (AIFTA)** - Regional FTA
+3. **",131033.18,3560.59,200,Success
+2026-04-27T17:42:16.162217,15,load,Direct,What is an Ordinary Certificate of Origin and when do I need it?,"# What is an Ordinary Certificate of Origin (OCO)?
+
+An **Ordinary Certificate of Origin (OCO)** is a **non-preferential certificate** that certifies the country of origin of goods being exported. Unlike a Preferential Certificate of Origin (PCO), an OCO does **not** grant preferential tariff treatment or reduced customs duties under Free Trade Agreements (FTAs).
+
+---
+
+## Key Differences: OCO vs. PCO
+
+| Feature | **Ordinary Certificate of Origin (OCO)** | **Preferential Certificate of Origin (PCO",79209.73,7922.79,200,Success
+2026-04-27T17:42:21.608296,15,load,Indirect,We import Korean cosmetics (HS 3304) under RCEP into Singapore and re-export to Japan with no further processing. Can we apply for a back-to-back RCEP certificate?,"# Back-to-Back RCEP Certificate Eligibility for Korean Cosmetics (HS 3304) to Japan via Singapore
+
+---
+
+## **Your Trade Scenario**
+
+- **Product:** Korean cosmetics
+- **HS Code:** 3304 (Beauty or make-up preparations and preparations for the care of the skin)
+- **Movement:** South Korea → Singapore → Japan
+- **Processing in Singapore:** No further processing
+- **FTA:** RCEP (Regional Comprehensive Economic Partnership)
+
+---
+
+## **Summary: YES, You Are Eligible for Back-to-Back RCEP Certificate**
+",166837.17,3640.15,200,Success
+2026-04-27T17:42:27.051079,15,load,Indirect,Which Free Trade Agreements (FTAs) can I utilise when exporting compact disks (HS Code: 8523.41.10) from Singapore to Indonesia?,"**
+
+# **Available FTAs for Exporting Compact Disks (HS 8523.41.10) from Singapore to Indonesia**
+
+## **⚠️ Important Notice: No Tariff Savings from FTAs**
+
+**The customs duty rate for HS code 8523.41.10 (compact disks - optical media: unrecorded) from Singapore to Indonesia is already 0% (FREE) under the Most Favoured Nation (MFN) rate.**
+
+This means:
+- ✅ **No customs duty is charged** even without claiming FTA preferential treatment
+- ✅ **You do not need a Preferential Certificate of Origin (PCO",76301.58,4958.04,200,Success
+2026-04-27T17:42:29.139976,15,load,Indirect,"What are the steps and timelines to apply for a PCO under the Digital Economy Agreement between Singapore and Australia, and how does it differ from the standard goods FTA process?","I am unable to retrieve sufficient information regarding this subject matter. For further guidance, please click on the 'Email' button on the bottom right corner of the screen to arrange for a call or a one-to-one advisory session. Our specialists can offer tailored insights based on your product and trade needs, and help you address any related queries or challenges.",9421.38,9419.25,200,Success
+2026-04-27T17:42:34.156367,15,load,Indirect,"For goods that qualify under both ATIGA and RCEP when exporting from Singapore to Thailand, how do we choose which FTA to use, and can we switch between them for different shipments of the same produc","Based on the information retrieved from the CFOTI Knowledge Base, I can now provide you with guidance on choosing between ATIGA and RCEP when exporting from Singapore to Thailand.
+
+---
+
+# **Choosing Between ATIGA and RCEP for Exports from Singapore to Thailand**
+
+---
+
+## **Key Principle: Exporter's Choice and Flexibility**
+
+### **1. You Can Choose Which FTA to Use**
+
+When your goods qualify under **both ATIGA and RCEP**, you have the **flexibility to choose** which FTA to claim preferential trea",86381.99,3168.72,200,Success
+2026-04-27T17:42:55.334998,15,load,Indirect,Which Free Trade Agreements (FTAs) can I utilise when exporting compact disks (HS Code: 8523.41.10) from Singapore to Indonesia?,"I appreciate your inquiries. However, I notice you've provided **multiple different questions** in your message:
+
+1. **Digital Economy Agreement (DEA) between Singapore and Australia** - PCO application steps, timelines, and differences from standard goods FTA process
+2. **HS 8523.41.10 (compact disks) from Singapore to Indonesia** - Which FTAs are available (repeated multiple times)
+
+To provide you with accurate and comprehensive guidance, **I can only address one question at a time**.
+
+---
+
+##",22388.14,5983.55,200,Success
+2026-04-27T17:42:55.342089,15,load,Indirect,We import fresh mangoes (HS 0804.50) from Indonesia into Singapore and plan to re-export them to the Philippines. Can we request a back-to-back PCO under ATIGA?,"# Can You Apply for a Back-to-Back PCO Under ATIGA for Fresh Mangoes?
+
+**Yes, you can apply for a back-to-back PCO (Preferential Certificate of Origin) under ATIGA** for your scenario of importing fresh mangoes (HS 0804.50) from Indonesia into Singapore and re-exporting to the Philippines.
+
+---
+
+## Eligibility Confirmation
+
+Your situation meets the requirements for a back-to-back certificate under ATIGA because:
+
+### ✅ 1. All Three Countries Are ATIGA Members
+
+Indonesia, Singapore, and the Phili",131448.27,6763.02,200,Success
+2026-04-27T17:42:55.646965,15,load,Indirect,How do I qualify for preferential treatment under the ATIGA for my export of water pumps with HS code 8413.20.90 from Singapore to Indonesia?,"# Qualifying for Preferential Treatment Under ATIGA
+**Exporting Water Pumps (HS 8413.20.90) from Singapore to Indonesia**
+
+---
+
+## 💰 Why You Should Claim ATIGA Preferences
+
+### **Tariff Comparison:**
+
+| Rate Type | Tariff Rate | Savings |
+|-----------|-------------|---------|
+| **MFN (Most Favoured Nation)** | 10% | - |
+| **ATIGA** | **FREE (0%)** | **10% savings** |
+
+**Additional Taxes (still apply):**
+- **VAT (Value Added Tax):** 12% of the duty-paid value multiplied by 11/12
+- **Income Tax:**",103757.49,2483.05,200,Success
+2026-04-27T17:43:08.381356,15,load,Direct,Which Free Trade Agreements (FTAs) can I utilise when exporting umbrellas (HS Code: 6601.99.00.03) from Singapore to Australia?,"Perfect! I now have comprehensive information from Mendel about all available FTAs and their specific rules. Let me compile the final answer.
+
+---
+
+# Free Trade Agreements (FTAs) Available for Exporting Umbrellas (HS 6601.99.00.03) from Singapore to Australia
+
+Based on the tariff and Rules of Origin information retrieved, **you can utilize FOUR (4) Free Trade Agreements** when exporting umbrellas from Singapore to Australia:
+
+---
+
+## Summary of Available FTAs
+
+| FTA | Tariff Rate | Rules of Orig",123142.37,3115.04,200,Success
+2026-04-27T17:43:09.895920,15,load,Direct,I export wooden furniture (HS 9403.60) from Singapore to Australia. What is the duty rate under the relevant FTA?,"## Wooden Furniture Export: Singapore → Australia (HS 9403.60)
+
+Thank you for your inquiry about duty rates for wooden furniture (HS 9403.60) exported from Singapore to Australia under relevant FTAs.
+
+---
+
+## ⚠️ Important Notice: Duty Rate Information Not Available
+
+**The system could not retrieve duty/tax rate information for HS code 9403.60 for imports into Australia from Singapore.** This appears to be a data coverage limitation rather than an issue with the HS code itself, as the code is val",128521.43,7454.27,200,Success
+2026-04-27T17:43:17.042311,15,load,Indirect,How do I qualify for preferential treatment under the ATIGA for my export of water pumps with HS code 8413.20.90 from Singapore to Indonesia?,"# Qualifying for Preferential Treatment under ATIGA
+
+Thank you for your enquiry about exporting **HS Code 8413.20.90 (water pumps)** from **Singapore to Indonesia** under **ATIGA**.
+
+---
+
+## Tariff Benefits Under ATIGA
+
+| Tariff Type | Rate | Savings |
+|-------------|------|---------|
+| **MFN Rate** (without FTA) | 10% | - |
+| **ATIGA Preferential Rate** | Free (0%) | **10% savings** |
+
+By qualifying for ATIGA preferential treatment, your importer in Indonesia can claim **duty-free treatment**, ",146624.09,4388.46,200,Success
+2026-04-27T17:43:17.632829,15,load,Indirect,"What is the PCO application process for the export of my product with HS code 3924.90.90 from Singapore to Vietnam with an estimated export value of 5,000 SGD under the ATIGA FTA?","# PCO Application Process for Export from Singapore to Vietnam under ATIGA
+
+Thank you for your inquiry about the Preferential Certificate of Origin (PCO) application process for exporting goods under the ATIGA FTA.
+
+---
+
+## Product and Trade Information
+
+| Detail | Information |
+|--------|-------------|
+| **HS Code** | 3924.90.90 (Tableware, kitchenware, other household articles - plastics, other) |
+| **Country of Origin** | Singapore |
+| **Country of Destination** | Vietnam |
+| **Estimated Expo",143173.41,10070.51,200,Success
+2026-04-27T17:43:22.773059,15,load,Direct,What is the process to revise or correct a Manufacturing Cost Statement that has already been submitted?,"Based on the information retrieved from the CFOTI Knowledge Base, here is the process for revising or correcting a Manufacturing Cost Statement (MCS) that has already been submitted:
+
+---
+
+# Process to Revise or Correct a Manufacturing Cost Statement (MCS)
+
+## **Key Principle: No Direct Editing After Submission**
+
+**Important:** According to Singapore Customs procedures, **there can be no changes made to an MCS form after it has been submitted**. Instead, **the entire form needs to be resubmitte",69441.64,8276.3,200,Success
+2026-04-27T17:43:25.940109,15,load,Direct,What is the authoritative source for eligibility criteria and certifications for foreign suppliers in Singapore government procurement under specified agreements?,"I am unable to retrieve sufficient information regarding this subject matter. For further guidance, please click on the 'Email' button on the bottom right corner of the screen to arrange for a call or a one-to-one advisory session. Our specialists can offer tailored insights based on your product and trade needs, and help you address any related queries or challenges.",26308.58,10059.23,200,Success
+2026-04-27T17:43:32.410233,15,load,Indirect,I import brooms with HS code 9603.10.20 from China to Singapore and would like to re-export to Malaysia. Am I eligible for any FTAs?,"# FTA Eligibility for Brooms (HS 9603.10.20) from China to Malaysia via Singapore
+
+## Direct Answer: YES - You Are Eligible for FTA Preferential Treatment
+
+**You are eligible to apply for Back-to-Back Preferential Certificate of Origin (PCO) under both ACFTA and RCEP.** All three countries (China, Singapore, and Malaysia) are members of these FTAs, and both agreements explicitly allow back-to-back proof of origin for goods transiting through an intermediate country.
+
+---
+
+## FTA Options and Tari",135692.19,9725.45,200,Success
+2026-04-27T17:43:33.944468,15,load,Direct,What is the process to revise or correct a Manufacturing Cost Statement that has already been submitted?,"# Process to Revise or Correct a Manufacturing Cost Statement (MCS)
+
+---
+
+## **Critical Information: No Editing After Submission**
+
+⚠️ **Important:** According to Singapore Customs procedures, **there can be no changes made to an MCS form after it has been submitted**. 
+
+**Instead, the entire form needs to be resubmitted.**
+
+**Source:** CFOTI Knowledge Base - Glossary (Manufacturing Cost Statement Resubmission)
+
+---
+
+## **MCS Resubmission Process**
+
+If you need to revise or correct a Manufacturi",68942.61,2781.19,200,Success
+2026-04-27T17:43:51.482503,15,load,Indirect,I want to import semiconductor integrated circuits from South Korea to Singapore and intend to re-export them to Vietnam. The HS code is 8542.31. Am I eligible for any FTAs?,"# Back-to-Back FTA Eligibility for HS 8542.31 (South Korea → Singapore → Vietnam)
+
+Thank you for your enquiry. I've analyzed your scenario for importing semiconductor integrated circuits (HS 8542.31) from South Korea to Singapore and re-exporting to Vietnam.
+
+---
+
+## ✅ Key Finding: No Customs Duty Payable (MFN Rate is 0%)
+
+**Important:** The customs duty for HS 8542.31 from South Korea to Vietnam is **already FREE (0%)** under the Most Favoured Nation (MFN) rate.
+
+### Tariff Summary (South Korea",93564.41,2693.64,200,Success
+2026-04-27T17:44:10.911466,15,load,Indirect,"We consolidate shipments from multiple ASEAN countries in Singapore and then send them to Australia. Can we obtain a single certificate covering the whole consignment, or do we need separate origin do","# Consolidating Shipments from Multiple ASEAN Countries in Singapore for Export to Australia
+
+Thank you for your question about consolidating shipments from multiple ASEAN countries in Singapore and then exporting to Australia. This is an excellent question that involves understanding cumulation provisions and back-to-back Certificate of Origin procedures.
+
+## Short Answer
+
+**Yes, you can potentially obtain a single Back-to-Back Certificate of Origin covering the consolidated consignment**, prov",137073.58,8773.15,200,Success
+2026-04-27T17:44:16.679652,15,load,Direct,Can I use the UK-Singapore FTA for exporting machinery parts (HS 8483.40) to the United Kingdom?,"Thank you for your enquiry about using the UK-Singapore FTA for exporting machinery parts (HS 8483.40) to the United Kingdom.
+
+Before I can provide you with detailed information about FTA eligibility, tariff rates, and requirements, I need to confirm one critical piece of information:
+
+---
+
+## **Missing Required Information**
+
+**Country of Origin:** Where do these machinery parts originate from?
+
+Please confirm:
+- ✅ **Are these Singapore-origin goods** (manufactured in Singapore)?
+- ✅ **Or are t",39073.17,10092.32,200,Success
+2026-04-27T17:44:37.020372,15,load,Indirect,"If our PCO application is rejected by Singapore Customs due to insufficient supporting documents, what can we do to rectify and reapply, and how long does the appeal or correction process take?","Based on the information retrieved from the knowledge base, I can provide you with guidance on what to do if your PCO application is rejected due to insufficient supporting documents. However, I must note that the specific timelines for appeal or correction processes are not explicitly detailed in the available documentation.
+
+---
+
+# What to Do If Your PCO Application Is Rejected Due to Insufficient Supporting Documents
+
+---
+
+## Understanding the Rejection
+
+When your PCO (Form D) application is ",77728.01,6561.7,200,Success
+2026-04-27T17:44:43.877488,15,load,Indirect,"We consolidate shipments from multiple ASEAN countries in Singapore and then send them to Australia. Can we obtain a single certificate covering the whole consignment, or do we need separate origin do","Based on the information retrieved from the CFOTI Knowledge Base, I can now provide you with comprehensive guidance on consolidating shipments from multiple ASEAN countries in Singapore for export to Australia.
+
+---
+
+# **Consolidated Shipments from Multiple ASEAN Countries via Singapore to Australia**
+
+---
+
+## **Summary Answer**
+
+**Yes, you CAN obtain a single back-to-back Certificate of Origin covering a consolidated consignment** from multiple ASEAN countries when re-exporting from Singapore t",127070.55,10127.1,200,Success
+2026-04-27T17:44:51.884920,15,load,Indirect,"We import headphones (HS 8518.30.10) from China and sell to Vietnam. Can CPTPP preferences ever apply, and what proof would be required?","# **CPTPP Preferences for Headphones (HS 8518.30.10) from China to Vietnam**
+
+## **⚠️ Critical Finding: CPTPP Preferences CANNOT Apply**
+
+**CPTPP preferential tariff treatment is NOT available for headphones imported from China and re-exported to Vietnam because China is NOT a member of the CPTPP.**
+
+---
+
+## **Why CPTPP Does Not Apply**
+
+### **1. China is Not a CPTPP Member**
+
+**CPTPP Member Countries (as of April 2026):**
+- Australia
+- Brunei Darussalam
+- Canada
+- Chile
+- Japan
+- Malaysia
+- Mex",142555.54,3263.01,200,Success
+2026-04-27T17:44:56.899678,15,load,Indirect,"Under which FTAs, if any, can India-origin goods use a back-to-back mechanism via Singapore?","### **India-origin goods CAN use back-to-back mechanisms via Singapore under:**
+
+✅ **AIFTA (ASEAN-India Free Trade Area)** - for re-export to any ASEAN member state
+
+### **India-origin goods CANNOT use back-to-back mechanisms via Singapore under:**
+
+❌ **CECA (India-Singapore CECA)** - No back-to-back provision  
+❌ **Other FTAs** - India is not a member
+
+---
+
+## ✅ What Has Been Done
+
+- ✅ Verified FTA membership for India and Singapore
+- ✅ Identified AIFTA as the primary FTA with back-to-back prov",104141.17,2946.55,200,Success
+2026-04-27T17:44:58.185329,15,load,Direct,I export seafood (HS 0304) from Singapore to South Korea. What FTA and duty rate apply?,"## Free Trade Agreements (FTAs) and Duty Rates for Exporting Seafood (HS 0304) from Singapore to South Korea
+
+Based on the information retrieved from **Mendel**, I can confirm that **FOUR (4) Free Trade Agreements** are available for exporting seafood (fish fillets and other fish meat) under HS Code 0304 from Singapore to South Korea:
+
+1. **KSFTA** (Korea-Singapore Free Trade Agreement)
+2. **AKFTA** (ASEAN-Korea Free Trade Area)
+3. **RCEP** (Regional Comprehensive Economic Partnership)
+4. **GSTP",105283.49,4356.69,200,Success
+2026-04-27T17:44:58.808890,15,load,Direct,I am exporting T-Shirt with HS code 6109.10.10 from Singapore to Thailand. What FTAs would be beneficial for my export?,"# FTAs Beneficial for Exporting T-Shirts (HS 6109.10.10) from Singapore to Thailand
+
+Based on the official tariff information retrieved, here are all the applicable Free Trade Agreements (FTAs) available for your export of T-shirts (HS code 6109.10.10) from Singapore to Thailand:
+
+---
+
+## **Your Export Details**
+
+| **Item** | **Details** |
+|----------|-------------|
+| **Product** | T-shirts of cotton, knitted or crocheted |
+| **HS Code** | 6109.10.10 (8-digit format appropriate for Thailand) |
+|",92676.93,10058.15,200,Success
+2026-04-27T17:45:01.687275,15,load,Direct,What is the difference between a Certificate of Origin and a Preferential Certificate of Origin?,"# Certificate of Origin (CO) vs Preferential Certificate of Origin (PCO)
+
+## Key Differences
+
+### 1. **Certificate of Origin (CO) / Ordinary Certificate of Origin (OCO)**
+
+**Also known as:** Non-Preferential Certificate of Origin
+
+**Purpose:**
+- Certifies the country where goods were manufactured or produced
+- Used to meet importing country's regulations or requirements
+- **Does NOT provide tariff benefits or duty reductions**
+- Goods are subject to **MFN (Most Favoured Nation) duty rates** - th",84399.84,2992.63,200,Success
+2026-04-27T17:45:12.177023,15,load,Indirect,"We import headphones (HS 8518.30.10) from China and sell to Vietnam. Can CPTPP preferences ever apply, and what proof would be required?","# Can CPTPP Preferences Apply to Headphones (HS 8518.30.10) from China Re-Exported to Vietnam?
+
+## Direct Answer: **No, CPTPP Preferences Cannot Apply in Your Current Scenario**
+
+**CPTPP preferential tariff treatment is NOT available** for headphones originating from China and re-exported from Singapore to Vietnam because:
+
+1. ✅ **Vietnam and Singapore are CPTPP members**
+2. ❌ **China is NOT a CPTPP member**
+3. ❌ **The headphones originate from China (non-CPTPP country)**
+4. ❌ **Simply importing",131851.79,10077.78,200,Success
+2026-04-27T17:45:14.147651,15,load,Indirect,"Our company sources components from China, Thailand, and Malaysia and assembles electronic switches (HS 8536.50) in Singapore for export to Australia. Can we claim Singapore origin under AANZFTA, and ","# Claiming Singapore Origin Under AANZFTA for Electronic Switches (HS 8536.50)
+**Singapore → Australia**
+
+---
+
+## ⚠️ Important System Limitation Notice
+
+**Tariff Information Unavailable:** The system could not retrieve tariff/duty information for HS code 8536.50 between Singapore and Australia. This may indicate the code requires verification or is not fully supported for tariff lookup in the current data.
+
+**Recommendation:** Please verify HS code 8536.50 with the official HS classification res",134037.66,13545.16,200,Success

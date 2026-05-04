@@ -1,5 +1,5 @@
 Count,Message,Traceback,Nodes
-834,Response ended prematurely,"  File ""C:\Users\bchainani001\Desktop\bhav_projects\chatbot-performance-testing\venv\Lib\site-packages\locust\user\task.py"", line 363, in run
+1,Response ended prematurely,"  File ""C:\Users\bchainani001\Desktop\bhav_projects\chatbot-performance-testing\venv\Lib\site-packages\locust\user\task.py"", line 363, in run
     self.execute_next_task()
     ~~~~~~~~~~~~~~~~~~~~~~^^
   File ""C:\Users\bchainani001\Desktop\bhav_projects\chatbot-performance-testing\venv\Lib\site-packages\locust\user\task.py"", line 396, in execute_next_task
@@ -8,7 +8,7 @@ Count,Message,Traceback,Nodes
   File ""C:\Users\bchainani001\Desktop\bhav_projects\chatbot-performance-testing\venv\Lib\site-packages\locust\user\task.py"", line 513, in execute_task
     task(self.user)
     ~~~~^^^^^^^^^^^
-  File ""C:\Users\bchainani001\Desktop\bhav_projects\chatbot-performance-testing\src\locustfile.py"", line 368, in send_chat_message
+  File ""C:\Users\bchainani001\Desktop\bhav_projects\chatbot-performance-testing\src\locustfile.py"", line 392, in send_chat_message
     for line in resp.iter_lines():
                 ~~~~~~~~~~~~~~~^^
   File ""C:\Users\bchainani001\Desktop\bhav_projects\chatbot-performance-testing\venv\Lib\site-packages\requests\models.py"", line 871, in iter_lines

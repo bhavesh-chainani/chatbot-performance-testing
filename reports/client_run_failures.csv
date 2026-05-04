@@ -1,4 +1,0 @@
-Method,Name,Error,Occurrences
-GET,Verify Auth,CatchResponseError('Auth failed: 503 – session cookie may be expired'),1
-POST,Chat [Indirect],CatchResponseError('Content error: Empty Response'),2
-POST,Chat [Direct],CatchResponseError('Content error: Empty Response'),1

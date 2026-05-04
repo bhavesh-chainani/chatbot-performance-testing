@@ -8,8 +8,19 @@ from datetime import datetime
 from pathlib import Path
 
 import requests
+from requests.exceptions import ChunkedEncodingError, ConnectionError as RequestsConnectionError
+from urllib3.exceptions import IncompleteRead, ProtocolError
 
 from locust import task, between, events, LoadTestShape, HttpUser
+
+# SSE/chunked bodies: server or proxy closed the stream early (common under load).
+_STREAM_READ_ERRORS = (
+    ChunkedEncodingError,
+    IncompleteRead,
+    ProtocolError,
+    RequestsConnectionError,
+    ConnectionError,
+)
 from locust.runners import WorkerRunner, Runner
 
 import sys
@@ -123,12 +134,61 @@ def _archive_response_times_csv_if_legacy(path: Path) -> None:
         pass
 
 
+def _effective_reports_dir(environment) -> Path:
+    """Use the same directory as Locust ``--csv`` / ``--html`` outputs.
+
+    Headless runs often set e.g. ``--csv reports/30_users/client_run`` and
+    ``--html reports/30_users/client_run.html``; per-chat CSV and run metadata
+    should land next to those artifacts, not only under the configured ``REPORTS_DIR``.
+
+    If the prefix is a bare filename (e.g. ``response_times_load``), Locust writes
+    ``<prefix>_stats.csv`` to the process **current working directory**; we must match
+    that instead of falling back to ``REPORTS_DIR``, or the per-chat CSV is missing from
+    the folder where the user saved Locust exports.
+    """
+    opts = getattr(environment, "parsed_options", None)
+    base = Path(REPORTS_DIR)
+    if opts is None:
+        return base
+    for attr in ("csv_prefix", "html_file"):
+        raw = getattr(opts, attr, None)
+        if not raw:
+            continue
+        p = Path(raw)
+        parent = p.parent
+        if parent == Path("."):
+            return Path.cwd()
+        return parent.resolve()
+    return base
+
+
+def _locust_export_prefix(environment) -> str:
+    """Return Locust export prefix basename used by --csv/--html (e.g. 'client_run')."""
+    opts = getattr(environment, "parsed_options", None)
+    if opts is None:
+        return ""
+
+    csv_prefix = getattr(opts, "csv_prefix", None)
+    if csv_prefix:
+        return Path(csv_prefix).name
+
+    html_file = getattr(opts, "html_file", None)
+    if html_file:
+        return Path(html_file).stem
+
+    return ""
+
+
 @events.test_start.add_listener
 def on_test_start(environment, **kwargs):
     global RESPONSE_TIME_CSV
-    reports = Path(REPORTS_DIR)
+    reports = _effective_reports_dir(environment)
     reports.mkdir(parents=True, exist_ok=True)
-    RESPONSE_TIME_CSV = reports / f"response_times_{TEST_TYPE}.csv"
+    locust_prefix = _locust_export_prefix(environment)
+    if locust_prefix:
+        RESPONSE_TIME_CSV = reports / f"{locust_prefix}_response_times_{TEST_TYPE}.csv"
+    else:
+        RESPONSE_TIME_CSV = reports / f"response_times_{TEST_TYPE}.csv"
 
     # Run metadata is written in on_test_stop only, so users/spawn_rate reflect the
     # actual swarm (UI or CLI). Writing at test start often captured 0/default users
@@ -196,7 +256,7 @@ def on_test_stop(environment, **kwargs):
     runner = getattr(environment, "runner", None)
     if runner is None or isinstance(runner, WorkerRunner):
         return
-    reports = Path(REPORTS_DIR)
+    reports = _effective_reports_dir(environment)
     reports.mkdir(parents=True, exist_ok=True)
     opts = getattr(environment, "parsed_options", None)
 
@@ -400,11 +460,21 @@ class ChatbotUser(HttpUser):
                             if _is_feedback_event(decoded):
                                 ttff_ms = (time.time() - start) * 1000
                         lines.append(decoded)
-                except (ConnectionError, requests.exceptions.ConnectionError) as e:
+                except _STREAM_READ_ERRORS as e:
                     response_time_ms = (time.time() - start) * 1000
-                    resp.failure(f"Connection lost: {e}")
-                    self._log(category, message, "", response_time_ms, ttff_ms,
-                              resp.status_code, "Connection Error")
+                    detail = type(e).__name__
+                    if isinstance(e, ChunkedEncodingError):
+                        detail = "chunked stream closed early (server/proxy/load)"
+                    resp.failure(f"Stream read failed: {e}")
+                    self._log(
+                        category,
+                        message,
+                        "",
+                        response_time_ms,
+                        ttff_ms,
+                        resp.status_code,
+                        f"Stream interrupted – {detail}",
+                    )
                     return
 
                 response_time_ms = (time.time() - start) * 1000
@@ -431,10 +501,13 @@ class ChatbotUser(HttpUser):
                     resp.failure(f"Status {resp.status_code}")
                     self._log(category, message, "", response_time_ms, ttff_ms,
                               resp.status_code, f"Error {resp.status_code}")
-        except (ConnectionError, requests.exceptions.ConnectionError) as e:
+        except _STREAM_READ_ERRORS as e:
             response_time_ms = (time.time() - start) * 1000
+            detail = type(e).__name__
+            if isinstance(e, ChunkedEncodingError):
+                detail = "chunked stream closed early (server/proxy/load)"
             self._log(category, message, "", response_time_ms, ttff_ms,
-                      0, "Connection Error")
+                      0, f"Stream interrupted – {detail}")
 
     # -- logging --------------------------------------------------------------
     def _current_concurrent_users(self):
