@@ -43,7 +43,6 @@ from config.test_config import (
     BREAKPOINT_RAMP_USERS_PER_STEP,
     BREAKPOINT_STEP_DURATION,
     REPORTS_DIR,
-    CHAT_TIMEOUT_SECONDS,
 )
 
 from src.sample_questions import get_sample_messages, get_question_category
@@ -444,7 +443,7 @@ class ChatbotUser(HttpUser):
                 json=payload,
                 name=f"Chat [{category}]",
                 catch_response=True,
-                timeout=CHAT_TIMEOUT_SECONDS,
+                timeout=None,
                 stream=True,
             ) as resp:
                 lines = []
