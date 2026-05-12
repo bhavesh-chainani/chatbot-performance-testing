@@ -1,0 +1,3 @@
+Method,Name,Error,Occurrences
+POST,Chat [Indirect],CatchResponseError('Stream read failed: Response ended prematurely'),37
+POST,Chat [Direct],CatchResponseError('Stream read failed: Response ended prematurely'),13

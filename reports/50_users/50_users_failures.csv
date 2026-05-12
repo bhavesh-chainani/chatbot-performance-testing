@@ -1,4 +1,5 @@
 Method,Name,Error,Occurrences
 POST,Chat [Indirect],CatchResponseError('Content error: Empty Response'),1
-POST,Chat [Indirect],CatchResponseError('Stream read failed: Response ended prematurely'),18
-POST,Chat [Direct],CatchResponseError('Stream read failed: Response ended prematurely'),8
+POST,Chat [Indirect],CatchResponseError('Stream read failed: Response ended prematurely'),11
+POST,Chat [Direct],CatchResponseError('Content error: Empty Response'),2
+POST,Chat [Direct],CatchResponseError('Stream read failed: Response ended prematurely'),5
