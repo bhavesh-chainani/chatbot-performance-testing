@@ -1,2 +1,0 @@
-Method,Name,Error,Occurrences
-POST,Chat [Indirect],CatchResponseError('Content error: Empty Response'),3

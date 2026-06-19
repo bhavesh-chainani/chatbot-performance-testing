@@ -43,6 +43,7 @@ from config.test_config import (
     BREAKPOINT_RAMP_USERS_PER_STEP,
     BREAKPOINT_STEP_DURATION,
     REPORTS_DIR,
+    LOG_ALL_RAW_SSE,
 )
 
 from src.sample_questions import get_sample_messages, get_question_category
@@ -106,11 +107,35 @@ Runner.start = _capturing_start
 
 
 # ---------------------------------------------------------------------------
-# CSV logging
+# Per-chat logging (CSV summary + JSONL transcripts)
 # ---------------------------------------------------------------------------
 RESPONSE_TIME_CSV = None
+CHAT_TRANSCRIPT_JSONL = None
 
 _RESPONSE_TIMES_USER_COL = "concurrent_users"
+
+
+def _summarize_sse_events(full_text: str) -> list[str]:
+    """Short list of event types/steps seen in the stream (for debugging without full raw SSE)."""
+    summary = []
+    for line in full_text.split("\n"):
+        line = line.strip()
+        if not line.startswith("data:"):
+            continue
+        try:
+            evt = json.loads(line[5:].strip())
+        except (json.JSONDecodeError, TypeError):
+            summary.append("unparseable_data_line")
+            continue
+        evt_type = evt.get("type", "unknown")
+        if evt_type == "streaming_event":
+            payload = evt.get("data", {}).get("payload", {})
+            step = payload.get("step_type", "?")
+            status = payload.get("status", "?")
+            summary.append(f"streaming_event:{step}:{status}")
+        else:
+            summary.append(str(evt_type))
+    return summary
 
 
 def _archive_response_times_csv_if_legacy(path: Path) -> None:
@@ -180,14 +205,16 @@ def _locust_export_prefix(environment) -> str:
 
 @events.test_start.add_listener
 def on_test_start(environment, **kwargs):
-    global RESPONSE_TIME_CSV
+    global RESPONSE_TIME_CSV, CHAT_TRANSCRIPT_JSONL
     reports = _effective_reports_dir(environment)
     reports.mkdir(parents=True, exist_ok=True)
     locust_prefix = _locust_export_prefix(environment)
     if locust_prefix:
         RESPONSE_TIME_CSV = reports / f"{locust_prefix}_response_times_{TEST_TYPE}.csv"
+        CHAT_TRANSCRIPT_JSONL = reports / f"{locust_prefix}_chat_transcripts_{TEST_TYPE}.jsonl"
     else:
         RESPONSE_TIME_CSV = reports / f"response_times_{TEST_TYPE}.csv"
+        CHAT_TRANSCRIPT_JSONL = reports / f"chat_transcripts_{TEST_TYPE}.jsonl"
 
     # Run metadata is written in on_test_stop only, so users/spawn_rate reflect the
     # actual swarm (UI or CLI). Writing at test start often captured 0/default users
@@ -200,7 +227,7 @@ def on_test_start(environment, **kwargs):
             csv.writer(f).writerow([
                 "timestamp", _RESPONSE_TIMES_USER_COL, "test_type", "question_category",
                 "question", "answer", "response_time_ms", "ttff_ms",
-                "status_code", "status",
+                "status_code", "status", "failure_reason",
             ])
 
     if not SESSION_COOKIE:
@@ -213,6 +240,8 @@ def on_test_start(environment, **kwargs):
         f"=== Running {TEST_TYPE.upper()} test | "
         f"users={ACTIVE_USERS} | run_time={ACTIVE_RUN_TIME} ==="
     )
+    if CHAT_TRANSCRIPT_JSONL:
+        print(f"Per-chat transcripts (full Q&A + raw API on failures): {CHAT_TRANSCRIPT_JSONL.name}")
 
 
 def _format_run_time_for_meta(run_time) -> str:
@@ -464,15 +493,21 @@ class ChatbotUser(HttpUser):
                     detail = type(e).__name__
                     if isinstance(e, ChunkedEncodingError):
                         detail = "chunked stream closed early (server/proxy/load)"
-                    resp.failure(f"Stream read failed: {e}")
+                    full_text = "\n".join(lines)
+                    partial_answer = _parse_sse_response(full_text) if full_text else ""
+                    locust_reason = f"Stream read failed: {e}"
+                    resp.failure(locust_reason)
                     self._log(
                         category,
                         message,
-                        "",
+                        partial_answer,
                         response_time_ms,
                         ttff_ms,
                         resp.status_code,
                         f"Stream interrupted – {detail}",
+                        failure_reason=locust_reason,
+                        raw_sse=full_text,
+                        locust_marked_failure=True,
                     )
                     return
 
@@ -484,29 +519,58 @@ class ChatbotUser(HttpUser):
                     answer_text = _parse_sse_response(full_text)
                     error_type = _classify_error(answer_text)
                     if error_type:
-                        resp.failure(f"Content error: {error_type}")
-                        self._log(category, message, answer_text, response_time_ms, ttff_ms,
-                                  resp.status_code, f"Error - {error_type}")
+                        locust_reason = f"Content error: {error_type}"
+                        resp.failure(locust_reason)
+                        self._log(
+                            category, message, answer_text, response_time_ms, ttff_ms,
+                            resp.status_code, f"Error - {error_type}",
+                            failure_reason=locust_reason,
+                            raw_sse=full_text,
+                            locust_marked_failure=True,
+                        )
                     else:
                         resp.success()
-                        self._log(category, message, answer_text, response_time_ms, ttff_ms,
-                                  resp.status_code, "Success")
+                        self._log(
+                            category, message, answer_text, response_time_ms, ttff_ms,
+                            resp.status_code, "Success",
+                            failure_reason="",
+                            raw_sse=full_text,
+                            locust_marked_failure=False,
+                        )
                 elif resp.status_code == 401:
-                    resp.failure("401 Unauthorized – session cookie expired")
+                    locust_reason = "401 Unauthorized – session cookie expired"
+                    resp.failure(locust_reason)
                     self.is_authenticated = False
-                    self._log(category, message, "", response_time_ms, ttff_ms,
-                              resp.status_code, "401 Unauthorized")
+                    self._log(
+                        category, message, "", response_time_ms, ttff_ms,
+                        resp.status_code, "401 Unauthorized",
+                        failure_reason=locust_reason,
+                        raw_sse=full_text,
+                        locust_marked_failure=True,
+                    )
                 else:
-                    resp.failure(f"Status {resp.status_code}")
-                    self._log(category, message, "", response_time_ms, ttff_ms,
-                              resp.status_code, f"Error {resp.status_code}")
+                    locust_reason = f"Status {resp.status_code}"
+                    resp.failure(locust_reason)
+                    self._log(
+                        category, message, "", response_time_ms, ttff_ms,
+                        resp.status_code, f"Error {resp.status_code}",
+                        failure_reason=locust_reason,
+                        raw_sse=full_text,
+                        locust_marked_failure=True,
+                    )
         except _STREAM_READ_ERRORS as e:
             response_time_ms = (time.time() - start) * 1000
             detail = type(e).__name__
             if isinstance(e, ChunkedEncodingError):
                 detail = "chunked stream closed early (server/proxy/load)"
-            self._log(category, message, "", response_time_ms, ttff_ms,
-                      0, f"Stream interrupted – {detail}")
+            locust_reason = f"Stream read failed: {e}"
+            self._log(
+                category, message, "", response_time_ms, ttff_ms,
+                0, f"Stream interrupted – {detail}",
+                failure_reason=locust_reason,
+                raw_sse="",
+                locust_marked_failure=True,
+            )
 
     # -- logging --------------------------------------------------------------
     def _current_concurrent_users(self):
@@ -520,24 +584,72 @@ class ChatbotUser(HttpUser):
         except (TypeError, ValueError):
             return ""
 
-    def _log(self, category, question, answer, response_time_ms, ttff_ms, status_code, status):
+    def _log(
+        self,
+        category,
+        question,
+        answer,
+        response_time_ms,
+        ttff_ms,
+        status_code,
+        status,
+        *,
+        failure_reason="",
+        raw_sse="",
+        locust_marked_failure=False,
+    ):
+        """Append one chat row to CSV (full Q&A) and JSONL transcript (evidence for failures)."""
         try:
             if not RESPONSE_TIME_CSV:
                 return
+            ts = datetime.now().isoformat()
+            users = self._current_concurrent_users()
             ttff_val = round(ttff_ms, 2) if ttff_ms is not None else ""
+            answer_text = answer or ""
+
             with open(RESPONSE_TIME_CSV, "a", newline="", encoding="utf-8") as f:
                 csv.writer(f).writerow([
-                    datetime.now().isoformat(),
-                    self._current_concurrent_users(),
+                    ts,
+                    users,
                     TEST_TYPE,
                     category,
-                    question[:200],
-                    answer[:500] if answer else "",
+                    question,
+                    answer_text,
                     round(response_time_ms, 2),
                     ttff_val,
                     status_code,
                     status,
+                    failure_reason,
                 ])
+
+            if CHAT_TRANSCRIPT_JSONL is None:
+                return
+
+            include_raw = bool(raw_sse) and (locust_marked_failure or LOG_ALL_RAW_SSE)
+            record = {
+                "timestamp": ts,
+                "concurrent_users": users,
+                "test_type": TEST_TYPE,
+                "question_category": category,
+                "question": question,
+                "extracted_answer": answer_text,
+                "response_time_ms": round(response_time_ms, 2),
+                "ttff_ms": ttff_val,
+                "status_code": status_code,
+                "status": status,
+                "failure_reason": failure_reason,
+                "locust_marked_failure": locust_marked_failure,
+                "sse_event_summary": _summarize_sse_events(raw_sse) if raw_sse else [],
+                "evidence_note": (
+                    "extracted_answer is parsed from the API stream (Network tab), "
+                    "not from HTML/DOM. Compare raw_sse to DevTools → Network → stream → Response."
+                ),
+            }
+            if include_raw:
+                record["raw_sse"] = raw_sse
+
+            with open(CHAT_TRANSCRIPT_JSONL, "a", encoding="utf-8") as f:
+                f.write(json.dumps(record, ensure_ascii=False) + "\n")
         except Exception:
             pass
 

@@ -107,3 +107,5 @@ WAIT_TIME_MAX = _get_config('user_behavior.wait_time.max', 5.0, 'WAIT_TIME_MAX')
 
 # ---- Reporting ----
 REPORTS_DIR = _get_config('reporting.reports_dir', 'reports', 'REPORTS_DIR')
+# When true, JSONL transcript file includes full raw SSE for every chat (large files).
+LOG_ALL_RAW_SSE = _get_config('reporting.log_all_raw_sse', False, 'LOG_ALL_RAW_SSE')

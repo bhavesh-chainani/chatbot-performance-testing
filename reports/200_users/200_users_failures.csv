@@ -1,5 +1,0 @@
-Method,Name,Error,Occurrences
-POST,Chat [Indirect],CatchResponseError('Content error: Empty Response'),3
-POST,Chat [Indirect],CatchResponseError('Stream read failed: Response ended prematurely'),105
-POST,Chat [Direct],CatchResponseError('Content error: Empty Response'),1
-POST,Chat [Direct],CatchResponseError('Stream read failed: Response ended prematurely'),41

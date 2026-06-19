@@ -72,7 +72,10 @@ After it finishes, send the client at least:
 
 Locust also writes `reports/client_run_stats.csv` (final stats table) and `reports/client_run_failures.csv` if there were failures.
 
-**Column-by-column guide for clients:** [docs/CLIENT_LOCUST_STATS_HISTORY.md](docs/CLIENT_LOCUST_STATS_HISTORY.md) (explains **Total Median / Average / Min / Max** response time and the rest).
+**Client guides:**
+
+- [docs/CLIENT_LOCUST_STATS_HISTORY.md](docs/CLIENT_LOCUST_STATS_HISTORY.md) — `*_stats_history.csv` columns (**Total Median / Average / Min / Max**, etc.).
+- [docs/CLIENT_CHAT_FAILURES_EXPLAINED.md](docs/CLIENT_CHAT_FAILURES_EXPLAINED.md) — failure types, full Q&A + JSONL transcripts, DevTools mapping, and how to respond when engineering says “it works.”
 
 ---
 
@@ -80,7 +83,8 @@ Locust also writes `reports/client_run_stats.csv` (final stats table) and `repor
 
 | File | Meaning |
 |------|--------|
-| `reports/response_times_<TEST_TYPE>.csv` | One row per **chat** completed by Locust: question, answer snippet, end-to-end time in **ms**, TTFF, status. **Not** the same as Locust’s `*_stats_history.csv` (that one is **HTTP-level** stats from Locust). |
+| `reports/*_response_times_<TEST_TYPE>.csv` | One row per **chat**: **full** question and answer, timings, `failure_reason`. **Not** Locust’s `*_stats_history.csv` (that is HTTP-level aggregates). |
+| `reports/*_chat_transcripts_<TEST_TYPE>.jsonl` | Same chats as JSON; **failures include `raw_sse`** (full API stream) for DevTools comparison. Optional `LOG_ALL_RAW_SSE=true` for successes too. |
 | `reports/run_meta_<TEST_TYPE>.json` | Written when the test **ends**: users, spawn rate, host, run time (from the swarm you actually ran). |
 
 ---
@@ -89,7 +93,8 @@ Locust also writes `reports/client_run_stats.csv` (final stats table) and `repor
 
 ```
 ├── docs/
-│   └── CLIENT_LOCUST_STATS_HISTORY.md  # Client-facing: Locust *_stats_history.csv columns
+│   ├── CLIENT_LOCUST_STATS_HISTORY.md  # Client-facing: Locust *_stats_history.csv columns
+│   └── CLIENT_CHAT_FAILURES_EXPLAINED.md  # Client-facing: chat failure types and DevTools mapping
 ├── .env                 # You create this (see .env.example); not committed
 ├── config/
 │   ├── test_config.yaml # URL, API paths, default users/duration per TEST_TYPE
